@@ -14,6 +14,12 @@ type BehaviorTree struct {
 	Child INode
 }
 
+// ParseTreeString takes a string defining a behavior tree
+// and returns a new Behavior Tree object.
+func ParseTreeString(treeString string) (*BehaviorTree, error) {
+	return NewParser(strings.NewReader(treeString)).Parse()
+}
+
 func (bt *BehaviorTree) String() string {
 	var b strings.Builder
 	nodeRecurse(bt.Child, 0, &b)
