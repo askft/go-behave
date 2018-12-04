@@ -16,7 +16,7 @@ type BehaviorTree struct {
 
 // ParseTreeString takes a string defining a behavior tree
 // and returns a new Behavior Tree object.
-func ParseTreeString(treeString string) (*BehaviorTree, error) {
+func NewBehaviorTree(treeString string) (*BehaviorTree, error) {
 	return NewParser(strings.NewReader(treeString)).Parse()
 }
 
@@ -58,13 +58,15 @@ type INode interface {
 	GetChildren() []INode
 	GetCategory() Category
 	GetType() Type
+	GetChan() chan Status
 }
 
 // Node ...
 type Node struct {
 	Category
 	Type
-	Data map[string]interface{}
+	StatusChan chan Status
+	// Data       map[string]interface{}
 }
 
 // GetCategory ...
@@ -72,6 +74,10 @@ func (n *Node) GetCategory() Category { return n.Category }
 
 // GetType ...
 func (n *Node) GetType() Type { return n.Type }
+
+func (n *Node) GetChan() chan Status {
+	return n.StatusChan
+}
 
 // Composite nodes ----------------------------------------
 
@@ -85,8 +91,9 @@ type Composite struct {
 func NewComposite() Composite {
 	return Composite{
 		Node: Node{
-			Category: cComposite,
-			Data:     map[string]interface{}{},
+			Category:   cComposite,
+			StatusChan: make(chan Status, 1),
+			// Data:       map[string]interface{}{},
 		},
 		Children: []INode{},
 	}
@@ -119,8 +126,9 @@ type Decorator struct {
 func NewDecorator() Decorator {
 	return Decorator{
 		Node: Node{
-			Category: cDecorator,
-			Data:     map[string]interface{}{},
+			Category:   cDecorator,
+			StatusChan: make(chan Status, 1),
+			// Data:       map[string]interface{}{},
 		},
 	}
 }
@@ -148,9 +156,23 @@ type Leaf struct {
 	Action string
 }
 
+// NewLeaf ...
+func NewLeaf(t Type, action string) *Leaf {
+	return &Leaf{
+		Node: Node{
+			Category:   cLeaf,
+			Type:       t,
+			StatusChan: make(chan Status, 1),
+			// Data:       map[string]interface{}{},
+		},
+		Action: action,
+	}
+}
+
 // Init ...
 func (l *Leaf) Init() {
 	fmt.Println("Init leaf", l.Type, "action", l.Action)
+
 }
 
 // GetChildren returns an empty list of INode, since a leaf has no children.

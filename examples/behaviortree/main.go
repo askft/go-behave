@@ -2,26 +2,31 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
-	bt "behaviortree"
+	bt "github.com/alexanderskafte/behaviortree"
 )
 
+// Example of how I want to be able to define the tree.
+// '?' defines a condition, '!' an action.
 var exampleTree = `
-    Sequence {
-		Action a1.js
-		Action a2.js
-        Selector {
-            Action a3.js
-			Action a4.js
-        }
-    }`
+	Selector {
+		Sequence {
+			? TargetNearby
+			! TargetSelect (-> t1)
+			! TargetAttack (t1 ->)
+		}
+		RandomSelector {
+			! Sleep
+			! Smoke
+		}
+	}
+`
 
 // Main ...
 func main() {
 	fmt.Println("Started program!")
 
-	tree, err := bt.NewParser(strings.NewReader(exampleTree)).Parse()
+	tree, err := bt.NewBehaviorTree(exampleTree)
 	if err != nil {
 		fmt.Println(err)
 	} else {

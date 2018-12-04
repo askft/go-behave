@@ -185,14 +185,7 @@ func (p *Parser) parseLeaf() (INode, error) {
 		return nil, Error(lit, "identifier")
 	}
 
-	node := &Leaf{
-		Node: Node{
-			Category: cLeaf,
-			Type:     Type(lit),
-			Data:     map[string]interface{}{},
-		},
-		Action: lit,
-	}
+	node := NewLeaf(Type(lit), lit)
 
 	return node, nil
 }
