@@ -1,4 +1,4 @@
-package behaviortree
+package lang
 
 /*
 	CREDIT:
@@ -21,7 +21,12 @@ const (
 	tWS
 	tBL
 	tBR
+	tPL
+	tPR
 	tCOMMA
+	tCOLON
+	tEMARK
+	tQMARK
 	tID
 
 	tSEQUENCE
@@ -33,16 +38,36 @@ const (
 var lit2tok = map[string]Token{
 	"SEQUENCE": tSEQUENCE,
 	"SELECTOR": tSELECTOR,
-	"ACTION":   tACTION,
 	"INVERTER": tINVERTER,
+	"ACTION":   tACTION,
 }
 
 const (
-	eof   = rune(0)
-	bl    = rune('{')
-	br    = rune('}')
-	comma = rune(',')
+	rEOF          = rune(0)
+	rBracketLeft  = rune('{')
+	rBracketRight = rune('}')
+	rParenLeft    = rune('(')
+	rParenRight   = rune(')')
+	rComma        = rune(',')
+	rColon        = rune(':')
+	rExclamation  = rune('!')
+	rQuestion     = rune('?')
 )
+
+// TokenIsEOF returns true if `tok` is an EOF token.
+func TokenIsEOF(tok Token) bool {
+	return tok == tEOF
+}
+
+// TokenIsWhitespace returns true if `tok` is a whitespace token.
+func TokenIsWhitespace(tok Token) bool {
+	return tok == tWS
+}
+
+// TokenIsInvalid returns true if `tok` is an invalid token.
+func TokenIsInvalid(tok Token) bool {
+	return tok == tINVALID
+}
 
 func isKeyword(lit string) bool {
 	_, ok := lit2tok[lit]
@@ -65,6 +90,7 @@ type Scanner struct {
 	r *bufio.Reader
 }
 
+// NewScanner returns a scanner that reads from `r`.
 func NewScanner(r io.Reader) *Scanner {
 	return &Scanner{r: bufio.NewReader(r)}
 }
@@ -72,7 +98,7 @@ func NewScanner(r io.Reader) *Scanner {
 func (s *Scanner) read() rune {
 	ch, _, err := s.r.ReadRune()
 	if err != nil {
-		return eof
+		return rEOF
 	}
 	return ch
 }
@@ -81,6 +107,7 @@ func (s *Scanner) unread() {
 	_ = s.r.UnreadRune()
 }
 
+// Scan scans one token, and returns the token and the scanned string.
 func (s *Scanner) Scan() (tok Token, lit string) {
 	ch := s.read()
 
@@ -94,13 +121,23 @@ func (s *Scanner) Scan() (tok Token, lit string) {
 	}
 
 	switch ch {
-	case eof:
+	case rEOF:
 		return tEOF, ""
-	case bl:
+	case rBracketLeft:
 		return tBL, string(ch)
-	case br:
+	case rBracketRight:
 		return tBR, string(ch)
-	case comma:
+	case rParenLeft:
+		return tPL, string(ch)
+	case rParenRight:
+		return tPR, string(ch)
+	case rColon:
+		return tCOLON, string(ch)
+	case rExclamation:
+		return tEMARK, string(ch)
+	case rQuestion:
+		return tQMARK, string(ch)
+	case rComma:
 		return tCOMMA, string(ch)
 	}
 
@@ -111,7 +148,7 @@ func (s *Scanner) scanWhitespace() (tok Token, lit string) {
 	var buf bytes.Buffer
 	buf.WriteRune(s.read())
 	for {
-		if ch := s.read(); ch == eof {
+		if ch := s.read(); ch == rEOF {
 			break
 		} else if !isWhitespace(ch) {
 			s.unread()
@@ -127,7 +164,7 @@ func (s *Scanner) scanWord() (tok Token, lit string) {
 	var buf bytes.Buffer
 	buf.WriteRune(s.read())
 	for {
-		if ch := s.read(); ch == eof {
+		if ch := s.read(); ch == rEOF {
 			break
 		} else if !(isLetter(ch) || isDigit(ch) || ch == '_' || ch == '.') {
 			// Found non-word character

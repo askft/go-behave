@@ -1,4 +1,4 @@
-package behaviortree
+package lang
 
 /*
 	CREDIT:
@@ -9,6 +9,10 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	"github.com/alexanderskafte/behaviortree/composite"
+	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/behaviortree/decorator"
 )
 
 // Parser ...
@@ -66,29 +70,26 @@ func (p *Parser) scanIgnoreWhitespace() (tok Token, lit string) {
 // BehaviorTree parsing functions
 
 // Parse ...
-func (p *Parser) Parse() (*BehaviorTree, error) {
+func (p *Parser) Parse() (core.INode, error) {
 	node, err := p.parse()
 	if err != nil {
 		return nil, err
 	}
-
-	bt := &BehaviorTree{Child: node}
-
-	return bt, nil
+	return node, nil
 }
 
-func (p *Parser) parse() (INode, error) {
+func (p *Parser) parse() (core.INode, error) {
 	return p.parseExpr()
 }
 
-func (p *Parser) parseExpr() (INode, error) {
+func (p *Parser) parseExpr() (core.INode, error) {
 	tok, lit := p.scanIgnoreWhitespace()
 	if !isKeyword(lit) {
 		return nil, Error(lit, "keyword")
 	}
 	p.level++
 	var (
-		node INode
+		node core.INode
 		err  error
 	)
 	switch tok {
@@ -112,12 +113,12 @@ func (p *Parser) parseExpr() (INode, error) {
 	return node, nil
 }
 
-func (p *Parser) parseComposite(comp Token) (INode, error) {
+func (p *Parser) parseComposite(comp Token) (core.INode, error) {
 	if tok, lit := p.scanIgnoreWhitespace(); tok != tBL {
 		return nil, Error(lit, "{")
 	}
 
-	node := NewComposite()
+	node := core.NewComposite()
 
 	for {
 		tok, _ := p.scanIgnoreWhitespace()
@@ -134,14 +135,14 @@ func (p *Parser) parseComposite(comp Token) (INode, error) {
 		node.AddChildren(child)
 	}
 
-	var specnode INode
+	var specnode core.INode
 	switch comp {
 	case tSEQUENCE:
-		node.Type = tSequence // TODO remove
-		specnode = &Sequence{Composite: node}
+		node.Type = core.TypeSequence // TODO remove
+		specnode = &composite.Sequence{Composite: node}
 	case tSELECTOR:
-		node.Type = tSelector // TODO remove
-		specnode = &Selector{node}
+		node.Type = core.TypeSelector // TODO remove
+		specnode = &composite.Selector{node}
 	default:
 		return nil, fmt.Errorf("invalid composite type")
 	}
@@ -149,7 +150,7 @@ func (p *Parser) parseComposite(comp Token) (INode, error) {
 	return specnode, nil
 }
 
-func (p *Parser) parseDecorator(deco Token) (INode, error) {
+func (p *Parser) parseDecorator(deco Token) (core.INode, error) {
 
 	if tok, lit := p.scanIgnoreWhitespace(); tok != tBL {
 		return nil, Error(lit, "{")
@@ -160,14 +161,14 @@ func (p *Parser) parseDecorator(deco Token) (INode, error) {
 		return nil, err
 	}
 
-	node := NewDecorator()
+	node := core.NewDecorator()
 	node.SetChild(child)
 
-	var specnode INode
+	var specnode core.INode
 	switch deco {
 	case tINVERTER:
-		node.Type = tInverter
-		specnode = &Inverter{node}
+		node.Type = core.TypeInverter
+		specnode = &decorator.Inverter{node}
 	default:
 		return nil, fmt.Errorf("invalid decorator type")
 	}
@@ -179,13 +180,13 @@ func (p *Parser) parseDecorator(deco Token) (INode, error) {
 	return specnode, nil
 }
 
-func (p *Parser) parseLeaf() (INode, error) {
+func (p *Parser) parseLeaf() (core.INode, error) {
 	tok, lit := p.scanIgnoreWhitespace()
 	if tok != tID {
 		return nil, Error(lit, "identifier")
 	}
 
-	node := NewLeaf(Type(lit), lit)
+	node := core.NewLeaf(core.Type(lit), lit)
 
 	return node, nil
 }

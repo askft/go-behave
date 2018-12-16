@@ -1,0 +1,29 @@
+package behaviortree
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	timer := time.NewTimer(1 * time.Second)
+	for {
+		result := poll(timer)
+		fmt.Println(result)
+		if result == "done" {
+			break
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+}
+
+func poll(timer *time.Timer) string {
+	select {
+	case <-timer.C:
+		timer.Stop()
+		return "done"
+
+	default:
+		return "running"
+	}
+}

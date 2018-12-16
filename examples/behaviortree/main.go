@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	bt "github.com/alexanderskafte/behaviortree"
 )
@@ -12,19 +13,44 @@ var exampleTree = `
 	Selector {
 		Sequence {
 			? TargetNearby
-			! TargetSelect (-> t1)
-			! TargetAttack (t1 ->)
+			! TargetSelect (   : t1)
+			! TargetAttack (t1 :   )
 		}
 		RandomSelector {
 			! Sleep
 			! Smoke
 		}
 	}
-`
+	`
 
-// Main ...
 func main() {
-	fmt.Println("Started program!")
+	testScanner()
+}
+
+func testScanner() {
+	fmt.Println("Testing scanner...")
+	r := strings.NewReader(exampleTree)
+	s := bt.NewScanner(r)
+
+	for {
+		tok, lit := s.Scan()
+		if bt.TokenIsEOF(tok) {
+			break
+		}
+		if bt.TokenIsWhitespace(tok) {
+			continue
+		}
+		if bt.TokenIsInvalid(tok) {
+			fmt.Printf("[ Invalid token %q ]\n", lit)
+			continue
+		}
+		fmt.Println(tok, lit)
+	}
+	fmt.Println("Done!")
+}
+
+func testTree() {
+	fmt.Println("Testing tree...")
 
 	tree, err := bt.NewBehaviorTree(exampleTree)
 	if err != nil {
@@ -34,7 +60,7 @@ func main() {
 	}
 
 	blackboard := bt.NewBlackboard()
-	tree.Run(blackboard)
+	tree.Tick(blackboard)
 
-	fmt.Println("Finished program!")
+	fmt.Println("Done!")
 }

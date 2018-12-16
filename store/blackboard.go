@@ -1,6 +1,6 @@
-package behaviortree
+package store
 
-// Blackboard ...
+// Blackboard is an implementation of store.Interface
 type Blackboard struct {
 	data map[string]interface{}
 }
@@ -8,7 +8,7 @@ type Blackboard struct {
 // NewBlackboard instantiates a new blackboard
 func NewBlackboard() *Blackboard {
 	bb := &Blackboard{}
-	bb.data = map[string]interface{}{}
+	bb.data = make(map[string]interface{})
 	return bb
 }
 
