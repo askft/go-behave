@@ -1,22 +1,34 @@
 package core
 
-// INode ...
-type INode interface {
-	Init()
-	Tick(*Context) Status
-	Terminate(*Context)
+type IBase interface {
 	GetChildren() []INode
 	GetCategory() Category
-	GetType() Type
-	GetChan() chan Status
+	GetStatus() Status
+	SetStatus(Status)
+	String() string
+}
+
+type ISpec interface {
+	Initialize(args ...interface{})
+	Start(*Context)
+	Tick(*Context) Status
+	Stop(*Context)
+}
+
+type INode interface {
+	IBase
+	ISpec
 }
 
 // Node ...
 type Node struct {
 	Category
-	Type
-	StatusChan chan Status
-	// Data       map[string]interface{}
+	Status
+}
+
+// NewNode ...
+func NewNode(category Category) *Node {
+	return &Node{Category: category}
 }
 
 // GetCategory returns the category of the node.
@@ -24,11 +36,12 @@ func (n *Node) GetCategory() Category {
 	return n.Category
 }
 
-// GetType returns the specific type of the node.
-func (n *Node) GetType() Type {
-	return n.Type
+// GetStatus ...
+func (n *Node) GetStatus() Status {
+	return n.Status
 }
 
-func (n *Node) GetChan() chan Status {
-	return n.StatusChan
+// SetStatus ...
+func (n *Node) SetStatus(status Status) {
+	n.Status = status
 }

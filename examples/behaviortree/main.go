@@ -1,66 +1,94 @@
 package main
 
+// https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
+// TODO: Decorator section at https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees
+// Good tutorial: https://github.com/adnzzzzZ/blog/issues/3
+
 import (
 	"fmt"
 	"strings"
 
-	bt "github.com/alexanderskafte/behaviortree"
+	"github.com/alexanderskafte/behaviortree"
+	"github.com/alexanderskafte/behaviortree/lang"
+	"github.com/alexanderskafte/behaviortree/registry"
+	"github.com/alexanderskafte/behaviortree/store"
 )
 
-// Example of how I want to be able to define the tree.
-// '?' defines a condition, '!' an action.
 var exampleTree = `
-	Selector {
-		Sequence {
-			? TargetNearby
-			! TargetSelect (   : t1)
-			! TargetAttack (t1 :   )
+	+ RandomSequence {
+		+ Sequence {
+			! Succeed (asd : sdf )
 		}
-		RandomSelector {
-			! Sleep
-			! Smoke
+		* UntilSuccess {
+			! Fail (qwe : wer) 
 		}
 	}
 	`
 
+type ID int
+
+func (id ID) String() string { return fmt.Sprint(id) }
+
 func main() {
-	testScanner()
-}
-
-func testScanner() {
-	fmt.Println("Testing scanner...")
-	r := strings.NewReader(exampleTree)
-	s := bt.NewScanner(r)
-
-	for {
-		tok, lit := s.Scan()
-		if bt.TokenIsEOF(tok) {
-			break
-		}
-		if bt.TokenIsWhitespace(tok) {
-			continue
-		}
-		if bt.TokenIsInvalid(tok) {
-			fmt.Printf("[ Invalid token %q ]\n", lit)
-			continue
-		}
-		fmt.Println(tok, lit)
-	}
-	fmt.Println("Done!")
+	// testScanner()
+	testParser()
+	testTree()
 }
 
 func testTree() {
 	fmt.Println("Testing tree...")
 
-	tree, err := bt.NewBehaviorTree(exampleTree)
+	tree, err := behaviortree.NewBehaviorTree(
+		behaviortree.Config{
+			Owner:      ID(0),
+			Store:      store.NewBlackboard(),
+			Registry:   registry.NewDefault(),
+			Definition: exampleTree,
+		})
 	if err != nil {
 		fmt.Println(err)
-	} else {
+	}
+	fmt.Println(tree)
+
+	for i := 0; i < 5; i++ {
+		tree.Update()
 		fmt.Println(tree)
 	}
-
-	blackboard := bt.NewBlackboard()
-	tree.Tick(blackboard)
+	fmt.Println(tree)
 
 	fmt.Println("Done!")
+}
+
+func testScanner() {
+	fmt.Println("Testing scanner...")
+	r := strings.NewReader(exampleTree)
+	s := lang.NewScanner(r)
+
+	for {
+		tok, lit := s.Scan()
+		if lang.TokenIsEOF(tok) {
+			break
+		}
+		if lang.TokenIsWhitespace(tok) {
+			continue
+		}
+		if lang.TokenIsInvalid(tok) {
+			fmt.Printf("[ Invalid token %q ]\n", lit)
+			continue
+		}
+		fmt.Println(tok, "\t", lit)
+	}
+	fmt.Println("Done scanning!")
+}
+
+func testParser() {
+	fmt.Println("Testing parser...")
+	r := strings.NewReader(exampleTree)
+	p := lang.NewParser(r, registry.NewDefault())
+	node, err := p.Parse()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(node)
+	fmt.Println("Done parsing!")
 }

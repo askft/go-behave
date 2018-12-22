@@ -1,36 +1,22 @@
 package core
 
 import (
-	"fmt"
+	"strings"
 )
 
 // Composite base type
 type Composite struct {
-	Node
+	*Node
 	Children     []INode
 	CurrentChild int
 }
 
 // NewComposite ...
-func NewComposite() Composite {
-	return Composite{
-		Node: Node{
-			Category:   CategoryComposite,
-			StatusChan: make(chan Status, 1),
-			// Data:       map[string]interface{}{},
-		},
+func NewComposite() *Composite {
+	return &Composite{
+		Node:     NewNode(CategoryComposite),
 		Children: []INode{},
 	}
-}
-
-// Init ...
-func (c *Composite) Init() {
-	fmt.Println("init comp", c.Type, "children", c.Children)
-}
-
-// Terminate ..
-func (c *Composite) Terminate(ctx *Context) {
-	fmt.Println("Terminate comp", c.Type, "child", c.Children)
 }
 
 // GetChildren returns a list containing the children of the composite node.
@@ -41,4 +27,13 @@ func (c *Composite) GetChildren() []INode {
 // AddChildren ...
 func (c *Composite) AddChildren(children ...INode) {
 	c.Children = append(c.Children, children...)
+}
+
+// String returns a string representation of the composite node.
+func (c *Composite) String() string {
+	ss := make([]string, len(c.Children))
+	for i, child := range c.Children {
+		ss[i] = child.String()
+	}
+	return strings.Join(ss, " BLOOP ")
 }

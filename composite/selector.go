@@ -1,29 +1,39 @@
 package composite
 
 import (
-	. "github.com/alexanderskafte/behaviortree/core"
+	"fmt"
+	"github.com/alexanderskafte/behaviortree/core"
 )
 
 // Selector ...
 type Selector struct {
-	Composite
+	*core.Composite
 }
 
-// Init ...
-func (s *Selector) Init() {
+// Initialize ...
+func (s *Selector) Initialize(args ...interface{}) {
+	s.Composite = args[0].(*core.Composite)
+}
+
+// Start ...
+func (s *Selector) Start(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 
 // Tick ...
-func (s *Selector) Tick(ctx *Context) Status {
+func (s *Selector) Tick(ctx *core.Context) core.Status {
+	fmt.Println("Run Sequence")
 	for {
-		status := Update(s.Children[s.CurrentChild], ctx)
-		if status != StatusFailure {
+		status := core.Update(s.Children[s.CurrentChild], ctx)
+		if status != core.StatusFailure {
 			return status
 		}
 		s.Composite.CurrentChild++
 		if s.CurrentChild >= len(s.Children) {
-			return StatusFailure
+			return core.StatusFailure
 		}
 	}
 }
+
+// Stop ...
+func (s *Selector) Stop(ctx *core.Context) {}

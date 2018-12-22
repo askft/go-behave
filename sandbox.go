@@ -14,7 +14,7 @@ package behaviortree
 // type TL struct{ Node }
 
 // // Run a selector
-// func (tc *TC) Tick(ctx *Context) Status {
+// func (tc *TC) Tick(ctx *context.Context) Status {
 // 	for _, child := range tc.Children {
 // 		go child.Tick(ctx)
 // 		status := <-child.GetChan()
@@ -26,7 +26,7 @@ package behaviortree
 // 	return StatusSuccess
 // }
 
-// // func (tl *TL) Tick(ctx *Context) Status {
+// // func (tl *TL) Tick(ctx *context.Context) Status {
 
 // // }
 

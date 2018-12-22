@@ -1,24 +1,19 @@
 package core
 
 import (
-	"fmt"
-
 	"github.com/alexanderskafte/behaviortree/store"
 )
 
-// Context is renewed every time the tree is run.
+// Context ...
 type Context struct {
-	owner fmt.Stringer
-	store store.Interface
+	Owner interface{}
+	Store store.Interface
 }
 
 // NewContext ...
-func NewContext(owner fmt.Stringer, store store.Interface) *Context {
-	if owner == nil {
-		panic("owner is nil")
+func NewContext(owner interface{}, store store.Interface) *Context {
+	return &Context{
+		owner,
+		store,
 	}
-	if store == nil {
-		panic("board is nil")
-	}
-	return &Context{owner, store}
 }
