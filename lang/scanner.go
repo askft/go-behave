@@ -198,29 +198,3 @@ func validWordRune(ch rune) bool {
 func validLiteralRune(ch rune) bool {
 	return isDigit(ch)
 }
-
-// switch ch {
-// case eof:
-// 	return tokenEndOfFile, ""
-// case '!':
-// 	return tokenAction, string(ch)
-// case '?':
-// 	return tokenCondition, string(ch)
-// case '*':
-// 	return tokenDecorator, string(ch)
-// case '+':
-// 	return tokenComposite, string(ch)
-// case rBracketLeft:
-// 	return tokenBracketLeft, string(ch)
-// case rBracketRight:
-// 	return tokenBracketRight, string(ch)
-// case rParenLeft:
-// 	return tokenParenLeft, string(ch)
-// case rParenRight:
-// 	return tokenParenRight, string(ch)
-// case rColon:
-// 	return tokenColon, string(ch)
-// case rComma:
-// 	return tokenComma, string(ch)
-// }
-// return tokenInvalid, string(ch)
