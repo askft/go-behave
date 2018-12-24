@@ -1,30 +1,30 @@
 package composite
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/alexanderskafte/behaviortree/core"
 )
 
-// Initialize ...
-func (s *RandomSequence) Initialize(args ...interface{}) {
-	s.Composite = args[0].(*core.Composite)
+// RandomSequence creates a new random sequence node.
+func RandomSequence(children ...core.INode) core.INode {
+	base := core.NewComposite("RandomSequence")
+	base.Children = children
+	return &randomSequence{Composite: base}
 }
 
 // Start ...
-func (s *RandomSequence) Start(ctx *core.Context) {
+func (s *randomSequence) Start(ctx *core.Context) {
 	shuffle(s.Children)
 }
 
-// RandomSequence ...
-type RandomSequence struct {
+// randomSequence ...
+type randomSequence struct {
 	*core.Composite
 }
 
 // Tick ...
-func (s *RandomSequence) Tick(ctx *core.Context) core.Status {
-	fmt.Println("Run RandomSequence")
+func (s *randomSequence) Tick(ctx *core.Context) core.Status {
 	for {
 		status := core.Update(s.Children[s.CurrentChild], ctx)
 		if status != core.StatusSuccess {
@@ -38,7 +38,7 @@ func (s *RandomSequence) Tick(ctx *core.Context) core.Status {
 }
 
 // Stop ...
-func (s *RandomSequence) Stop(ctx *core.Context) {
+func (s *randomSequence) Stop(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 

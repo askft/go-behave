@@ -6,19 +6,21 @@ import (
 
 func (p *Parser) parseComposite(name string) (core.INode, error) {
 
-	if tok, lit := p.scanIgnoreWhitespace(); tok != tokenBL {
+	if tok, lit := p.scanIgnoreWhitespace(); tok != tokenBracketLeft {
 		return nil, Error(lit, "{")
 	}
 
-	children, err := p.parseCompositeChildren(tokenBR)
+	children, err := p.parseCompositeChildren(tokenBracketRight)
 	if err != nil {
 		return nil, err
 	}
 
-	base := core.NewComposite()
-	base.AddChildren(children...)
-
-	return p.nodeRegistry.NewComposite(name, base)
+	tmp, err := p.fnRegistry.GetFunction(name)
+	if err != nil {
+		return nil, err
+	}
+	fn := tmp.(core.CompositeFn)
+	return fn(children...), nil
 }
 
 func (p *Parser) parseCompositeChildren(brk Token) ([]core.INode, error) {

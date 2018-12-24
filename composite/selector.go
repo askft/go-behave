@@ -1,28 +1,28 @@
 package composite
 
 import (
-	"fmt"
 	"github.com/alexanderskafte/behaviortree/core"
 )
 
-// Selector ...
-type Selector struct {
+// selector ...
+type selector struct {
 	*core.Composite
 }
 
-// Initialize ...
-func (s *Selector) Initialize(args ...interface{}) {
-	s.Composite = args[0].(*core.Composite)
+// Selector creates a new selector node.
+func Selector(children ...core.INode) core.INode {
+	base := core.NewComposite("Selector")
+	base.Children = children
+	return &selector{Composite: base}
 }
 
 // Start ...
-func (s *Selector) Start(ctx *core.Context) {
+func (s *selector) Start(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 
 // Tick ...
-func (s *Selector) Tick(ctx *core.Context) core.Status {
-	fmt.Println("Run Sequence")
+func (s *selector) Tick(ctx *core.Context) core.Status {
 	for {
 		status := core.Update(s.Children[s.CurrentChild], ctx)
 		if status != core.StatusFailure {
@@ -36,4 +36,4 @@ func (s *Selector) Tick(ctx *core.Context) core.Status {
 }
 
 // Stop ...
-func (s *Selector) Stop(ctx *core.Context) {}
+func (s *selector) Stop(ctx *core.Context) {}

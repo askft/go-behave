@@ -7,7 +7,6 @@ package lang
 
 import (
 	"fmt"
-	"io"
 	"strings"
 
 	"github.com/alexanderskafte/behaviortree/core"
@@ -16,9 +15,9 @@ import (
 
 // Parser ...
 type Parser struct {
-	nodeRegistry registry.Registry
-	scanner      *Scanner
-	buf          struct {
+	fnRegistry *registry.Registry
+	scanner    *Scanner
+	buf        struct {
 		tok Token
 		lit string
 		n   int
@@ -28,8 +27,15 @@ type Parser struct {
 }
 
 // NewParser returns a new instance of Parser.
-func NewParser(r io.Reader, reg registry.Registry) *Parser {
-	return &Parser{scanner: NewScanner(r), nodeRegistry: reg}
+func NewParser(reg *registry.Registry) *Parser {
+	return &Parser{fnRegistry: reg}
+}
+
+// Compile ...
+func (p *Parser) Compile(definition string) (core.INode, error) {
+	r := strings.NewReader(definition)
+	p.scanner = NewScanner(r)
+	return p.parseExpr()
 }
 
 // scan returns the next Token from the underlying scanner.
@@ -56,49 +62,29 @@ func (p *Parser) unscan() {
 // scanIgnoreWhitespace scans the next non-whitespace token.
 func (p *Parser) scanIgnoreWhitespace() (tok Token, lit string) {
 	tok, lit = p.scan()
-	if tok == tokenWS {
+	if tok == tokenWhitespace {
 		tok, lit = p.scan()
 	}
 	fmt.Println(strings.Repeat("   ", p.level) + lit)
 	return
 }
 
-// --------------------------------------------------------
-// BehaviorTree parsing functions
-
-// Parse ...
-func (p *Parser) Parse() (core.INode, error) {
-	return p.parseExpr()
+type item struct {
+	tok Token
+	lit string
 }
 
-func (p *Parser) parseExpr() (core.INode, error) {
-	p.level++
-	defer func() { p.level-- }()
+var itemInvalid = item{tok: tokenInvalid, lit: "invalid token"}
 
+func (p *Parser) accept(token Token) (item, error) {
 	tok, lit := p.scanIgnoreWhitespace()
-	if !isKeyword(lit) {
-		return nil, Error(lit, "keyword")
+	if tok != token {
+		return itemInvalid, Error(lit, string(token))
 	}
-
-	idTok, name := p.scanIgnoreWhitespace()
-	if idTok != tokenID {
-		return nil, Error(name, "identifier")
-	}
-
-	switch tok {
-	case tokenComposite:
-		return p.parseComposite(name)
-	case tokenDecorator:
-		return p.parseDecorator(name)
-	case tokenCondition:
-		return p.parseCondition(name)
-	case tokenAction:
-		return p.parseAction(name)
-	}
-	return nil, fmt.Errorf("invalid token")
+	return item{tok, lit}, nil
 }
 
 // Error ...
 func Error(got, exp string) error {
-	return fmt.Errorf("got %q, expected %q", got, exp)
+	return fmt.Errorf("got %q, expected %s", got, exp)
 }

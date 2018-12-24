@@ -1,15 +1,21 @@
 package core
 
+import (
+	"fmt"
+)
+
 // Decorator base type
 type Decorator struct {
 	*Node
-	Child INode
+	Child  INode
+	Params Params
 }
 
 // NewDecorator ...
-func NewDecorator() *Decorator {
+func NewDecorator(name string, params map[string]string) *Decorator {
 	return &Decorator{
-		Node: NewNode(CategoryDecorator),
+		Node:   NewNode(CategoryDecorator, name),
+		Params: params,
 	}
 }
 
@@ -18,12 +24,7 @@ func (d *Decorator) GetChildren() []INode {
 	return append([]INode{}, d.Child)
 }
 
-// SetChild ...
-func (d *Decorator) SetChild(child INode) {
-	d.Child = child
-}
-
 // String returns a string representation of the decorator node.
 func (d *Decorator) String() string {
-	return "Decorator {" + d.Child.String() + "}"
+	return fmt.Sprintf("* %s (%v)", d.Name, d.Params)
 }

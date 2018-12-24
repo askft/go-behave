@@ -1,27 +1,26 @@
 package decorator
 
 import (
-	"fmt"
-
 	"github.com/alexanderskafte/behaviortree/core"
 )
 
-// Inverter ...
-type Inverter struct {
+// inverter ...
+type inverter struct {
 	*core.Decorator
 }
 
-// Initialize ...
-func (d *Inverter) Initialize(args ...interface{}) {
-	d.Decorator = args[0].(*core.Decorator)
+// Inverter ...
+func Inverter(params core.Params, child core.INode) core.INode {
+	base := core.NewDecorator("Inverter", params)
+	base.Child = child
+	return &delayer{Decorator: base}
 }
 
 // Start ...
-func (d *Inverter) Start(ctx *core.Context) {}
+func (d *inverter) Start(ctx *core.Context) {}
 
 // Tick ...
-func (d *Inverter) Tick(ctx *core.Context) core.Status {
-	fmt.Println("Run Inverter")
+func (d *inverter) Tick(ctx *core.Context) core.Status {
 	switch core.Update(d.Child, ctx) {
 	case core.StatusSuccess:
 		return core.StatusFailure
@@ -33,4 +32,4 @@ func (d *Inverter) Tick(ctx *core.Context) core.Status {
 }
 
 // Stop ...
-func (d *Inverter) Stop(ctx *core.Context) {}
+func (d *inverter) Stop(ctx *core.Context) {}

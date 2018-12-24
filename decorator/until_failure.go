@@ -1,33 +1,33 @@
 package decorator
 
-import (
-	"fmt"
+// import (
+// 	"fmt"
 
-	"github.com/alexanderskafte/behaviortree/core"
-)
+// 	"github.com/alexanderskafte/behaviortree/core"
+// )
 
-// UntilFailure ...
-type UntilFailure struct {
-	*core.Decorator
-}
+// // UntilFailure ...
+// type UntilFailure struct {
+// 	*core.Decorator
+// }
 
-// Initialize ...
-func (d *UntilFailure) Initialize(args ...interface{}) {
-	d.Decorator = args[0].(*core.Decorator)
-}
+// // Initialize ...
+// func (d *UntilFailure) Initialize(args ...interface{}) {
+// 	d.Decorator = args[0].(*core.Decorator)
+// }
 
-// Start ...
-func (d *UntilFailure) Start(ctx *core.Context) {}
+// // Start ...
+// func (d *UntilFailure) Start(ctx *core.Context) {}
 
-// Tick ...
-func (d *UntilFailure) Tick(ctx *core.Context) core.Status {
-	fmt.Println("Run UntilFailure")
-	status := core.Update(d.Child, ctx)
-	if status != core.StatusFailure {
-		return core.StatusRunning
-	}
-	return core.StatusSuccess
-}
+// // Tick ...
+// func (d *UntilFailure) Tick(ctx *core.Context) core.Status {
+// 	fmt.Println("Run UntilFailure")
+// 	status := core.Update(d.Child, ctx)
+// 	if status != core.StatusFailure {
+// 		return core.StatusRunning
+// 	}
+// 	return core.StatusSuccess
+// }
 
-// Stop ...
-func (d *UntilFailure) Stop(ctx *core.Context) {}
+// // Stop ...
+// func (d *UntilFailure) Stop(ctx *core.Context) {}

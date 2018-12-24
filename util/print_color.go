@@ -1,29 +1,24 @@
 package util
 
+import (
+	"fmt"
+	"strings"
+
+	"github.com/alexanderskafte/behaviortree/core"
+
+	"github.com/fatih/color"
+)
+
 // PrintTreeInColor prints the tree with colors representing node state.
-// Red: Failure  |  Yellow: Running  |  Green: Success  |  Magenta: Invalid.
+//
+// Red = Failure, Yellow = Running, Green = Success, Magenta = Invalid.
 func PrintTreeInColor(node core.INode, level int) {
 	indent := strings.Repeat("    ", level)
-
-	col := colorFor(node.GetStatus())
-	color.Set(col)
-
-	if node.GetCategory() == core.CategoryLeaf {
-		fmt.Printf(indent + node.String())
-		color.Unset()
-	} else {
-		name := reflect.TypeOf(node).Elem().Name()
-		fmt.Printf(indent + name)
-		color.Unset()
-		fmt.Printf(" {")
-	}
-	fmt.Printf("\n")
-	children := node.GetChildren()
-	for _, child := range children {
+	color.Set(colorFor(node.GetStatus()))
+	fmt.Println(indent + node.String())
+	color.Unset()
+	for _, child := range node.GetChildren() {
 		PrintTreeInColor(child, level+1)
-	}
-	if node.GetCategory() != core.CategoryLeaf {
-		fmt.Printf(indent + "}\n")
 	}
 }
 

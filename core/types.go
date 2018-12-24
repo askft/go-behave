@@ -5,6 +5,7 @@ type Category string
 
 // A list of behavior tree node categories.
 const (
+	CategoryInvalid   = Category("invalid")
 	CategoryComposite = Category("composite")
 	CategoryDecorator = Category("decorator")
 	CategoryLeaf      = Category("leaf")
@@ -21,25 +22,21 @@ const (
 	StatusRunning
 )
 
-// // ActionFn ...
-// type ActionFn func(*Context) command.Command
+type (
+	// CompositeFn ...
+	CompositeFn func(...INode) INode
 
-// // Type denotes the specific type of the node of any Category.
-// type Type string
+	// DecoratorFn ...
+	DecoratorFn func(Params, INode) INode
 
-// // A list of behavior tree node types.
-// const (
-// 	TypeInvalid = Type("invalid")
-// 	TypeCustom  = Type("Custom")
+	// ActionFn ...
+	ActionFn func([]string, []string) INode
+)
 
-// 	// Composite types
-// 	TypeSequence = Type("Sequence")
-// 	TypeSelector = Type("Selector")
+type (
+	// Params ...
+	Params map[string]string
 
-// 	// Decorator types
-// 	TypeInverter = Type("Inverter")
-
-// 	// Leaf types
-// 	TypeCondition = Type("Condition")
-// 	TypeAction    = Type("Action")
-// )
+	// Returns ...
+	Returns map[string]string
+)

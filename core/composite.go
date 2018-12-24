@@ -1,9 +1,5 @@
 package core
 
-import (
-	"strings"
-)
-
 // Composite base type
 type Composite struct {
 	*Node
@@ -12,9 +8,9 @@ type Composite struct {
 }
 
 // NewComposite ...
-func NewComposite() *Composite {
+func NewComposite(name string) *Composite {
 	return &Composite{
-		Node:     NewNode(CategoryComposite),
+		Node:     NewNode(CategoryComposite, name),
 		Children: []INode{},
 	}
 }
@@ -24,16 +20,7 @@ func (c *Composite) GetChildren() []INode {
 	return append([]INode{}, c.Children...)
 }
 
-// AddChildren ...
-func (c *Composite) AddChildren(children ...INode) {
-	c.Children = append(c.Children, children...)
-}
-
 // String returns a string representation of the composite node.
 func (c *Composite) String() string {
-	ss := make([]string, len(c.Children))
-	for i, child := range c.Children {
-		ss[i] = child.String()
-	}
-	return strings.Join(ss, " BLOOP ")
+	return "+ " + c.Name
 }

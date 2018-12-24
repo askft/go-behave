@@ -1,41 +1,49 @@
 package decorator
 
-// import (
-// 	"fmt"
+import (
+	"strconv"
 
-// 	"github.com/alexanderskafte/behaviortree/core"
-// )
+	"github.com/alexanderskafte/behaviortree/core"
+)
 
-// // Repeater runs its child until it returns core.StatusRunning.
-// // Repeat at most n times, or unlimited if n == 0 (default).
-// type Repeater struct {
-// 	*core.Decorator
-// 	n int
-// }
+// repeater runs its child either until it returns core.StatusRunning
+// or until it has run n times. Runs forever if n == 0.
+type repeater struct {
+	*core.Decorator
+	n int
+	i int
+}
 
-// // Initialize ...
-// func (d *Repeater) Initialize(args ...interface{}) {
-// 	d.Decorator = args[0].(*core.Decorator)
-// }
+// Repeater ...
+func Repeater(params core.Params, child core.INode) core.INode {
+	base := core.NewDecorator("Repeater", params)
+	base.Child = child
+	d := &repeater{Decorator: base}
 
-// // Start ...
-// func (d *Repeater) Start(ctx *core.Context) {
-// 	d.n = 0
-// }
+	n, err := strconv.Atoi(d.Params["n"])
+	if err != nil {
+		panic(err) // TODO
+	}
+	d.n = n
+	return d
+}
 
-// // Tick ... TODO
-// func (d *Repeater) Tick(ctx *core.Context) core.Status {
-// 	fmt.Println("Run Repeater")
-// 	i := 0
-// 	status := core.StatusSuccess
-// 	for ; d.n == 0 || i < d.n; i++ {
-// 		status = core.Update(d.Child, ctx)
-// 		if status == core.StatusRunning {
-// 			break
-// 		}
-// 	}
-// 	return status
-// }
+// Start ...
+func (d *repeater) Start(ctx *core.Context) {
+	d.i = 0
+}
 
-// // Stop ...
-// func (d *Repeater) Stop(ctx *core.Context) {}
+// Tick ...
+func (d *repeater) Tick(ctx *core.Context) core.Status {
+	status := core.StatusSuccess
+	for ; d.n == 0 || d.i < d.n; d.i++ {
+		status = core.Update(d.Child, ctx)
+		if status == core.StatusRunning {
+			break
+		}
+	}
+	return status
+}
+
+// Stop ...
+func (d *repeater) Stop(ctx *core.Context) {}

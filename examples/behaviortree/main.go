@@ -7,88 +7,96 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/alexanderskafte/behaviortree"
+	"github.com/alexanderskafte/behaviortree/core"
 	"github.com/alexanderskafte/behaviortree/lang"
 	"github.com/alexanderskafte/behaviortree/registry"
 	"github.com/alexanderskafte/behaviortree/store"
+	"github.com/alexanderskafte/behaviortree/util"
 )
 
-var exampleTree = `
-	+ RandomSequence {
-		+ Sequence {
-			! Succeed (asd : sdf )
-		}
-		* UntilSuccess {
-			! Fail (qwe : wer) 
-		}
-	}
-	`
-
+// ID is a simple type only used as tree owner for testing.
+// In a real scenario, the owner would be an actual entity
+// with some interesting stae and functionality.
 type ID int
 
-func (id ID) String() string { return fmt.Sprint(id) }
+// String returns a string representation of ID.
+func (id ID) String() string { return fmt.Sprint(int(id)) }
 
 func main() {
 	// testScanner()
-	testParser()
-	testTree()
+	// testParser()
+	testTree(someRoot)
 }
 
-func testTree() {
+func testTree(root core.INode) {
 	fmt.Println("Testing tree...")
 
 	tree, err := behaviortree.NewBehaviorTree(
 		behaviortree.Config{
-			Owner:      ID(0),
+			Owner:      ID(1337),
 			Store:      store.NewBlackboard(),
-			Registry:   registry.NewDefault(),
-			Definition: exampleTree,
-		})
+			FnRegistry: registry.NewDefault(),
+			Definition: someTreeStr,
+		},
+	)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
-	fmt.Println(tree)
 
-	for i := 0; i < 5; i++ {
-		tree.Update()
-		fmt.Println(tree)
+	if root != nil {
+		fmt.Println("Using root created in Go code.")
+		tree.Root = root
 	}
-	fmt.Println(tree)
+
+	ticker := time.NewTicker(100 * time.Millisecond)
+	for {
+		status := tree.Update()
+		select {
+		case <-ticker.C:
+			util.PrintTreeInColor(tree.Root, 0)
+			fmt.Println()
+		default:
+		}
+		if status == core.StatusSuccess {
+			break
+		}
+	}
+	util.PrintTreeInColor(tree.Root, 0)
 
 	fmt.Println("Done!")
 }
 
 func testScanner() {
 	fmt.Println("Testing scanner...")
-	r := strings.NewReader(exampleTree)
+	r := strings.NewReader(someTreeStr)
 	s := lang.NewScanner(r)
 
 	for {
 		tok, lit := s.Scan()
-		if lang.TokenIsEOF(tok) {
+		if tok.IsEOF() {
 			break
 		}
-		if lang.TokenIsWhitespace(tok) {
+		if tok.IsWhitespace() {
 			continue
 		}
-		if lang.TokenIsInvalid(tok) {
+		if tok.IsInvalid() {
 			fmt.Printf("[ Invalid token %q ]\n", lit)
 			continue
 		}
-		fmt.Println(tok, "\t", lit)
+		fmt.Printf("%-15s%s\n", tok, lit)
 	}
 	fmt.Println("Done scanning!")
 }
 
 func testParser() {
 	fmt.Println("Testing parser...")
-	r := strings.NewReader(exampleTree)
-	p := lang.NewParser(r, registry.NewDefault())
-	node, err := p.Parse()
+	node, err := lang.NewParser(registry.NewDefault()).Compile(someTreeStr)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(node)
+	fmt.Println(behaviortree.NodeToString(node))
 	fmt.Println("Done parsing!")
 }

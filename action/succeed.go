@@ -4,23 +4,24 @@ import (
 	"github.com/alexanderskafte/behaviortree/core"
 )
 
-// Succeed ...
-type Succeed struct {
+// succeed ...
+type succeed struct {
 	*core.Action
 }
 
-// Initialize ...
-func (a *Succeed) Initialize(args ...interface{}) {
-	a.Action = args[0].(*core.Action)
+// Succeed returns a new succeed node.
+func Succeed(params, returns []string) core.INode {
+	base := core.NewAction("Succeed", params, returns)
+	return &succeed{Action: base}
 }
 
 // Start ...
-func (a *Succeed) Start(ctx *core.Context) {}
+func (a *succeed) Start(ctx *core.Context) {}
 
 // Tick ...
-func (a *Succeed) Tick(ctx *core.Context) core.Status {
+func (a *succeed) Tick(ctx *core.Context) core.Status {
 	return core.StatusSuccess
 }
 
 // Stop ...
-func (a *Succeed) Stop(ctx *core.Context) {}
+func (a *succeed) Stop(ctx *core.Context) {}

@@ -4,23 +4,24 @@ import (
 	"github.com/alexanderskafte/behaviortree/core"
 )
 
-// Fail ...
-type Fail struct {
+// fail ...
+type fail struct {
 	*core.Action
 }
 
-// Initialize ...
-func (a *Fail) Initialize(args ...interface{}) {
-	a.Action = args[0].(*core.Action)
+// Fail returns a new fail node.
+func Fail(params, returns []string) core.INode {
+	base := core.NewAction("Fail", params, returns)
+	return &fail{Action: base}
 }
 
 // Start ...
-func (a *Fail) Start(ctx *core.Context) {}
+func (a *fail) Start(ctx *core.Context) {}
 
 // Tick ...
-func (a *Fail) Tick(ctx *core.Context) core.Status {
+func (a *fail) Tick(ctx *core.Context) core.Status {
 	return core.StatusFailure
 }
 
 // Stop ...
-func (a *Fail) Stop(ctx *core.Context) {}
+func (a *fail) Stop(ctx *core.Context) {}

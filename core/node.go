@@ -1,34 +1,28 @@
 package core
 
-type IBase interface {
+// INode ...
+type INode interface {
 	GetChildren() []INode
 	GetCategory() Category
 	GetStatus() Status
 	SetStatus(Status)
 	String() string
-}
 
-type ISpec interface {
-	Initialize(args ...interface{})
 	Start(*Context)
 	Tick(*Context) Status
 	Stop(*Context)
-}
-
-type INode interface {
-	IBase
-	ISpec
 }
 
 // Node ...
 type Node struct {
 	Category
 	Status
+	Name string
 }
 
 // NewNode ...
-func NewNode(category Category) *Node {
-	return &Node{Category: category}
+func NewNode(category Category, name string) *Node {
+	return &Node{Category: category, Name: name}
 }
 
 // GetCategory returns the category of the node.

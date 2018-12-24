@@ -6,8 +6,17 @@ import (
 
 func (p *Parser) parseDecorator(name string) (core.INode, error) {
 
-	if tok, lit := p.scanIgnoreWhitespace(); tok != tokenBL {
-		return nil, Error(lit, "{")
+	if _, err := p.accept(tokenParenLeft); err != nil {
+		return nil, err
+	}
+
+	params, err := p.parseAssignmentList(tokenParenRight)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := p.accept(tokenBracketLeft); err != nil {
+		return nil, err
 	}
 
 	child, err := p.parseExpr()
@@ -15,12 +24,14 @@ func (p *Parser) parseDecorator(name string) (core.INode, error) {
 		return nil, err
 	}
 
-	if tok, lit := p.scanIgnoreWhitespace(); tok != tokenBR {
-		return nil, Error(lit, "}")
+	if _, err := p.accept(tokenBracketRight); err != nil {
+		return nil, err
 	}
 
-	base := core.NewDecorator()
-	base.Child = child
-
-	return p.nodeRegistry.NewDecorator(name, base)
+	tmp, err := p.fnRegistry.GetFunction(name)
+	if err != nil {
+		return nil, err
+	}
+	fn := tmp.(core.DecoratorFn)
+	return fn(params, child), nil
 }

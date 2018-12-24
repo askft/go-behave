@@ -3,95 +3,109 @@ package registry
 import (
 	"fmt"
 	"reflect"
+	"runtime"
+	"strings"
 
 	"github.com/alexanderskafte/behaviortree/action"
 	"github.com/alexanderskafte/behaviortree/composite"
-	"github.com/alexanderskafte/behaviortree/condition"
 	"github.com/alexanderskafte/behaviortree/core"
 	"github.com/alexanderskafte/behaviortree/decorator"
 )
 
 // Registry ...
-type Registry map[string]reflect.Type
+type Registry struct {
+	// functionFor map[string]interface{}
+	categoryFor map[string]core.Category
+
+	cs map[string]core.CompositeFn
+	ds map[string]core.DecoratorFn
+	as map[string]core.ActionFn
+}
+
+// NewEmpty returns a new empty registry.
+func NewEmpty() *Registry {
+	return &Registry{
+		// functionFor: map[string]interface{}{},
+		categoryFor: map[string]core.Category{},
+		cs:          map[string]core.CompositeFn{},
+		ds:          map[string]core.DecoratorFn{},
+		as:          map[string]core.ActionFn{},
+	}
+}
 
 // NewDefault returns a structure of all
 // the nodes that are defined by default.
-func NewDefault() Registry {
-	nodes := Registry{}
-
-	nodes.Register(&composite.Sequence{})
-	nodes.Register(&composite.Selector{})
-	nodes.Register(&composite.RandomSequence{})
-	nodes.Register(&composite.RandomSelector{})
-
-	nodes.Register(&decorator.Inverter{})
-	nodes.Register(&decorator.UntilFailure{})
-	nodes.Register(&decorator.UntilSuccess{})
-
-	nodes.Register(&condition.TargetNearby{})
-
-	nodes.Register(&action.Succeed{})
-	nodes.Register(&action.Fail{})
-	nodes.Register(&action.Print{})
-
-	return nodes
+func NewDefault() *Registry {
+	r := NewEmpty()
+	r.Register(core.CategoryComposite,
+		composite.Sequence,
+		composite.Selector,
+		composite.RandomSequence,
+		composite.RandomSelector,
+	)
+	r.Register(core.CategoryDecorator,
+		decorator.Delayer,
+		decorator.Inverter,
+		decorator.Repeater,
+	)
+	r.Register(core.CategoryLeaf,
+		action.Succeed,
+		action.Fail,
+	)
+	return r
 }
 
-// Register ...
-func (r Registry) Register(node core.ISpec) {
-	elem := reflect.TypeOf(node).Elem()
-	r[elem.Name()] = elem
-}
-
-// New creates a new node struct pointer identified by `name`.
-func (r Registry) New(name string) (interface{}, error) {
-	if node, ok := r[name]; ok {
-		return reflect.New(node).Interface(), nil
+// Register registers each function in `fns` by its name. In other words,
+// the registry maps function names to function handles.
+func (r *Registry) Register(category core.Category, fns ...interface{}) {
+	for _, fn := range fns {
+		r.registerOne(category, fn)
 	}
-	return nil, fmt.Errorf("Could not create node for name %s", name)
 }
 
-// Contains returns true if the node map contains a node identified by `name`.
-func (r Registry) Contains(name string) bool {
-	_, ok := r[name]
-	return ok
-}
+func (r *Registry) registerOne(category core.Category, fn interface{}) {
 
-// Sugar, baby!
+	// Get name of function
+	fullName := runtime.FuncForPC(reflect.ValueOf(fn).Pointer()).Name()
+	tokens := strings.Split(fullName, ".")
+	name := tokens[len(tokens)-1]
 
-// TODO - Change to return ISpec instead of INode.
-
-// TODO - All of these are actually the same...
-
-// NewComposite ...
-func (r Registry) NewComposite(name string, base core.IBase) (core.INode, error) {
-	any, err := r.New(name)
-	if err != nil {
-		return nil, err
+	switch category {
+	case core.CategoryComposite:
+		r.cs[name] = core.CompositeFn(fn.(func(...core.INode) core.INode))
+	case core.CategoryDecorator:
+		r.ds[name] = core.DecoratorFn(fn.(func(core.Params, core.INode) core.INode))
+	case core.CategoryLeaf:
+		r.as[name] = core.ActionFn(fn.(func([]string, []string) core.INode))
+	default:
+		panic(fmt.Errorf("invalid category (category = %s", category))
 	}
-	spec := any.(core.INode)
-	spec.Initialize(base)
-	return spec, err
+	r.categoryFor[name] = category
 }
 
-// NewDecorator ...
-func (r Registry) NewDecorator(name string, base core.IBase) (core.INode, error) {
-	any, err := r.New(name)
-	if err != nil {
-		return nil, err
+// GetFunction ...
+func (r *Registry) GetFunction(name string) (interface{}, error) {
+	var fn interface{}
+	var ok bool
+	switch r.categoryFor[name] {
+	case core.CategoryComposite:
+		fn, ok = r.cs[name]
+	case core.CategoryDecorator:
+		fn, ok = r.ds[name]
+	case core.CategoryLeaf:
+		fn, ok = r.as[name]
 	}
-	spec := any.(core.INode)
-	spec.Initialize(base)
-	return spec, err
+	if !ok {
+		return nil, fmt.Errorf("function %s not found in registry", name)
+	}
+	return fn, nil
 }
 
-// NewAction ...
-func (r Registry) NewAction(name string, base core.IBase) (core.INode, error) {
-	any, err := r.New(name)
-	if err != nil {
-		return nil, err
+// CategoryFor returns the category to which the type `name` belongs.
+func (r *Registry) CategoryFor(name string) (core.Category, error) {
+	category, ok := r.categoryFor[name]
+	if !ok {
+		return core.CategoryInvalid, fmt.Errorf("%q not found in registry", name)
 	}
-	spec := any.(core.INode)
-	spec.Initialize(base)
-	return spec, err
+	return category, nil
 }
