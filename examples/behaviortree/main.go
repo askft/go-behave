@@ -15,15 +15,15 @@ import (
 
 // ID is a simple type only used as tree owner for testing.
 // In a real scenario, the owner would be an actual entity
-// with some interesting stae and functionality.
+// with some interesting state and functionality.
 type ID int
 
 // String returns a string representation of ID.
 func (id ID) String() string { return fmt.Sprint(int(id)) }
 
 func main() {
-	// testScanner()
-	// testParser()
+	testScanner()
+	testParser()
 	testTree(someRoot)
 }
 
