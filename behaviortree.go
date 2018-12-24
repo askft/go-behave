@@ -49,18 +49,16 @@ func NewBehaviorTree(cfg Config) (*BehaviorTree, error) {
 		return nil, err
 	}
 	tree := &BehaviorTree{
-		Context:  core.NewContext(cfg.Owner, cfg.Store),
-		Registry: cfg.Registry,
-		Root:     root,
+		Context: core.NewContext(cfg.Owner, cfg.Store),
+		Root:    root,
 	}
 	return tree, nil
 }
 
 // BehaviorTree ...
 type BehaviorTree struct {
-	Context  *core.Context
-	Registry *registry.Registry
-	Root     core.INode
+	Context *core.Context
+	Root    core.INode
 }
 
 // Update propagates an update call down the behavior tree.
