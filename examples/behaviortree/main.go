@@ -34,7 +34,7 @@ func testTree(root core.INode) {
 		behaviortree.Config{
 			Owner:      ID(1337),
 			Store:      store.NewBlackboard(),
-			FnRegistry: registry.NewDefault(),
+			Registry: registry.NewDefault(),
 			Definition: someTreeStr,
 		},
 	)
