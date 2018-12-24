@@ -1,9 +1,5 @@
 package main
 
-// https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
-// TODO: Decorator section at https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees
-// Good tutorial: https://github.com/adnzzzzZ/blog/issues/3
-
 import (
 	"fmt"
 	"strings"
