@@ -2,9 +2,13 @@
 
 **<p align=center>An extensible Behavior Tree library in Go.</p>**
 
-## Introduction
+## Important notice
 
-A behavior tree is a formalism for describing the behavior of an autonomous entity such as a robot or a non-player character in a video game. Behavior trees, by their nature, allow for highly modular design thanks to the composability of nodes, and the formalism makes task switching and state management trivial.
+The library is still being developed. Please do not assume API stability.
+
+## What is a behavior tree?
+
+A behavior tree is a formalism for describing the behavior of an autonomous entity such as a robot or a non-player character in a video game. A behavior trees, by its nature, allows for highly modular behavior design thanks to the composability of its nodes, and the formalism makes task switching and state management trivial.
 
 A behavior tree is a directed rooted tree with at most three categories of nodes: _composite nodes_, _decorator nodes_ and _leaf nodes_. Each category can contain many different _types_ of nodes. A _tick_ is sent from the root with a certain frequency, making a pre-order traversal of the tree. Each node type provides a different algorithm for processing the tick, explained below. Once a tick has been processed, the node returns a status to its parent - either _Failure_, _Running_ or _Success_.
 
@@ -40,33 +44,43 @@ A leaf node can also be a _condition node_ which returns Success or Failure depe
 
 ## Usage
 
-Please see the `examples` package. An extensive explanation of the library can be found below.
+Please see the `examples` package.
 
 ### Defining custom nodes
 
-The library offers a set of common node types, although it's easy to make your own. The available common node types can be found in the `composite`, `decorator` and `action` packages. These are _not_ required for you to use the rest of the library, but greatly simplify usage.
+While the library offers a set of pre-made common node types, it's easy to implement your own. The available node types can be found in the `composite`, `decorator` and `action` packages. These are _not_ required for you to use the rest of the library, but greatly simplify usage.
 
-Defining a custom node means having a `struct` embedding a pointer to a `core.T` where `T` is either `Composite`, `Decorator` or `Action`, and having the following methods defined on the type:
+In order to define a custom node type, the type must embed `*core.T` where `T` is either `Composite`, `Decorator` or `Action`, and define the following methods:
 
 ```go
-Start(*Context)
-Tick(*Context) Status
-Stop(*Context)
+(n *YourCustomNode) Start(*Context)
+(n *YourCustomNode) Tick(*Context) Status
+(n *YourCustomNode) Stop(*Context)
 ```
 
-The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. The constructor function needs have a type equal to one of `CompositeFn`, `DecoratorFn` or `ActionFn` (see [core/types.go](https://github.com/AlexanderSkafte/go-behave/blob/master/core/types.go)). An example can be seen in [decorator/repeater.go](https://github.com/AlexanderSkafte/go-behave/blob/master/decorator/repeater.go) (or any other type in the `composite`, `decorator` or `action` packages).
+The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. If you intend to construct a tree containing the node by compiling a definition string (see the next section), the function type of the custom node's constructor function must match one of `CompositeFn`, `DecoratorFn` or `ActionFn` (see [core/types.go](https://github.com/AlexanderSkafte/go-behave/blob/master/core/types.go)). An example can be seen in [decorator/repeater.go](https://github.com/AlexanderSkafte/go-behave/blob/master/decorator/repeater.go) (or any other type in the `composite`, `decorator` or `action` packages).
 
-### Defining behavior trees
+### Defining behavior
 
-You may define a behavior tree in one of two ways: via a definition string that compiles to a behavior tree node, or by declaring the node directly in Go code. Please see [examples/behave/](https://github.com/AlexanderSkafte/go-behave/tree/master/examples/behave), where both methods are used. Defining the behavior tree via a definition string requires you to register the functions in a `Registry` in order for the parser to recognize them. [gbl/registry.go](https://github.com/AlexanderSkafte/go-behave/blob/master/gbl/registry.go) offers a `NewDefault` function that will return a registry where the available common nodes have been registered. Please refer to that function when you want to find out how to register your own nodes.
+A behavior tree describing a specific behavior can be built in one of two ways: either by compiling a definition string written in GBL ("Go Behave Language") or by defining a tree directly in Go code.
 
-The `go-behave` type contains a reference to a root node, a reference to its owner, a reference to a `Registry` [\*] and a reference to a `Store` interface. The library offers a `Blackboard` ([store/Blackboard.go](https://github.com/AlexanderSkafte/go-behave/blob/master/store/blackboard.go)) which implements the `Store` interface. A `go-behave` is created via the `Newgo-behave` function which takes a `Config` type containing the types mentioned above. See [behave.go](https://github.com/AlexanderSkafte/go-behave/blob/master/behave.go).
+#### Using GBL to define a behavior tree
 
-<p style="font-size:0.8em">[*] TODO: Will be removed as it's not really necessary if the used precompiles the definition string into a node</p>
+Please see [examples/behave](https://github.com/AlexanderSkafte/go-behave/tree/master/examples/behave) for examples.
 
-## Important notice
+Defining a behavior tree in GBL requires pre-registration of nodes to be used via a \*`gbl.Registry` handle in order for the parser to recognize them. The [behave](https://github.com/AlexanderSkafte/go-behave/blob/master/behave.go) provides a `CommonNodeRegistry` function that will return a registry with available common nodes registered. Please refer to [gbl/registry.go](https://github.com/AlexanderSkafte/go-behave/blob/master/gbl/registry.go) for full documentation of the registry.
 
-The library is still in the development phase, so the API is not stable, and I can not guarantee that the implementation is bug-free.
+#### Using Go to define a behavior tree
+
+Please see [examples/behave](https://github.com/AlexanderSkafte/go-behave/tree/master/examples/behave) for examples.
+
+### Creating behavior tree instances
+
+An instance of a `BehaviorTree` type can be created by passing a `Config` object to the `NewBehaviorTree` function. `Config` should contain references to the owner of the behavior tree, a store (normally a `store.Blackboard`) and a root node. The root node is built using one of the methods described above.
+
+The owner of the tree depends on the application at hand, so the type is `interface{}`, and the real type of the owner needs to be asserted inside the application specific nodes at runtime.
+
+The store refers to any type that implements `store.Interface`. Such an implementation is offered by the library - a `Blackboard` ([store/Blackboard.go](https://github.com/AlexanderSkafte/go-behave/blob/master/store/blackboard.go)) type that simply wraps a `map[string]interface{}`.
 
 ## Installation
 

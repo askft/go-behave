@@ -1,10 +1,11 @@
 package main
 
-// I use dot imports to make the tree definition look nicer. Sorry!
 import (
+	"github.com/alexanderskafte/go-behave/core"
+
+	// Use dot imports to make a tree definition look nice.
 	. "github.com/alexanderskafte/go-behave/action"
 	. "github.com/alexanderskafte/go-behave/composite"
-	"github.com/alexanderskafte/go-behave/core"
 	. "github.com/alexanderskafte/go-behave/decorator"
 )
 
