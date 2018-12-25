@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/alexanderskafte/behaviortree/store"
+	"github.com/alexanderskafte/go-behave/store"
 )
 
 // Context ...

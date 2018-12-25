@@ -2,22 +2,22 @@ package core
 
 // Composite base type
 type Composite struct {
-	*Node
-	Children     []INode
+	*BaseNode
+	Children     []Node
 	CurrentChild int
 }
 
 // NewComposite ...
 func NewComposite(name string) *Composite {
 	return &Composite{
-		Node:     NewNode(CategoryComposite, name),
-		Children: []INode{},
+		BaseNode: newBaseNode(CategoryComposite, name),
+		Children: []Node{},
 	}
 }
 
 // GetChildren returns a list containing the children of the composite node.
-func (c *Composite) GetChildren() []INode {
-	return append([]INode{}, c.Children...)
+func (c *Composite) GetChildren() []Node {
+	return append([]Node{}, c.Children...)
 }
 
 // String returns a string representation of the composite node.

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 
 	"github.com/alexanderskafte/lair/core/vec"
 	"github.com/alexanderskafte/lair/ecs/entities"

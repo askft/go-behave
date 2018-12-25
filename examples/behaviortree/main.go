@@ -5,12 +5,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alexanderskafte/behaviortree"
-	"github.com/alexanderskafte/behaviortree/core"
-	"github.com/alexanderskafte/behaviortree/lang"
-	"github.com/alexanderskafte/behaviortree/registry"
-	"github.com/alexanderskafte/behaviortree/store"
-	"github.com/alexanderskafte/behaviortree/util"
+	"github.com/alexanderskafte/go-behave"
+	"github.com/alexanderskafte/go-behave/core"
+	"github.com/alexanderskafte/go-behave/gbl"
+	"github.com/alexanderskafte/go-behave/store"
+	"github.com/alexanderskafte/go-behave/util"
 )
 
 // ID is a simple type only used as tree owner for testing.
@@ -27,24 +26,18 @@ func main() {
 	testTree(someRoot)
 }
 
-func testTree(root core.INode) {
+func testTree(root core.Node) {
 	fmt.Println("Testing tree...")
 
-	tree, err := behaviortree.NewBehaviorTree(
-		behaviortree.Config{
-			Owner:      ID(1337),
-			Store:      store.NewBlackboard(),
-			Registry: registry.NewDefault(),
-			Definition: someTreeStr,
+	tree, err := behave.NewBehaviorTree(
+		behave.Config{
+			Owner: ID(1337),
+			Store: store.NewBlackboard(),
+			Root:  root,
 		},
 	)
 	if err != nil {
 		panic(err)
-	}
-
-	if root != nil {
-		fmt.Println("Using root created in Go code.")
-		tree.Root = root
 	}
 
 	ticker := time.NewTicker(100 * time.Millisecond)
@@ -52,7 +45,7 @@ func testTree(root core.INode) {
 		status := tree.Update()
 		select {
 		case <-ticker.C:
-			util.PrintTreeInColor(tree.Root, 0)
+			util.PrintTreeInColor(tree.Root)
 			fmt.Println()
 		default:
 		}
@@ -60,7 +53,7 @@ func testTree(root core.INode) {
 			break
 		}
 	}
-	util.PrintTreeInColor(tree.Root, 0)
+	util.PrintTreeInColor(tree.Root)
 
 	fmt.Println("Done!")
 }
@@ -68,7 +61,7 @@ func testTree(root core.INode) {
 func testScanner() {
 	fmt.Println("Testing scanner...")
 	r := strings.NewReader(someTreeStr)
-	s := lang.NewScanner(r)
+	s := gbl.NewScanner(r)
 
 	for {
 		tok, lit := s.Scan()
@@ -89,10 +82,11 @@ func testScanner() {
 
 func testParser() {
 	fmt.Println("Testing parser...")
-	node, err := lang.NewParser(registry.NewDefault()).Compile(someTreeStr)
+	reg := behave.CommonNodeRegistry()
+	node, err := gbl.NewParser(reg).Compile(someTreeStr)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(behaviortree.NodeToString(node))
+	fmt.Println(util.NodeToString(node))
 	fmt.Println("Done parsing!")
 }

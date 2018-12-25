@@ -1,7 +1,7 @@
 package action
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // fail ...
@@ -10,7 +10,7 @@ type fail struct {
 }
 
 // Fail returns a new fail node.
-func Fail(params, returns []string) core.INode {
+func Fail(params, returns []string) core.Node {
 	base := core.NewAction("Fail", params, returns)
 	return &fail{Action: base}
 }

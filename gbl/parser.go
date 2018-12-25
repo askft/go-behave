@@ -1,4 +1,4 @@
-package lang
+package gbl
 
 /*
 	CREDIT:
@@ -9,13 +9,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/alexanderskafte/behaviortree/core"
-	"github.com/alexanderskafte/behaviortree/registry"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // Parser ...
 type Parser struct {
-	fnRegistry *registry.Registry
+	fnRegistry *Registry
 	scanner    *Scanner
 	buf        struct {
 		tok Token
@@ -27,12 +26,12 @@ type Parser struct {
 }
 
 // NewParser returns a new instance of Parser.
-func NewParser(reg *registry.Registry) *Parser {
+func NewParser(reg *Registry) *Parser {
 	return &Parser{fnRegistry: reg}
 }
 
 // Compile ...
-func (p *Parser) Compile(definition string) (core.INode, error) {
+func (p *Parser) Compile(definition string) (core.Node, error) {
 	r := strings.NewReader(definition)
 	p.scanner = NewScanner(r)
 	return p.parseExpr()
@@ -79,12 +78,12 @@ var itemInvalid = item{tok: tokenInvalid, lit: "invalid token"}
 func (p *Parser) accept(token Token) (item, error) {
 	tok, lit := p.scanIgnoreWhitespace()
 	if tok != token {
-		return itemInvalid, Error(lit, string(token))
+		return itemInvalid, expectError(lit, string(token))
 	}
 	return item{tok, lit}, nil
 }
 
-// Error ...
-func Error(got, exp string) error {
+// expectError ...
+func expectError(got, exp string) error {
 	return fmt.Errorf("got %q, expected %s", got, exp)
 }

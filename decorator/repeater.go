@@ -3,7 +3,7 @@ package decorator
 import (
 	"strconv"
 
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // repeater runs its child either until it returns core.StatusRunning
@@ -15,7 +15,7 @@ type repeater struct {
 }
 
 // Repeater ...
-func Repeater(params core.Params, child core.INode) core.INode {
+func Repeater(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Repeater", params)
 	base.Child = child
 	d := &repeater{Decorator: base}

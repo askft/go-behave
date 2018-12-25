@@ -1,7 +1,7 @@
 package core
 
 // Update updates a node.
-func Update(node INode, ctx *Context) Status {
+func Update(node Node, ctx *Context) Status {
 	status := node.GetStatus()
 	if status != StatusRunning {
 		node.Start(ctx)

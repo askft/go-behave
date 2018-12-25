@@ -1,31 +1,30 @@
-package behaviortree
+package behave
 
 import (
-	"fmt"
-	"strings"
-
-	"github.com/alexanderskafte/behaviortree/core"
-	"github.com/alexanderskafte/behaviortree/lang"
-	"github.com/alexanderskafte/behaviortree/registry"
-	"github.com/alexanderskafte/behaviortree/store"
-	"github.com/alexanderskafte/behaviortree/util"
+	"github.com/alexanderskafte/go-behave/action"
+	"github.com/alexanderskafte/go-behave/composite"
+	"github.com/alexanderskafte/go-behave/core"
+	"github.com/alexanderskafte/go-behave/decorator"
+	"github.com/alexanderskafte/go-behave/gbl"
+	"github.com/alexanderskafte/go-behave/store"
+	"github.com/alexanderskafte/go-behave/util"
 )
 
-// Config has the following fields:
-// - `Owner`, the owner of the tree instance
-// - `Store`, a global store shared by all entities
-// - `Registry`, maps function name to constructor function
-// - `Definition`, a behavior tree defined as a string
-//
-// TODO: Don't take a definition string, take a compiled node.
+// Config describes the configuration of a BehaviorTree object.
 type Config struct {
-	Owner      interface{}
-	Store      store.Interface
-	Registry   *registry.Registry
-	Definition string
+	Owner interface{}     // Owner of a tree instance
+	Store store.Interface // Global store shared by all entities
+	Root  core.Node       // Root node of the tree
 }
 
-// NewBehaviorTree returns a new behavior tree, configured by `cfg`.
+// BehaviorTree ...
+type BehaviorTree struct {
+	Root    core.Node
+	context *core.Context
+}
+
+// NewBehaviorTree returns a new BehaviorTree. A data context
+// to be propagated down the tree each tick is created.
 func NewBehaviorTree(cfg Config) (*BehaviorTree, error) {
 	var eb util.ErrorBuilder
 	eb.SetMessage("NewBehaviorTree")
@@ -35,56 +34,59 @@ func NewBehaviorTree(cfg Config) (*BehaviorTree, error) {
 	if cfg.Store == nil {
 		eb.Write("Config.Store is nil")
 	}
-	if cfg.Registry == nil {
-		eb.Write("Config.Registry is nil")
-	}
-	if cfg.Definition == "" {
-		eb.Write("Config.Definition is nil")
+	if cfg.Root == nil {
+		eb.Write("Config.Root is nil")
 	}
 	if eb.Error() != nil {
 		return nil, eb.Error()
 	}
-	root, err := lang.NewParser(cfg.Registry).Compile(cfg.Definition)
-	if err != nil {
-		return nil, err
-	}
 	tree := &BehaviorTree{
-		Context: core.NewContext(cfg.Owner, cfg.Store),
-		Root:    root,
+		Root:    cfg.Root,
+		context: core.NewContext(cfg.Owner, cfg.Store),
 	}
 	return tree, nil
 }
 
-// BehaviorTree ...
-type BehaviorTree struct {
-	Context *core.Context
-	Root    core.INode
-}
-
 // Update propagates an update call down the behavior tree.
 func (bt *BehaviorTree) Update() core.Status {
-	return core.Update(bt.Root, bt.Context)
+	return core.Update(bt.Root, bt.context)
 }
 
 // String creates a string representation of the behavior tree
 // by traversing it and writing lexical elements to a string.
 func (bt *BehaviorTree) String() string {
-	return NodeToString(bt.Root)
+	return util.NodeToString(bt.Root)
 }
 
-// NodeToString returns a string representation of a node,
-// including those of all its children.
-func NodeToString(node core.INode) string {
-	var b strings.Builder
-	fmt.Println()
-	nodeRecurse(node, 0, &b)
-	return b.String()
-}
-
-func nodeRecurse(node core.INode, level int, b *strings.Builder) {
-	indent := strings.Repeat("    ", level)
-	b.WriteString(indent + node.String() + "\n")
-	for _, child := range node.GetChildren() {
-		nodeRecurse(child, level+1, b)
+// NewNode takes a set of nodes defined in a registry, and a definition
+// string for a behavior tree, compiles the string and returns the root
+// node if the compilation was successful, else an error.
+func NewNode(reg *gbl.Registry, def string) (core.Node, error) {
+	node, err := gbl.NewParser(reg).Compile(def)
+	if err != nil {
+		return nil, err
 	}
+	return node, nil
+}
+
+// CommonNodeRegistry returns a Registry with
+// a set of predefined nodes registered.
+func CommonNodeRegistry() *gbl.Registry {
+	r := gbl.NewRegistry()
+	r.Register(core.CategoryComposite,
+		composite.Sequence,
+		composite.Selector,
+		composite.RandomSequence,
+		composite.RandomSelector,
+	)
+	r.Register(core.CategoryDecorator,
+		decorator.Delayer,
+		decorator.Inverter,
+		decorator.Repeater,
+	)
+	r.Register(core.CategoryLeaf,
+		action.Succeed,
+		action.Fail,
+	)
+	return r
 }

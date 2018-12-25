@@ -1,13 +1,13 @@
-package lang
+package gbl
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
-func (p *Parser) parseComposite(name string) (core.INode, error) {
+func (p *Parser) parseComposite(name string) (core.Node, error) {
 
 	if tok, lit := p.scanIgnoreWhitespace(); tok != tokenBracketLeft {
-		return nil, Error(lit, "{")
+		return nil, expectError(lit, "{")
 	}
 
 	children, err := p.parseCompositeChildren(tokenBracketRight)
@@ -15,7 +15,7 @@ func (p *Parser) parseComposite(name string) (core.INode, error) {
 		return nil, err
 	}
 
-	tmp, err := p.fnRegistry.GetFunction(name)
+	tmp, _, err := p.fnRegistry.Get(name)
 	if err != nil {
 		return nil, err
 	}
@@ -23,8 +23,8 @@ func (p *Parser) parseComposite(name string) (core.INode, error) {
 	return fn(children...), nil
 }
 
-func (p *Parser) parseCompositeChildren(brk Token) ([]core.INode, error) {
-	children := []core.INode{}
+func (p *Parser) parseCompositeChildren(brk Token) ([]core.Node, error) {
+	children := []core.Node{}
 	for {
 		tok, _ := p.scanIgnoreWhitespace()
 		if tok == brk {

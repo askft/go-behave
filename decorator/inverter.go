@@ -1,7 +1,7 @@
 package decorator
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // inverter ...
@@ -10,7 +10,7 @@ type inverter struct {
 }
 
 // Inverter ...
-func Inverter(params core.Params, child core.INode) core.INode {
+func Inverter(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Inverter", params)
 	base.Child = child
 	return &delayer{Decorator: base}

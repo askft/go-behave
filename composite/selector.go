@@ -1,7 +1,7 @@
 package composite
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // selector ...
@@ -10,7 +10,7 @@ type selector struct {
 }
 
 // Selector creates a new selector node.
-func Selector(children ...core.INode) core.INode {
+func Selector(children ...core.Node) core.Node {
 	base := core.NewComposite("Selector")
 	base.Children = children
 	return &selector{Composite: base}

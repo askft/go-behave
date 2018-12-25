@@ -3,11 +3,11 @@ package composite
 import (
 	"math/rand"
 
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // RandomSequence creates a new random sequence node.
-func RandomSequence(children ...core.INode) core.INode {
+func RandomSequence(children ...core.Node) core.Node {
 	base := core.NewComposite("RandomSequence")
 	base.Children = children
 	return &randomSequence{Composite: base}
@@ -42,7 +42,7 @@ func (s *randomSequence) Stop(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 
-func shuffle(nodes []core.INode) {
+func shuffle(nodes []core.Node) {
 	rand.Shuffle(len(nodes), func(i, j int) {
 		nodes[i], nodes[j] = nodes[j], nodes[i]
 	})

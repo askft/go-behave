@@ -1,4 +1,4 @@
-package lang
+package gbl
 
 /*
 	CREDIT:
@@ -50,17 +50,17 @@ var kw2tok = map[string]Token{
 
 const eof = rune(0)
 
-// IsEOF returns true if `tok` is an EOF token.
+// IsEOF returns true if tok is an EOF token.
 func (tok Token) IsEOF() bool {
 	return tok == tokenEndOfFile
 }
 
-// IsWhitespace returns true if `tok` is a whitespace token.
+// IsWhitespace returns true if tok is a whitespace token.
 func (tok Token) IsWhitespace() bool {
 	return tok == tokenWhitespace
 }
 
-// IsInvalid returns true if `tok` is an invalid token.
+// IsInvalid returns true if tok is an invalid token.
 func (tok Token) IsInvalid() bool {
 	return tok == tokenInvalid
 }
@@ -81,7 +81,7 @@ type Scanner struct {
 	r *bufio.Reader
 }
 
-// NewScanner returns a scanner that reads from `r`.
+// NewScanner returns a scanner that reads from r.
 func NewScanner(r io.Reader) *Scanner {
 	return &Scanner{r: bufio.NewReader(r)}
 }

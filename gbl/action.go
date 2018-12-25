@@ -1,13 +1,13 @@
-package lang
+package gbl
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
-func (p *Parser) parseAction(name string) (core.INode, error) {
+func (p *Parser) parseAction(name string) (core.Node, error) {
 
 	if tok, lit := p.scanIgnoreWhitespace(); tok != tokenParenLeft {
-		return nil, Error(lit, "(")
+		return nil, expectError(lit, "(")
 	}
 
 	in, err := p.parseList(tokenColon)
@@ -20,7 +20,7 @@ func (p *Parser) parseAction(name string) (core.INode, error) {
 		return nil, err
 	}
 
-	tmp, err := p.fnRegistry.GetFunction(name)
+	tmp, _, err := p.fnRegistry.Get(name)
 	if err != nil {
 		return nil, err
 	}

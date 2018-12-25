@@ -3,7 +3,7 @@ package decorator
 // import (
 // 	"fmt"
 
-// 	"github.com/alexanderskafte/behaviortree/core"
+// 	"github.com/alexanderskafte/go-behave/core"
 // )
 
 // // UntilFailure ...

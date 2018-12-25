@@ -2,10 +2,10 @@ package main
 
 // I use dot imports to make the tree definition look nicer. Sorry!
 import (
-	. "github.com/alexanderskafte/behaviortree/action"
-	. "github.com/alexanderskafte/behaviortree/composite"
-	"github.com/alexanderskafte/behaviortree/core"
-	. "github.com/alexanderskafte/behaviortree/decorator"
+	. "github.com/alexanderskafte/go-behave/action"
+	. "github.com/alexanderskafte/go-behave/composite"
+	"github.com/alexanderskafte/go-behave/core"
+	. "github.com/alexanderskafte/go-behave/decorator"
 )
 
 // The trees below are equivalent.

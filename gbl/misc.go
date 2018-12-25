@@ -1,17 +1,18 @@
-package lang
+package gbl
 
 import (
 	"fmt"
-	"github.com/alexanderskafte/behaviortree/core"
+
+	"github.com/alexanderskafte/go-behave/core"
 )
 
-func (p *Parser) parseExpr() (core.INode, error) {
+func (p *Parser) parseExpr() (core.Node, error) {
 	p.level++
 	defer func() { p.level-- }()
 
 	tok, lit := p.scanIgnoreWhitespace()
 	if !isKeyword(lit) {
-		return nil, Error(lit, "keyword")
+		return nil, expectError(lit, "keyword")
 	}
 
 	it, err := p.accept(tokenIdentifier)

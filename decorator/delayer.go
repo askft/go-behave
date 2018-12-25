@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // delayer ...
@@ -16,7 +16,7 @@ type delayer struct {
 }
 
 // Delayer ... TODO, don't have params in the Decorator parent node - it's not needed?
-func Delayer(params core.Params, child core.INode) core.INode {
+func Delayer(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Delayer", params)
 	base.Child = child
 	d := &delayer{Decorator: base}

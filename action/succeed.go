@@ -1,7 +1,7 @@
 package action
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // succeed ...
@@ -10,7 +10,7 @@ type succeed struct {
 }
 
 // Succeed returns a new succeed node.
-func Succeed(params, returns []string) core.INode {
+func Succeed(params, returns []string) core.Node {
 	base := core.NewAction("Succeed", params, returns)
 	return &succeed{Action: base}
 }

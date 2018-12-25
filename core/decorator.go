@@ -6,22 +6,22 @@ import (
 
 // Decorator base type
 type Decorator struct {
-	*Node
-	Child  INode
+	*BaseNode
+	Child  Node
 	Params Params
 }
 
 // NewDecorator ...
 func NewDecorator(name string, params map[string]string) *Decorator {
 	return &Decorator{
-		Node:   NewNode(CategoryDecorator, name),
-		Params: params,
+		BaseNode: newBaseNode(CategoryDecorator, name),
+		Params:   params,
 	}
 }
 
 // GetChildren returns a list containing the only child of the decorator node.
-func (d *Decorator) GetChildren() []INode {
-	return append([]INode{}, d.Child)
+func (d *Decorator) GetChildren() []Node {
+	return append([]Node{}, d.Child)
 }
 
 // String returns a string representation of the decorator node.

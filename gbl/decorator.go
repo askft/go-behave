@@ -1,10 +1,10 @@
-package lang
+package gbl
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
-func (p *Parser) parseDecorator(name string) (core.INode, error) {
+func (p *Parser) parseDecorator(name string) (core.Node, error) {
 
 	if _, err := p.accept(tokenParenLeft); err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (p *Parser) parseDecorator(name string) (core.INode, error) {
 		return nil, err
 	}
 
-	tmp, err := p.fnRegistry.GetFunction(name)
+	tmp, _, err := p.fnRegistry.Get(name)
 	if err != nil {
 		return nil, err
 	}

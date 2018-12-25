@@ -4,11 +4,11 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // RandomSelector creates a new random selector node.
-func RandomSelector(children ...core.INode) core.INode {
+func RandomSelector(children ...core.Node) core.Node {
 	base := core.NewComposite("RandomSelector")
 	base.Children = children
 	return &randomSelector{Composite: base}

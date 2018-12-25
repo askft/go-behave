@@ -1,41 +1,45 @@
 package core
 
-// INode ...
-type INode interface {
-	GetChildren() []INode
-	GetCategory() Category
+// The Node interface must be satisfied by any custom node.
+type Node interface {
+
+	// Automatically implemented by embedding a pointer to a
+	// Composite, Decorator or Action node in the custom node.
 	GetStatus() Status
 	SetStatus(Status)
+	GetCategory() Category
+	GetChildren() []Node
 	String() string
 
+	// Must be implemented by the custom node.
 	Start(*Context)
 	Tick(*Context) Status
 	Stop(*Context)
 }
 
-// Node ...
-type Node struct {
+// BaseNode contains properties shared by all categories of node.
+// Do not use this type directly.
+type BaseNode struct {
 	Category
 	Status
 	Name string
 }
 
-// NewNode ...
-func NewNode(category Category, name string) *Node {
-	return &Node{Category: category, Name: name}
+func newBaseNode(category Category, name string) *BaseNode {
+	return &BaseNode{Category: category, Name: name}
 }
 
-// GetCategory returns the category of the node.
-func (n *Node) GetCategory() Category {
-	return n.Category
-}
-
-// GetStatus ...
-func (n *Node) GetStatus() Status {
+// GetStatus returns the status of this node.
+func (n *BaseNode) GetStatus() Status {
 	return n.Status
 }
 
-// SetStatus ...
-func (n *Node) SetStatus(status Status) {
+// SetStatus sets the status of this node.
+func (n *BaseNode) SetStatus(status Status) {
 	n.Status = status
+}
+
+// GetCategory returns the category of this node.
+func (n *BaseNode) GetCategory() Category {
+	return n.Category
 }

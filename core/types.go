@@ -23,14 +23,14 @@ const (
 )
 
 type (
-	// CompositeFn ...
-	CompositeFn func(...INode) INode
+	// CompositeFn specifies the kind of a composite constructor function.
+	CompositeFn = func(...Node) Node
 
-	// DecoratorFn ...
-	DecoratorFn func(Params, INode) INode
+	// DecoratorFn specifies the kind of a decorator constructor function.
+	DecoratorFn = func(Params, Node) Node
 
-	// ActionFn ...
-	ActionFn func([]string, []string) INode
+	// ActionFn specifies the kind of a action constructor function.
+	ActionFn = func([]string, []string) Node
 )
 
 type (

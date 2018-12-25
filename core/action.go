@@ -6,7 +6,7 @@ import (
 
 // Action ...
 type Action struct {
-	*Node
+	*BaseNode
 	Params  []string
 	Returns []string
 }
@@ -14,20 +14,20 @@ type Action struct {
 // NewAction ...
 func NewAction(name string, params, returns []string) *Action {
 	return &Action{
-		Node:    NewNode(CategoryLeaf, name),
-		Params:  params,
-		Returns: returns,
+		BaseNode: newBaseNode(CategoryLeaf, name),
+		Params:   params,
+		Returns:  returns,
 	}
 }
 
-// GetChildren returns an empty list of INode, since a leaf has no children.
+// GetChildren returns an empty list of Node, since a leaf has no children.
 // This method is required for Action in order to implement IBase.
-func (a *Action) GetChildren() []INode {
-	return []INode{}
+func (a *Action) GetChildren() []Node {
+	return []Node{}
 }
 
 // String returns a string representation of the action node.
-func (a Action) String() string {
+func (a *Action) String() string {
 	return fmt.Sprintf("! %s (%v : %v)",
 		a.Name,
 		a.Params,

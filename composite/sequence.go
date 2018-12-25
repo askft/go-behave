@@ -1,7 +1,7 @@
 package composite
 
 import (
-	"github.com/alexanderskafte/behaviortree/core"
+	"github.com/alexanderskafte/go-behave/core"
 )
 
 // sequence ...
@@ -10,7 +10,7 @@ type sequence struct {
 }
 
 // Sequence creates a new sequence node.
-func Sequence(children ...core.INode) core.INode {
+func Sequence(children ...core.Node) core.Node {
 	base := core.NewComposite("Sequence")
 	base.Children = children
 	return &sequence{Composite: base}
