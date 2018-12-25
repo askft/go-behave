@@ -64,7 +64,7 @@ func (p *Parser) scanIgnoreWhitespace() (tok Token, lit string) {
 	if tok == tokenWhitespace {
 		tok, lit = p.scan()
 	}
-	fmt.Println(strings.Repeat("   ", p.level) + lit)
+	// fmt.Println(strings.Repeat("   ", p.level) + lit)
 	return
 }
 

@@ -69,7 +69,7 @@ A leaf node can also be a _condition node_ which returns Success or Failure depe
     <a href="#license">License</a>
 </p>-->
 
-Please see the `examples` package.
+Please see the [documentation](https://godoc.org/github.com/AlexanderSkafte/go-behave) and the [examples](examples).
 
 ### Defining custom nodes
 
