@@ -19,12 +19,12 @@ The library is still under development. Please do not assume API stability.
 
 ## <a id="introduction" style="text-decoration:none;color:inherit;">Introduction</a>
 
-<p align=center>
+<!--<p align=center>
     <b><u><a href="#introduction">Introduction</a></u></b> •
     <a href="#usage">Usage</a> •
     <a href="#installation">Installation</a> •
     <a href="#license">License</a>
-</p>
+</p>-->
 
 A behavior tree is a formalism for describing the behavior of an autonomous entity such as a robot or a non-player character in a video game. A behavior trees, by its nature, allows for highly modular behavior design thanks to the composability of its nodes, and the formalism makes task switching and state management trivial.
 
@@ -62,12 +62,12 @@ A leaf node can also be a _condition node_ which returns Success or Failure depe
 
 ## <a id="usage" style="text-decoration:none;color:inherit;">Usage</a>
 
-<p align=center>
+<!--<p align=center>
     <a href="#introduction">Introduction</a> •
     <b><u><a href="#usage">Usage</a></u></b> •
     <a href="#installation">Installation</a> •
     <a href="#license">License</a>
-</p>
+</p>-->
 
 Please see the `examples` package.
 
@@ -109,12 +109,12 @@ The store refers to any type that implements `store.Interface`. Such an implemen
 
 ## <a id="installation" style="text-decoration:none;color:inherit;">Installation</a>
 
-<p align=center>
+<!--<p align=center>
     <a href="#introduction">Introduction</a> •
     <a href="#usage">Usage</a> •
     <b><u><a href="#installation">Installation</a></u></b> •
     <a href="#license">License</a>
-</p>
+</p>-->
 
 `go get github.com/alexanderskafte/go-behave`
 
@@ -122,11 +122,11 @@ The package is identified by `behave`, not `go-behave`.
 
 ## <a id="license" style="text-decoration:none;color:inherit;">License</a>
 
-<p align=center>
+<!--<p align=center>
     <a href="#introduction">Introduction</a> •
     <a href="#usage">Usage</a> •
     <a href="#installation">Installation</a> •
     <b><u><a href="#license">License</a></u></b>
-</p>
+</p>-->
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
