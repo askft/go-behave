@@ -16,8 +16,7 @@ type repeater struct {
 
 // Repeater ...
 func Repeater(params core.Params, child core.Node) core.Node {
-	base := core.NewDecorator("Repeater", params)
-	base.Child = child
+	base := core.NewDecorator("Repeater", params, child)
 	d := &repeater{Decorator: base}
 
 	n, err := strconv.Atoi(d.Params["n"])

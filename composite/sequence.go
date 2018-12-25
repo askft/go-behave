@@ -11,8 +11,7 @@ type sequence struct {
 
 // Sequence creates a new sequence node.
 func Sequence(children ...core.Node) core.Node {
-	base := core.NewComposite("Sequence")
-	base.Children = children
+	base := core.NewComposite("Sequence", children)
 	return &sequence{Composite: base}
 }
 

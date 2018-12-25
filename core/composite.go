@@ -8,10 +8,10 @@ type Composite struct {
 }
 
 // NewComposite ...
-func NewComposite(name string) *Composite {
+func NewComposite(name string, children []Node) *Composite {
 	return &Composite{
 		BaseNode: newBaseNode(CategoryComposite, name),
-		Children: []Node{},
+		Children: children,
 	}
 }
 

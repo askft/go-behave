@@ -11,8 +11,7 @@ type selector struct {
 
 // Selector creates a new selector node.
 func Selector(children ...core.Node) core.Node {
-	base := core.NewComposite("Selector")
-	base.Children = children
+	base := core.NewComposite("Selector", children)
 	return &selector{Composite: base}
 }
 

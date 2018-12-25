@@ -15,10 +15,9 @@ type delayer struct {
 	start time.Time
 }
 
-// Delayer ... TODO, don't have params in the Decorator parent node - it's not needed?
+// Delayer ...
 func Delayer(params core.Params, child core.Node) core.Node {
-	base := core.NewDecorator("Delayer", params)
-	base.Child = child
+	base := core.NewDecorator("Delayer", params, child)
 	d := &delayer{Decorator: base}
 
 	str, ok := params["ms"]

@@ -8,8 +8,7 @@ import (
 
 // RandomSequence creates a new random sequence node.
 func RandomSequence(children ...core.Node) core.Node {
-	base := core.NewComposite("RandomSequence")
-	base.Children = children
+	base := core.NewComposite("RandomSequence", children)
 	return &randomSequence{Composite: base}
 }
 

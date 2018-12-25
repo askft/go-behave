@@ -12,9 +12,10 @@ type Decorator struct {
 }
 
 // NewDecorator ...
-func NewDecorator(name string, params map[string]string) *Decorator {
+func NewDecorator(name string, params map[string]string, child Node) *Decorator {
 	return &Decorator{
 		BaseNode: newBaseNode(CategoryDecorator, name),
+		Child:    child,
 		Params:   params,
 	}
 }

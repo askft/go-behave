@@ -9,8 +9,7 @@ import (
 
 // RandomSelector creates a new random selector node.
 func RandomSelector(children ...core.Node) core.Node {
-	base := core.NewComposite("RandomSelector")
-	base.Children = children
+	base := core.NewComposite("RandomSelector", children)
 	return &randomSelector{Composite: base}
 }
 
