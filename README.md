@@ -2,11 +2,29 @@
 
 **<p align=center>An extensible Behavior Tree library in Go.</p>**
 
+<p align=center>
+    <a href="#introduction">Introduction</a> •
+    <a href="#usage">Usage</a> •
+    <a href="#installation">Installation</a> •
+    <a href="#license">License</a>
+</p>
+
+<p align="center">
+    <img src="image.png" width=60% />
+</p>
+
 ## Important notice
 
-The library is still being developed. Please do not assume API stability.
+The library is still under development. Please do not assume API stability.
 
-## What is a behavior tree?
+## <a id="introduction" style="text-decoration:none;color:inherit;">Introduction</a>
+
+<p align=center>
+    <b><u><a href="#introduction">Introduction</a></u></b> •
+    <a href="#usage">Usage</a> •
+    <a href="#installation">Installation</a> •
+    <a href="#license">License</a>
+</p>
 
 A behavior tree is a formalism for describing the behavior of an autonomous entity such as a robot or a non-player character in a video game. A behavior trees, by its nature, allows for highly modular behavior design thanks to the composability of its nodes, and the formalism makes task switching and state management trivial.
 
@@ -42,7 +60,14 @@ A leaf node, also called execution node, action node or task node, is normally s
 
 A leaf node can also be a _condition node_ which returns Success or Failure depending on whether some condition is fulfilled in the environment.
 
-## Usage
+## <a id="usage" style="text-decoration:none;color:inherit;">Usage</a>
+
+<p align=center>
+    <a href="#introduction">Introduction</a> •
+    <b><u><a href="#usage">Usage</a></u></b> •
+    <a href="#installation">Installation</a> •
+    <a href="#license">License</a>
+</p>
 
 Please see the `examples` package.
 
@@ -82,10 +107,26 @@ The owner of the tree depends on the application at hand, so the type is `interf
 
 The store refers to any type that implements `store.Interface`. Such an implementation is offered by the library - a `Blackboard` ([store/Blackboard.go](https://github.com/AlexanderSkafte/go-behave/blob/master/store/blackboard.go)) type that simply wraps a `map[string]interface{}`.
 
-## Installation
+## <a id="installation" style="text-decoration:none;color:inherit;">Installation</a>
 
-`$ go get github.com/alexanderskafte/go-behave`
+<p align=center>
+    <a href="#introduction">Introduction</a> •
+    <a href="#usage">Usage</a> •
+    <b><u><a href="#installation">Installation</a></u></b> •
+    <a href="#license">License</a>
+</p>
 
-## License
+`go get github.com/alexanderskafte/go-behave`
+
+The package is identified by `behave`, not `go-behave`.
+
+## <a id="license" style="text-decoration:none;color:inherit;">License</a>
+
+<p align=center>
+    <a href="#introduction">Introduction</a> •
+    <a href="#usage">Usage</a> •
+    <a href="#installation">Installation</a> •
+    <b><u><a href="#license">License</a></u></b>
+</p>
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
