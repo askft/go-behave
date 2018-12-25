@@ -14,33 +14,23 @@ Leaf nodes require a data context, which will be propagated throughout the tree 
 
 A composite node has a type and one or more children. Below are some common types of composite nodes:
 
-#### Sequence
-
-Tick children in order. Succeeds only if each child succeeds. Fails as soon as any child fails. Returns Running if the currently executing child returns Running.
-
-#### Selector
-
-Tick children in order. Succeeds as soon as a child succeeds. Fails only if each child fails. Returns Running if the currently executing child returns Running.
-
-#### Random Sequence and Random Selector
-
-Same as sequence and selector, except the order of the children is randomized before each time the node runs.
+- **Sequence**:
+  Tick children in order. Succeeds only if each child succeeds. Fails as soon as any child fails. Returns Running if the currently executing child returns Running.
+- **Selector**:
+  Tick children in order. Succeeds as soon as a child succeeds. Fails only if each child fails. Returns Running if the currently executing child returns Running.
+- **Random Sequence and Random Selector**:
+  Same as sequence and selector, except the order of the children is randomized before each time the node runs.
 
 ### Decorator nodes
 
 A decorator node has a type and one child. Below are some common types of decorator nodes.
 
-#### Inverter
-
-The inverter node inverts (negates) the the result of its child, or returns Running if the child returns Running.
-
-#### Repeater
-
-A repeater node will re-tick its child when it returns Success or Failure. The number of times the child is re-ticked can be limited or unlimited. Often used to wrap the root of the tree in order to make the tree run indefinitely.
-
-#### Delayer
-
-A delayer node will always return Running during a certain amount of time, after which it tick its child and return its status.
+- **Inverter**:
+  The inverter node inverts (negates) the the result of its child, or returns Running if the child returns Running.
+- **Repeater**:
+  A repeater node will re-tick its child when it returns Success or Failure. The number of times the child is re-ticked can be limited or unlimited. Often used to wrap the root of the tree in order to make the tree run indefinitely.
+- **Delayer**:
+  A delayer node will always return Running during a certain amount of time, after which it tick its child and return its status.
 
 ### Leaf nodes
 
