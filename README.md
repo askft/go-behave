@@ -93,7 +93,9 @@ A behavior tree describing a specific behavior can be built in one of two ways: 
 
 Please see [examples/behave](https://github.com/AlexanderSkafte/go-behave/tree/master/examples/behave) for examples.
 
-Defining a behavior tree in GBL requires pre-registration of nodes to be used via a \*`gbl.Registry` handle in order for the parser to recognize them. The [behave](https://github.com/AlexanderSkafte/go-behave/blob/master/behave.go) provides a `CommonNodeRegistry` function that will return a registry with available common nodes registered. Please refer to [gbl/registry.go](https://github.com/AlexanderSkafte/go-behave/blob/master/gbl/registry.go) for full documentation of the registry.
+Defining a behavior tree in GBL requires pre-registration of nodes to be used via a `*gbl.Registry` handle in order for the parser to recognize them. The [behave](https://github.com/AlexanderSkafte/go-behave/blob/master/behave.go) package provides a `CommonNodeRegistry` function that will return a registry with available common nodes registered.
+
+**TODO**: Make a document outlining the GBL specification.
 
 #### Using Go to define a behavior tree
 
