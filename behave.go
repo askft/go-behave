@@ -17,7 +17,7 @@ type Config struct {
 // BehaviorTree ...
 type BehaviorTree struct {
 	Root    core.Node
-	context *core.Context
+	Context *core.Context
 }
 
 // NewBehaviorTree returns a new BehaviorTree. A data context
@@ -39,14 +39,14 @@ func NewBehaviorTree(cfg Config) (*BehaviorTree, error) {
 	}
 	tree := &BehaviorTree{
 		Root:    cfg.Root,
-		context: core.NewContext(cfg.Owner, cfg.Store),
+		Context: core.NewContext(cfg.Owner, cfg.Store),
 	}
 	return tree, nil
 }
 
 // Update propagates an update call down the behavior tree.
 func (bt *BehaviorTree) Update() core.Status {
-	return core.Update(bt.Root, bt.context)
+	return core.Update(bt.Root, bt.Context)
 }
 
 // String creates a string representation of the behavior tree
