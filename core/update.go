@@ -1,6 +1,7 @@
 package core
 
-// Update updates a node.
+// Update updates a node by calling its Start method if it is not running,
+// then its Tick method, and finally Stop if it is not still running.
 func Update(node Node, ctx *Context) Status {
 	status := node.GetStatus()
 	if status != StatusRunning {

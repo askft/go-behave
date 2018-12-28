@@ -1,13 +1,15 @@
 package core
 
-// Composite base type
+// Composite is the base type for any specific composite node. Such a node
+// may be domain-specific, but usually one of the common nodes will be used,
+// such as Sequence or Selector.
 type Composite struct {
 	*BaseNode
 	Children     []Node
 	CurrentChild int
 }
 
-// NewComposite ...
+// NewComposite creates a new composite base node.
 func NewComposite(name string, children []Node) *Composite {
 	return &Composite{
 		BaseNode: newBaseNode(CategoryComposite, name),
@@ -22,5 +24,5 @@ func (c *Composite) GetChildren() []Node {
 
 // String returns a string representation of the composite node.
 func (c *Composite) String() string {
-	return "+ " + c.Name
+	return "+ " + c.name
 }

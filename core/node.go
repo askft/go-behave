@@ -20,26 +20,26 @@ type Node interface {
 // BaseNode contains properties shared by all categories of node.
 // Do not use this type directly.
 type BaseNode struct {
-	Category
-	Status
-	Name string
+	category Category
+	name     string
+	status   Status
 }
 
 func newBaseNode(category Category, name string) *BaseNode {
-	return &BaseNode{Category: category, Name: name}
+	return &BaseNode{category: category, name: name}
 }
 
 // GetStatus returns the status of this node.
 func (n *BaseNode) GetStatus() Status {
-	return n.Status
+	return n.status
 }
 
 // SetStatus sets the status of this node.
 func (n *BaseNode) SetStatus(status Status) {
-	n.Status = status
+	n.status = status
 }
 
 // GetCategory returns the category of this node.
 func (n *BaseNode) GetCategory() Category {
-	return n.Category
+	return n.category
 }

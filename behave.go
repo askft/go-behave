@@ -1,10 +1,7 @@
 package behave
 
 import (
-	"github.com/alexanderskafte/go-behave/action"
-	"github.com/alexanderskafte/go-behave/composite"
 	"github.com/alexanderskafte/go-behave/core"
-	"github.com/alexanderskafte/go-behave/decorator"
 	"github.com/alexanderskafte/go-behave/gbl"
 	"github.com/alexanderskafte/go-behave/store"
 	"github.com/alexanderskafte/go-behave/util"
@@ -67,26 +64,4 @@ func NewNode(reg *gbl.Registry, def string) (core.Node, error) {
 		return nil, err
 	}
 	return node, nil
-}
-
-// CommonNodeRegistry returns a Registry with
-// a set of predefined nodes registered.
-func CommonNodeRegistry() *gbl.Registry {
-	r := gbl.NewRegistry()
-	r.Register(core.CategoryComposite,
-		composite.Sequence,
-		composite.Selector,
-		composite.RandomSequence,
-		composite.RandomSelector,
-	)
-	r.Register(core.CategoryDecorator,
-		decorator.Delayer,
-		decorator.Inverter,
-		decorator.Repeater,
-	)
-	r.Register(core.CategoryLeaf,
-		action.Succeed,
-		action.Fail,
-	)
-	return r
 }

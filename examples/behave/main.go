@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/alexanderskafte/go-behave"
+	"github.com/alexanderskafte/go-behave/common"
 	"github.com/alexanderskafte/go-behave/core"
 	"github.com/alexanderskafte/go-behave/gbl"
 	"github.com/alexanderskafte/go-behave/store"
@@ -14,9 +15,9 @@ import (
 	// Use dot imports to make a tree definition look nice.
 	// Be careful when doing this! These packages export
 	// common word identifiers such as "Fail" and "Sequence".
-	. "github.com/alexanderskafte/go-behave/action"
-	. "github.com/alexanderskafte/go-behave/composite"
-	. "github.com/alexanderskafte/go-behave/decorator"
+	. "github.com/alexanderskafte/go-behave/common/action"
+	. "github.com/alexanderskafte/go-behave/common/composite"
+	. "github.com/alexanderskafte/go-behave/common/decorator"
 )
 
 // The two trees below are equivalent.
@@ -59,6 +60,11 @@ func main() {
 	testScanner()
 	testParser()
 	testTree(someRoot)
+	testCircularDependency()
+}
+
+func testCircularDependency() {
+	return
 }
 
 func testScanner() {
@@ -85,7 +91,7 @@ func testScanner() {
 
 func testParser() {
 	fmt.Println("Testing parser...")
-	reg := behave.CommonNodeRegistry()
+	reg := common.NodeRegistry()
 	node, err := gbl.NewParser(reg).Compile(rootGBL)
 	if err != nil {
 		panic(err)
