@@ -64,12 +64,11 @@ func (r *Registry) registerOne(category core.Category, fn interface{}) {
 // in s, as the function referred to in r is overwritten.
 func (r *Registry) Merge(s *Registry) (*Registry, error) {
 	t := NewRegistry()
-	var err error
-	e1 := t.merge(r)
-	e2 := t.merge(s)
-	err = errors.Wrap(e1, e1.Error())
-	err = errors.Wrap(e2, e2.Error())
-	return t, err
+	var e error
+	_ = t.merge(r) // Can not fail when merging with empty registry.
+	e = t.merge(s)
+	e = errors.Wrap(e, e.Error())
+	return t, e
 }
 
 func (r *Registry) merge(s *Registry) error {
@@ -124,60 +123,3 @@ func (r *Registry) Get(name string) (interface{}, core.Category, error) {
 	}
 	return fn, r.categoryFor[name], nil
 }
-
-// TODO: Remove? This is unused and probably not necessary since
-// a `core.Node` has a `GetCategory()` method.
-// // CategoryFor returns the category to which the type `name` belongs.
-// func (r *Registry) CategoryFor(name string) (core.Category, error) {
-// 	category, ok := r.categoryFor[name]
-// 	if !ok {
-// 		return core.CategoryInvalid, fmt.Errorf("%q not found in registry", name)
-// 	}
-// 	return category, nil
-// }
-
-// TODO: Remove. Old code.
-// keys1 := []string{}
-// keys2 := []string{}
-// for name := range r1.categoryFor {
-// 	keys1 = append(keys1, name)
-// }
-// for name := range r2.categoryFor {
-// 	keys2 = append(keys2, name)
-// }
-// for _, name := range keys1 {
-// 	r.categoryFor[name] = r1.categoryFor[name]
-// 	r.cs[name] = r1.cs[name]
-// 	r.ds[name] = r1.ds[name]
-// 	r.as[name] = r1.as[name]
-// }
-// for _, name := range keys2 {
-// 	r.categoryFor[name] = r2.categoryFor[name]
-// 	r.cs[name] = r2.cs[name]
-// 	r.ds[name] = r2.ds[name]
-// 	r.as[name] = r2.as[name]
-// }
-
-// r := NewRegistry()
-// for name := range r1.categoryFor {
-// 	r.categoryFor[name] = r1.categoryFor[name]
-// 	r.cs[name] = r1.cs[name]
-// 	r.ds[name] = r1.ds[name]
-// 	r.as[name] = r1.as[name]
-// }
-// var err error
-// for name := range r2.categoryFor {
-// 	if r.contains(name) {
-// 		msg := fmt.Sprintf("registry already contains name %q", name)
-// 		if err == nil {
-// 			err = errors.New(msg)
-// 		} else {
-// 			err = errors.Wrap(err, msg)
-// 		}
-// 	}
-// 	r.categoryFor[name] = r2.categoryFor[name]
-// 	r.cs[name] = r2.cs[name]
-// 	r.ds[name] = r2.ds[name]
-// 	r.as[name] = r2.as[name]
-// }
-// return r, err
