@@ -1,3 +1,5 @@
+// Package common provides a registry containing number of useful
+// predefined nodes. Subpackages provides the nodes themselves.
 package common
 
 import (
