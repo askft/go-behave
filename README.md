@@ -87,7 +87,7 @@ In order to define a custom node type, the type must embed `*core.T` where `T` i
 (n *YourCustomNode) Stop(*core.Context)
 ```
 
-The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. If you intend to construct a tree containing the node by compiling a definition string (see the next section), the function type of the custom node's constructor function must match one of `CompositeFn`, `DecoratorFn` or `ActionFn` (see [core/types.go](https://github.com/AlexanderSkafte/go-behave/blob/master/core/types.go)). An example can be seen in [decorator/repeater.go](https://github.com/AlexanderSkafte/go-behave/blob/master/common/decorator/repeater.go) (or any other type in the `composite`, `decorator` or `action` packages).
+The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. If you intend to construct a tree containing the node by compiling a definition string (see the next section), the function type of the custom node's constructor function must match one of `CompositeFn`, `DecoratorFn` or `ActionFn` (see [core/types.go](core/types.go)). An example can be seen in [common/decorator/repeater.go](common/decorator/repeater.go) (or any other type in the `composite`, `decorator` or `action` packages).
 
 ### Defining behavior
 
@@ -95,9 +95,9 @@ A behavior tree describing a specific behavior can be built in one of two ways: 
 
 #### Using GBL to define a behavior tree
 
-Please see [examples/behave](https://github.com/AlexanderSkafte/go-behave/tree/master/examples/behave) for examples.
+Please see [examples/behave](examples/behave) for examples.
 
-Defining a behavior tree in GBL requires pre-registration of nodes to be used via a `*gbl.Registry` handle in order for the parser to recognize them. The [behave](https://github.com/AlexanderSkafte/go-behave/blob/master/behave.go) package provides a `CommonNodeRegistry` function that will return a registry with available common nodes registered.
+Defining a behavior tree in GBL requires pre-registration of nodes to be used via a `*gbl.Registry` handle in order for the parser to recognize them. The [behave](behave.go) package provides a `CommonNodeRegistry` function that will return a registry with available common nodes registered.
 
 **TODO**: Make a document outlining the GBL specification.
 
@@ -107,7 +107,7 @@ Please see [examples/behave](examples/behave) for examples.
 
 ### Creating behavior tree instances
 
-An instance of a `BehaviorTree` type can be created by passing a `Config` object to the `NewBehaviorTree` function. Config has two fields - `Owner` and `Data`, both of type `interface{}`. How you choose to use these fields is up to you. Commonly, `Owner` refers to the entity to which the behavior tree is attached, and `Data` refers to some kind of storage mechanism, such as a `Blackboard` (e.g. ([store/Blackboard.go](https://github.com/AlexanderSkafte/go-behave/blob/master/store/blackboard.go))) or any structure of your choice. The types of `Owner` and `Data` will of course have to be asserted inside the application specific nodes at runtime.
+An instance of a `BehaviorTree` type can be created by passing a `Config` object to the `NewBehaviorTree` function. Config has two fields - `Owner` and `Data`, both of type `interface{}`. How you choose to use these fields is up to you. Commonly, `Owner` refers to the entity to which the behavior tree is attached, and `Data` refers to some kind of storage mechanism, such as a `Blackboard` (e.g. ([store/Blackboard.go](store/blackboard.go))) or any structure of your choice. The types of `Owner` and `Data` will of course have to be asserted inside the application specific nodes at runtime.
 
 ## <a id="installation" style="text-decoration:none;color:inherit;">Installation</a>
 
