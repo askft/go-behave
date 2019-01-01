@@ -87,7 +87,7 @@ In order to define a custom node type, the type must embed `*core.T` where `T` i
 (n *YourCustomNode) Stop(*core.Context)
 ```
 
-The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. If you intend to construct a tree containing the node by compiling a definition string (see the next section), the function type of the custom node's constructor function must match one of `CompositeFn`, `DecoratorFn` or `ActionFn` (see [core/types.go](https://github.com/AlexanderSkafte/go-behave/blob/master/core/types.go)). An example can be seen in [decorator/repeater.go](https://github.com/AlexanderSkafte/go-behave/blob/master/decorator/repeater.go) (or any other type in the `composite`, `decorator` or `action` packages).
+The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. If you intend to construct a tree containing the node by compiling a definition string (see the next section), the function type of the custom node's constructor function must match one of `CompositeFn`, `DecoratorFn` or `ActionFn` (see [core/types.go](https://github.com/AlexanderSkafte/go-behave/blob/master/core/types.go)). An example can be seen in [decorator/repeater.go](https://github.com/AlexanderSkafte/go-behave/blob/master/common/decorator/repeater.go) (or any other type in the `composite`, `decorator` or `action` packages).
 
 ### Defining behavior
 
@@ -103,7 +103,7 @@ Defining a behavior tree in GBL requires pre-registration of nodes to be used vi
 
 #### Using Go to define a behavior tree
 
-Please see [examples/behave](https://github.com/AlexanderSkafte/go-behave/tree/master/examples/behave) for examples.
+Please see [examples/behave](examples/behave) for examples.
 
 ### Creating behavior tree instances
 
