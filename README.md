@@ -107,7 +107,7 @@ Please see [examples/behave](examples/behave) for examples.
 
 ### Creating behavior tree instances
 
-An instance of a `BehaviorTree` type can be created by passing a `Config` object to the `NewBehaviorTree` function. Config has two fields - `Owner` and `Data`, both of type `interface{}`. How you choose to use these fields is up to you. Commonly, `Owner` refers to the entity to which the behavior tree is attached, and `Data` refers to some kind of storage mechanism, such as a `Blackboard` (e.g. ([store/Blackboard.go](store/blackboard.go))) or any structure of your choice. The types of `Owner` and `Data` will of course have to be asserted inside the application specific nodes at runtime.
+An instance of a `BehaviorTree` type can be created by passing a `Config` object to the `NewBehaviorTree` function. In addition to have a reference to an actual root node, `Config` has two fields - `Owner` and `Data`, both of type `interface{}`. How you choose to use these fields is up to you. Commonly, `Owner` refers to the entity to which the behavior tree is attached, and `Data` refers to some kind of storage mechanism, such as a `Blackboard` (e.g. ([store/Blackboard.go](store/blackboard.go))) or any structure of your choice. The types of `Owner` and `Data` will of course have to be asserted inside the application specific nodes at runtime.
 
 ## <a id="installation" style="text-decoration:none;color:inherit;">Installation</a>
 
