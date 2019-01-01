@@ -4,7 +4,7 @@
 
 <p align="center">
     <a href="https://godoc.org/github.com/askft/go-behave"><img src="https://godoc.org/github.com/askft/go-behave?status.svg" alt="GoDoc"></a>
-    <a href="https://travis-ci.com/username/projectname"><img src="https://travis-ci.com/username/projectname.svg?branch=master" alt="Build Status"></a>
+    <a href="https://travis-ci.com/askft/go-behave"><img src="https://travis-ci.com/askft/go-behave.svg?branch=master" alt="Build Status"></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
