@@ -15,7 +15,7 @@
 
 ## Important notice
 
-The library is still under development. Please do not assume API stability.
+The library is still under development. Please do not assume API stability – fork the repository if you need that.
 
 ## <a id="introduction" style="text-decoration:none;color:inherit;">Introduction</a>
 
@@ -103,11 +103,7 @@ Please see [examples/behave](https://github.com/AlexanderSkafte/go-behave/tree/m
 
 ### Creating behavior tree instances
 
-An instance of a `BehaviorTree` type can be created by passing a `Config` object to the `NewBehaviorTree` function. `Config` should contain references to the owner of the behavior tree, a store (normally a `store.Blackboard`) and a root node. The root node is built using one of the methods described above.
-
-The owner of the tree depends on the application at hand, so the type is `interface{}`, and the real type of the owner needs to be asserted inside the application specific nodes at runtime.
-
-The store refers to any type that implements `store.Interface`. Such an implementation is offered by the library - a `Blackboard` ([store/Blackboard.go](https://github.com/AlexanderSkafte/go-behave/blob/master/store/blackboard.go)) type that simply wraps a `map[string]interface{}`.
+An instance of a `BehaviorTree` type can be created by passing a `Config` object to the `NewBehaviorTree` function. Config has two fields - `Owner` and `Data`, both of type `interface{}`. How you choose to use these fields is up to you. Commonly, `Owner` refers to the entity to which the behavior tree is attached, and `Data` refers to some kind of storage mechanism, such as a `Blackboard` (e.g. ([store/Blackboard.go](https://github.com/AlexanderSkafte/go-behave/blob/master/store/blackboard.go))) or any structure of your choice. The types of `Owner` and `Data` will of course have to be asserted inside the application specific nodes at runtime.
 
 ## <a id="installation" style="text-decoration:none;color:inherit;">Installation</a>
 
