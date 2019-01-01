@@ -10,7 +10,7 @@ type succeed struct {
 }
 
 // Succeed returns a new succeed node.
-func Succeed(params, returns []string) core.Node {
+func Succeed(params core.Params, returns core.Returns) core.Node {
 	base := core.NewAction("Succeed", params, returns)
 	return &succeed{Action: base}
 }

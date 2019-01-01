@@ -9,12 +9,12 @@ import (
 // and Returns: data keys that the implementation exports.
 type Action struct {
 	*BaseNode
-	Params  []string
-	Returns []string
+	Params  Params
+	Returns Returns
 }
 
 // NewAction creates a new action base node.
-func NewAction(name string, params, returns []string) *Action {
+func NewAction(name string, params Params, returns Returns) *Action {
 	return &Action{
 		BaseNode: newBaseNode(CategoryLeaf, name),
 		Params:   params,

@@ -22,7 +22,6 @@ type Parser struct {
 		n   int
 	}
 	level int
-	err   error
 }
 
 // NewParser returns a new instance of Parser.

@@ -30,7 +30,7 @@ type (
 	DecoratorFn = func(Params, Node) Node
 
 	// ActionFn specifies the kind of a action constructor function.
-	ActionFn = func([]string, []string) Node
+	ActionFn = func(Params, Returns) Node
 )
 
 type (

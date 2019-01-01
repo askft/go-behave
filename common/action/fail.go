@@ -10,7 +10,7 @@ type fail struct {
 }
 
 // Fail returns a new fail node.
-func Fail(params, returns []string) core.Node {
+func Fail(params core.Params, returns core.Returns) core.Node {
 	base := core.NewAction("Fail", params, returns)
 	return &fail{Action: base}
 }

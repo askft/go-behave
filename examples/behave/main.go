@@ -64,7 +64,7 @@ func main() {
 }
 
 func testCircularDependency() {
-	return
+
 }
 
 func testScanner() {
@@ -106,7 +106,7 @@ func testTree(root core.Node) {
 	tree, err := behave.NewBehaviorTree(
 		behave.Config{
 			Owner: ID(1337),
-			Store: store.NewBlackboard(),
+			Data:  store.NewBlackboard(),
 			Root:  root,
 		},
 	)

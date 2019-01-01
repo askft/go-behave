@@ -10,12 +10,12 @@ func (p *Parser) parseAction(name string) (core.Node, error) {
 		return nil, expectError(lit, "(")
 	}
 
-	in, err := p.parseList(tokenColon)
+	params, err := p.parseAssignmentList(tokenColon)
 	if err != nil {
 		return nil, err
 	}
 
-	out, err := p.parseList(tokenParenRight)
+	returns, err := p.parseAssignmentList(tokenParenRight)
 	if err != nil {
 		return nil, err
 	}
@@ -25,5 +25,5 @@ func (p *Parser) parseAction(name string) (core.Node, error) {
 		return nil, err
 	}
 	fn := tmp.(core.ActionFn)
-	return fn(in, out), nil
+	return fn(params, returns), nil
 }

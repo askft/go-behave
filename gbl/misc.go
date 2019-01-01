@@ -34,26 +34,7 @@ func (p *Parser) parseExpr() (core.Node, error) {
 	return nil, fmt.Errorf("invalid token")
 }
 
-func (p *Parser) parseList(brk Token) ([]string, error) {
-	list := []string{}
-	for {
-		if tok, _ := p.scanIgnoreWhitespace(); tok == brk {
-			break
-		}
-		p.unscan()
-
-		it, err := p.accept(tokenIdentifier)
-		if err != nil {
-			return nil, err
-		}
-
-		list = append(list, it.lit)
-	}
-	return list, nil
-}
-
 func (p *Parser) parseAssignmentList(brk Token) (map[string]string, error) {
-	list := []string{}
 	m := map[string]string{}
 	for {
 		tok, _ := p.scanIgnoreWhitespace()
@@ -67,7 +48,6 @@ func (p *Parser) parseAssignmentList(brk Token) (map[string]string, error) {
 		if err != nil {
 			return nil, err
 		}
-		list = append(list, ass.lhs, ass.rhs)
 		m[ass.lhs] = ass.rhs
 
 		t, _ := p.scanIgnoreWhitespace()
@@ -76,7 +56,6 @@ func (p *Parser) parseAssignmentList(brk Token) (map[string]string, error) {
 			continue
 		case brk:
 			p.unscan()
-			break
 		default:
 			return nil, fmt.Errorf("balabla")
 		}
@@ -105,3 +84,21 @@ func (p *Parser) parseAssignment() (assignment, error) {
 
 	return assignment{lhs.lit, rhs.lit}, nil
 }
+
+// func (p *Parser) parseList(brk Token) ([]string, error) {
+// 	list := []string{}
+// 	for {
+// 		if tok, _ := p.scanIgnoreWhitespace(); tok == brk {
+// 			break
+// 		}
+// 		p.unscan()
+
+// 		it, err := p.accept(tokenIdentifier)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+
+// 		list = append(list, it.lit)
+// 	}
+// 	return list, nil
+// }
