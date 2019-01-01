@@ -3,15 +3,14 @@ package behave
 import (
 	"github.com/alexanderskafte/go-behave/core"
 	"github.com/alexanderskafte/go-behave/gbl"
-	"github.com/alexanderskafte/go-behave/store"
 	"github.com/alexanderskafte/go-behave/util"
 )
 
 // Config describes the configuration of a BehaviorTree object.
 type Config struct {
-	Owner interface{}     // Owner of a tree instance
-	Store store.Interface // Global store shared by all entities
-	Root  core.Node       // Root node of the tree
+	Owner interface{} // Owner of a tree instance
+	Data  interface{} // Global data shared by all entities
+	Root  core.Node   // Root node of the tree
 }
 
 // BehaviorTree ...
@@ -25,21 +24,21 @@ type BehaviorTree struct {
 func NewBehaviorTree(cfg Config) (*BehaviorTree, error) {
 	var eb util.ErrorBuilder
 	eb.SetMessage("NewBehaviorTree")
+	if cfg.Root == nil {
+		eb.Write("Config.Root is nil")
+	}
 	if cfg.Owner == nil {
 		eb.Write("Config.Owner is nil")
 	}
-	if cfg.Store == nil {
-		eb.Write("Config.Store is nil")
-	}
-	if cfg.Root == nil {
-		eb.Write("Config.Root is nil")
+	if cfg.Data == nil {
+		eb.Write("Config.Data is nil")
 	}
 	if eb.Error() != nil {
 		return nil, eb.Error()
 	}
 	tree := &BehaviorTree{
 		Root:    cfg.Root,
-		Context: core.NewContext(cfg.Owner, cfg.Store),
+		Context: core.NewContext(cfg.Owner, cfg.Data),
 	}
 	return tree, nil
 }
