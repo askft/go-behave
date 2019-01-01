@@ -5,19 +5,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alexanderskafte/go-behave"
-	"github.com/alexanderskafte/go-behave/common"
-	"github.com/alexanderskafte/go-behave/core"
-	"github.com/alexanderskafte/go-behave/gbl"
-	"github.com/alexanderskafte/go-behave/store"
-	"github.com/alexanderskafte/go-behave/util"
+	"github.com/askft/go-behave"
+	"github.com/askft/go-behave/common"
+	"github.com/askft/go-behave/core"
+	"github.com/askft/go-behave/gbl"
+	"github.com/askft/go-behave/store"
+	"github.com/askft/go-behave/util"
 
 	// Use dot imports to make a tree definition look nice.
 	// Be careful when doing this! These packages export
 	// common word identifiers such as "Fail" and "Sequence".
-	. "github.com/alexanderskafte/go-behave/common/action"
-	. "github.com/alexanderskafte/go-behave/common/composite"
-	. "github.com/alexanderskafte/go-behave/common/decorator"
+	. "github.com/askft/go-behave/common/action"
+	. "github.com/askft/go-behave/common/composite"
+	. "github.com/askft/go-behave/common/decorator"
 )
 
 // The two trees below are equivalent.

@@ -3,7 +3,7 @@ package gbl
 import (
 	"fmt"
 
-	"github.com/alexanderskafte/go-behave/core"
+	"github.com/askft/go-behave/core"
 )
 
 func (p *Parser) parseExpr() (core.Node, error) {

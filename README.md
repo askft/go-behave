@@ -3,7 +3,9 @@
 **<p align=center>An extensible Behavior Tree library in Go.</p>**
 
 <p align="center">
-<a href="https://godoc.org/github.com/AlexanderSkafte/go-behave"><img src="https://godoc.org/github.com/AlexanderSkafte/go-behave?status.svg" alt="GoDoc"></a>
+    <a href="https://godoc.org/github.com/askft/go-behave"><img src="https://godoc.org/github.com/askft/go-behave?status.svg" alt="GoDoc"></a>
+    <a href="https://travis-ci.com/username/projectname"><img src="https://travis-ci.com/username/projectname.svg?branch=master" alt="Build Status"></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
 <p align=center>
@@ -73,7 +75,7 @@ A leaf node can also be a _condition node_ which returns Success or Failure depe
     <a href="#license">License</a>
 </p>-->
 
-Please see the [documentation](https://godoc.org/github.com/AlexanderSkafte/go-behave) and the [examples](examples).
+Please see the [documentation](https://godoc.org/github.com/askft/go-behave) and the [examples](examples).
 
 ### Defining custom nodes
 
@@ -118,7 +120,7 @@ An instance of a `BehaviorTree` type can be created by passing a `Config` object
     <a href="#license">License</a>
 </p>-->
 
-`go get github.com/alexanderskafte/go-behave`
+`go get github.com/askft/go-behave`
 
 The package is identified by `behave`, not `go-behave`.
 

@@ -8,7 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/alexanderskafte/go-behave/core"
+	"github.com/askft/go-behave/core"
 )
 
 // Registry allows for registration of node constructor functions by name.

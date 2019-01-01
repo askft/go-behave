@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/alexanderskafte/go-behave/core"
+	"github.com/askft/go-behave/core"
 )
 
 // Parser ...

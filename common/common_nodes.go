@@ -3,11 +3,11 @@
 package common
 
 import (
-	"github.com/alexanderskafte/go-behave/common/action"
-	"github.com/alexanderskafte/go-behave/common/composite"
-	"github.com/alexanderskafte/go-behave/common/decorator"
-	"github.com/alexanderskafte/go-behave/core"
-	"github.com/alexanderskafte/go-behave/gbl"
+	"github.com/askft/go-behave/common/action"
+	"github.com/askft/go-behave/common/composite"
+	"github.com/askft/go-behave/common/decorator"
+	"github.com/askft/go-behave/core"
+	"github.com/askft/go-behave/gbl"
 )
 
 // NodeRegistry returns a Registry with

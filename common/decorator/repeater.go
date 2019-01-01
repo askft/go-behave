@@ -3,7 +3,7 @@ package decorator
 import (
 	"strconv"
 
-	"github.com/alexanderskafte/go-behave/core"
+	"github.com/askft/go-behave/core"
 )
 
 // repeater runs its child either until it returns core.StatusRunning

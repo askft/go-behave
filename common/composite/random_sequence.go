@@ -3,7 +3,7 @@ package composite
 import (
 	"math/rand"
 
-	"github.com/alexanderskafte/go-behave/core"
+	"github.com/askft/go-behave/core"
 )
 
 // RandomSequence creates a new random sequence node.

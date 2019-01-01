@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/alexanderskafte/go-behave/core"
+	"github.com/askft/go-behave/core"
 )
 
 // RandomSelector creates a new random selector node.
