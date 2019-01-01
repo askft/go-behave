@@ -2,6 +2,10 @@
 
 **<p align=center>An extensible Behavior Tree library in Go.</p>**
 
+<p align="center">
+<a href="https://godoc.org/github.com/AlexanderSkafte/go-behave"><img src="https://godoc.org/github.com/AlexanderSkafte/go-behave?status.svg" alt="GoDoc"></a>
+</p>
+
 <p align=center>
     <a href="#introduction">Introduction</a> •
     <a href="#usage">Usage</a> •
