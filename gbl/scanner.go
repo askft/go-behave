@@ -111,6 +111,7 @@ func (s *Scanner) Scan() (tok Token, lit string) {
 		return s.scanWord()
 
 	} else if ch == '#' {
+		s.unread()
 		return s.scanLiteral()
 	}
 

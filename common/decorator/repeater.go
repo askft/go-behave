@@ -1,8 +1,6 @@
 package decorator
 
 import (
-	"strconv"
-
 	"github.com/askft/go-behave/core"
 )
 
@@ -19,10 +17,11 @@ func Repeater(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Repeater", params, child)
 	d := &repeater{Decorator: base}
 
-	n, err := strconv.Atoi(d.Params["n"])
+	n, err := params.GetInt("n")
 	if err != nil {
-		panic(err) // TODO
+		panic(err)
 	}
+
 	d.n = n
 	return d
 }

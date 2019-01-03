@@ -2,6 +2,7 @@ package gbl
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/askft/go-behave/core"
 )
@@ -34,8 +35,8 @@ func (p *Parser) parseExpr() (core.Node, error) {
 	return nil, fmt.Errorf("invalid token")
 }
 
-func (p *Parser) parseAssignmentList(brk Token) (map[string]string, error) {
-	m := map[string]string{}
+func (p *Parser) parseAssignmentList(brk Token) (map[string]interface{}, error) {
+	m := map[string]interface{}{}
 	for {
 		tok, _ := p.scanIgnoreWhitespace()
 		if tok == brk {
@@ -48,7 +49,14 @@ func (p *Parser) parseAssignmentList(brk Token) (map[string]string, error) {
 		if err != nil {
 			return nil, err
 		}
-		m[ass.lhs] = ass.rhs
+		if ass.rhs[0] == '#' {
+			m[ass.lhs], err = strconv.Atoi(ass.rhs[1:])
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			m[ass.lhs] = ass.rhs
+		}
 
 		t, _ := p.scanIgnoreWhitespace()
 		switch t {

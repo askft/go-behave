@@ -1,5 +1,9 @@
 package core
 
+import (
+	"fmt"
+)
+
 // Category denotes whether a node is a composite, decorator or leaf.
 type Category string
 
@@ -34,9 +38,41 @@ type (
 )
 
 type (
-	// Params ...
-	Params map[string]string
+	// Params denotes a list of parameters to a node.
+	Params map[string]interface{}
 
-	// Returns ...
-	Returns map[string]string
+	// Returns is just a type alias for Params.
+	Returns = Params
 )
+
+func (p Params) GetInt(key string) (int, error) {
+	val, ok := p[key]
+	if !ok {
+		return 0, ErrParamNotFound(key)
+	}
+	n, ok := val.(int)
+	if !ok {
+		return 0, ErrInvalidType(key)
+	}
+	return n, nil
+}
+
+func (p Params) GetString(key string) (string, error) {
+	val, ok := p[key]
+	if !ok {
+		return "", ErrParamNotFound(key)
+	}
+	s, ok := val.(string)
+	if !ok {
+		return "", ErrInvalidType(key)
+	}
+	return s, nil
+}
+
+func ErrParamNotFound(name string) error {
+	return fmt.Errorf("parameter %s not found", name)
+}
+
+func ErrInvalidType(name string) error {
+	return fmt.Errorf("invalid type for %s", name)
+}

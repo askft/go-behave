@@ -37,12 +37,12 @@ var rootGBL = `
 `
 
 // rootGo defines a node structure directly in Go code.
-var someRoot = Repeater(core.Params{"n": "2"},
+var someRoot = Repeater(core.Params{"n": 2},
 	Sequence(
-		Delayer(core.Params{"ms": "700"},
+		Delayer(core.Params{"ms": 700},
 			Succeed(nil, nil),
 		),
-		Delayer(core.Params{"ms": "400"},
+		Delayer(core.Params{"ms": 400},
 			Succeed(nil, nil),
 		),
 	),

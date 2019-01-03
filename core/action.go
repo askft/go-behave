@@ -17,8 +17,8 @@ type Action struct {
 func NewAction(name string, params Params, returns Returns) *Action {
 	return &Action{
 		BaseNode: newBaseNode(CategoryLeaf, name),
-		Params:   params,
-		Returns:  returns,
+		Params:   params,  // TODO (remove): These are only used for String()
+		Returns:  returns, // TODO (remove): These are only used for String()
 	}
 }
 

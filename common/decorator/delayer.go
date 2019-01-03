@@ -1,8 +1,6 @@
 package decorator
 
 import (
-	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/askft/go-behave/core"
@@ -20,15 +18,12 @@ func Delayer(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Delayer", params, child)
 	d := &delayer{Decorator: base}
 
-	str, ok := params["ms"]
-	if !ok {
-		panic(fmt.Errorf("ms not found in params to %s", d.String()))
-	}
-	delay, err := strconv.Atoi(str)
+	ms, err := params.GetInt("ms")
 	if err != nil {
 		panic(err)
 	}
-	d.delay = time.Duration(delay) * time.Millisecond
+
+	d.delay = time.Duration(ms) * time.Millisecond
 	return d
 }
 
