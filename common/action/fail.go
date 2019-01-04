@@ -4,15 +4,15 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// fail ...
-type fail struct {
-	*core.Action
-}
-
-// Fail returns a new fail node.
+// Fail returns a new fail node, which always fails in one tick.
 func Fail(params core.Params, returns core.Returns) core.Node {
 	base := core.NewAction("Fail", params, returns)
 	return &fail{Action: base}
+}
+
+// fail ...
+type fail struct {
+	*core.Action
 }
 
 // Start ...

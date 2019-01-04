@@ -1,33 +1,31 @@
 package decorator
 
-// import (
-// 	"fmt"
+import (
+	"github.com/askft/go-behave/core"
+)
 
-// 	"github.com/askft/go-behave/core"
-// )
+// UntilFailure ...
+func UntilFailure(params core.Params, child core.Node) core.Node {
+	base := core.NewDecorator("UntilFailure", params, child)
+	return &untilFailure{Decorator: base}
+}
 
-// // UntilFailure ...
-// type UntilFailure struct {
-// 	*core.Decorator
-// }
+// untilFailure ...
+type untilFailure struct {
+	*core.Decorator
+}
 
-// // Initialize ...
-// func (d *UntilFailure) Initialize(args ...interface{}) {
-// 	d.Decorator = args[0].(*core.Decorator)
-// }
+// Start ...
+func (d *untilFailure) Start(ctx *core.Context) {}
 
-// // Start ...
-// func (d *UntilFailure) Start(ctx *core.Context) {}
+// Tick ...
+func (d *untilFailure) Tick(ctx *core.Context) core.Status {
+	status := core.Update(d.Child, ctx)
+	if status != core.StatusFailure {
+		return core.StatusRunning
+	}
+	return core.StatusSuccess
+}
 
-// // Tick ...
-// func (d *UntilFailure) Tick(ctx *core.Context) core.Status {
-// 	fmt.Println("Run UntilFailure")
-// 	status := core.Update(d.Child, ctx)
-// 	if status != core.StatusFailure {
-// 		return core.StatusRunning
-// 	}
-// 	return core.StatusSuccess
-// }
-
-// // Stop ...
-// func (d *UntilFailure) Stop(ctx *core.Context) {}
+// Stop ...
+func (d *untilFailure) Stop(ctx *core.Context) {}

@@ -4,15 +4,15 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// succeed ...
-type succeed struct {
-	*core.Action
-}
-
-// Succeed returns a new succeed node.
+// Succeed returns a new succeed node, which always succeeds in one tick.
 func Succeed(params core.Params, returns core.Returns) core.Node {
 	base := core.NewAction("Succeed", params, returns)
 	return &succeed{Action: base}
+}
+
+// succeed ...
+type succeed struct {
+	*core.Action
 }
 
 // Start ...

@@ -4,15 +4,15 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// selector ...
-type selector struct {
-	*core.Composite
-}
-
 // Selector creates a new selector node.
 func Selector(children ...core.Node) core.Node {
 	base := core.NewComposite("Selector", children)
 	return &selector{Composite: base}
+}
+
+// selector ...
+type selector struct {
+	*core.Composite
 }
 
 // Start ...

@@ -11,7 +11,7 @@ import (
 // Example:
 //  func SomeNode( args ) core.Node {
 //  	name := util.FuncName() // will be "SomeNode"
-//  	base := core.NewT(name) // T is Composite, Decorator or Action
+//  	base := core.NewT(name) // T is Composite, Decorator or Leaf
 //  	return &someNode{T: base}
 //  }
 func FuncName() string {

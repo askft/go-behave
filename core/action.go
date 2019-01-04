@@ -4,18 +4,18 @@ import (
 	"fmt"
 )
 
-// Action is the base type for any specific action node (domain-specific).
-// Each action node has Params: data keys that the implementation imports
+// Leaf is the base type for any specific leaf node (domain-specific).
+// Each leaf node has Params: data keys that the implementation imports
 // and Returns: data keys that the implementation exports.
-type Action struct {
+type Leaf struct {
 	*BaseNode
 	Params  Params
 	Returns Returns
 }
 
-// NewAction creates a new action base node.
-func NewAction(name string, params Params, returns Returns) *Action {
-	return &Action{
+// NewLeaf creates a new leaf base node.
+func NewLeaf(name string, params Params, returns Returns) *Leaf {
+	return &Leaf{
 		BaseNode: newBaseNode(CategoryLeaf, name),
 		Params:   params,  // TODO (remove): These are only used for String()
 		Returns:  returns, // TODO (remove): These are only used for String()
@@ -23,13 +23,13 @@ func NewAction(name string, params Params, returns Returns) *Action {
 }
 
 // GetChildren returns an empty list of Node, since a leaf has no children.
-// This method is required for Action in order to implement IBase.
-func (a *Action) GetChildren() []Node {
+// This method is required for Leaf in order to implement IBase.
+func (a *Leaf) GetChildren() []Node {
 	return []Node{}
 }
 
-// String returns a string representation of the action node.
-func (a *Action) String() string {
+// String returns a string representation of the leaf node.
+func (a *Leaf) String() string {
 	return fmt.Sprintf("! %s (%v : %v)",
 		a.name,
 		a.Params,

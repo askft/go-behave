@@ -4,15 +4,15 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// sequence ...
-type sequence struct {
-	*core.Composite
-}
-
 // Sequence creates a new sequence node.
 func Sequence(children ...core.Node) core.Node {
 	base := core.NewComposite("Sequence", children)
 	return &sequence{Composite: base}
+}
+
+// sequence ...
+type sequence struct {
+	*core.Composite
 }
 
 // Start ...

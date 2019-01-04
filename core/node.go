@@ -4,7 +4,7 @@ package core
 type Node interface {
 
 	// Automatically implemented by embedding a pointer to a
-	// Composite, Decorator or Action node in the custom node.
+	// Composite, Decorator or Leaf node in the custom node.
 	GetStatus() Status
 	SetStatus(Status)
 	GetCategory() Category

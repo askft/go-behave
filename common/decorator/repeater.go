@@ -4,14 +4,6 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// repeater runs its child either until it returns core.StatusRunning
-// or until it has run n times. Runs forever if n == 0.
-type repeater struct {
-	*core.Decorator
-	n int
-	i int
-}
-
 // Repeater ...
 func Repeater(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Repeater", params, child)
@@ -24,6 +16,14 @@ func Repeater(params core.Params, child core.Node) core.Node {
 
 	d.n = n
 	return d
+}
+
+// repeater runs its child either until it returns core.StatusRunning
+// or until it has run n times. Runs forever if n == 0.
+type repeater struct {
+	*core.Decorator
+	n int
+	i int
 }
 
 // Start ...

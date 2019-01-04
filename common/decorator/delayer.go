@@ -6,13 +6,6 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// delayer ...
-type delayer struct {
-	*core.Decorator
-	delay time.Duration // delay in milliseconds
-	start time.Time
-}
-
 // Delayer ...
 func Delayer(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Delayer", params, child)
@@ -25,6 +18,13 @@ func Delayer(params core.Params, child core.Node) core.Node {
 
 	d.delay = time.Duration(ms) * time.Millisecond
 	return d
+}
+
+// delayer ...
+type delayer struct {
+	*core.Decorator
+	delay time.Duration // delay in milliseconds
+	start time.Time
 }
 
 // Start ...

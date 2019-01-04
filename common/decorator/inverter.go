@@ -4,15 +4,15 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// inverter ...
-type inverter struct {
-	*core.Decorator
-}
-
 // Inverter ...
 func Inverter(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Inverter", params, child)
 	return &inverter{Decorator: base}
+}
+
+// inverter ...
+type inverter struct {
+	*core.Decorator
 }
 
 // Start ...
