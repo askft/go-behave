@@ -12,7 +12,7 @@ type inverter struct {
 // Inverter ...
 func Inverter(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("Inverter", params, child)
-	return &delayer{Decorator: base}
+	return &inverter{Decorator: base}
 }
 
 // Start ...

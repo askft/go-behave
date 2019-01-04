@@ -11,8 +11,7 @@ import (
 )
 
 // Client ...
-type Client struct {
-}
+type Client struct{}
 
 // Run ...
 func (c *Client) Run() {

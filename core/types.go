@@ -27,17 +27,6 @@ const (
 )
 
 type (
-	// CompositeFn specifies the kind of a composite constructor function.
-	CompositeFn = func(...Node) Node
-
-	// DecoratorFn specifies the kind of a decorator constructor function.
-	DecoratorFn = func(Params, Node) Node
-
-	// ActionFn specifies the kind of a action constructor function.
-	ActionFn = func(Params, Returns) Node
-)
-
-type (
 	// Params denotes a list of parameters to a node.
 	Params map[string]interface{}
 

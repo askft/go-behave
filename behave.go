@@ -2,7 +2,6 @@ package behave
 
 import (
 	"github.com/askft/go-behave/core"
-	"github.com/askft/go-behave/gbl"
 	"github.com/askft/go-behave/util"
 )
 
@@ -52,15 +51,4 @@ func (bt *BehaviorTree) Update() core.Status {
 // by traversing it and writing lexical elements to a string.
 func (bt *BehaviorTree) String() string {
 	return util.NodeToString(bt.Root)
-}
-
-// NewNode takes a set of nodes defined in a registry, and a definition
-// string for a behavior tree, compiles the string and returns the root
-// node if the compilation was successful, else an error.
-func NewNode(reg *gbl.Registry, def string) (core.Node, error) {
-	node, err := gbl.NewParser(reg).Compile(def)
-	if err != nil {
-		return nil, err
-	}
-	return node, nil
 }

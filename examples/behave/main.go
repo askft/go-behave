@@ -2,13 +2,10 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/askft/go-behave"
-	"github.com/askft/go-behave/common"
 	"github.com/askft/go-behave/core"
-	"github.com/askft/go-behave/gbl"
 	"github.com/askft/go-behave/store"
 	"github.com/askft/go-behave/util"
 
@@ -20,30 +17,16 @@ import (
 	. "github.com/askft/go-behave/common/decorator"
 )
 
-// The two trees below are equivalent.
-
-// rootGBL defines a node structure in GBL code.
-var rootGBL = `
-* Repeater (n = #2) {
-	+ Sequence {
-		* Delayer (ms = #700) {
-			! Succeed (:)
-		}
-		* Delayer (ms = #400) {
-			! Succeed (:)
-		}
-	}
-}
-`
-
-// rootGo defines a node structure directly in Go code.
+// someRoot defines a node structure.
 var someRoot = Repeater(core.Params{"n": 2},
 	Sequence(
 		Delayer(core.Params{"ms": 700},
 			Succeed(nil, nil),
 		),
 		Delayer(core.Params{"ms": 400},
-			Succeed(nil, nil),
+			Inverter(nil,
+				Fail(nil, nil),
+			),
 		),
 	),
 )
@@ -57,47 +40,7 @@ type ID int
 func (id ID) String() string { return fmt.Sprint(int(id)) }
 
 func main() {
-	testScanner()
-	testParser()
 	testTree(someRoot)
-	testCircularDependency()
-}
-
-func testCircularDependency() {
-
-}
-
-func testScanner() {
-	fmt.Println("Testing scanner...")
-	r := strings.NewReader(rootGBL)
-	s := gbl.NewScanner(r)
-
-	for {
-		tok, lit := s.Scan()
-		if tok.IsEOF() {
-			break
-		}
-		if tok.IsWhitespace() {
-			continue
-		}
-		if tok.IsInvalid() {
-			fmt.Printf("[ Invalid token %q ]\n", lit)
-			continue
-		}
-		fmt.Printf("%-15s%s\n", tok, lit)
-	}
-	fmt.Println("Done scanning!")
-}
-
-func testParser() {
-	fmt.Println("Testing parser...")
-	reg := common.NodeRegistry()
-	node, err := gbl.NewParser(reg).Compile(rootGBL)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(util.NodeToString(node))
-	fmt.Println("Done parsing!")
 }
 
 func testTree(root core.Node) {
@@ -131,3 +74,20 @@ func testTree(root core.Node) {
 
 	fmt.Println("Done!")
 }
+
+// An example of a tree for an entity that will attack the nearest target.
+// Of course, you'd need to implement all of the action nodes here yourself.
+
+// var attackBT =
+// 		+ Sequence {
+// 			? EnemyInAggroRange ( : target )
+// 			! SetTarget ( target : )
+// 			+ Selector {
+// 				+ Sequence {
+// 					? TargetInAttackRange (:)
+// 					! Attack (:)
+// 				}
+// 				! MoveTowardTarget (:)
+// 			}
+// 		}
+// 		`
