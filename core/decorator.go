@@ -8,7 +8,7 @@ import (
 // may be domain-specific, but usually one of the common nodes will be used,
 // such as Inverter or Repeater. Each decorator node has Params: a key-value
 // map used for setting variables for a specific decorator node, for instance
-// Params{"n": 5} for a Repeater node or Params{"ms": 500"} for a
+// Params{"n": 5} for a Repeater node or Params{"ms": 500} for a
 // Delayer node.
 type Decorator struct {
 	*BaseNode
