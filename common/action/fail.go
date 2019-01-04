@@ -6,13 +6,13 @@ import (
 
 // Fail returns a new fail node, which always fails in one tick.
 func Fail(params core.Params, returns core.Returns) core.Node {
-	base := core.NewAction("Fail", params, returns)
-	return &fail{Action: base}
+	base := core.NewLeaf("Fail", params, returns)
+	return &fail{Leaf: base}
 }
 
 // fail ...
 type fail struct {
-	*core.Action
+	*core.Leaf
 }
 
 // Start ...
