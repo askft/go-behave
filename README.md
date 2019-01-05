@@ -98,7 +98,7 @@ The struct may also contain other fields that will be initialized in the node's 
 
 A behavior tree is defined by building a tree structure from behavior nodes and thereafter passing the root node and thereafter creating an instance of a `BehaviorTree` by passing a `Config` object to the `NewBehaviorTree` function.
 
-In addition to have a reference to an actual root node, `Config` has two fields - `Owner` and `Data`, both of type `interface{}`. How you choose to use these fields is up to you. Commonly, `Owner` refers to the entity to which the behavior tree is attached, and `Data` refers to some kind of storage mechanism, such as a `Blackboard` (e.g. ([store/Blackboard.go](store/blackboard.go))) or any structure of your choice. The types of `Owner` and `Data` will of course have to be asserted inside the application specific nodes at runtime.
+In addition to have a reference to an actual root node, `Config` has two fields - `Owner` and `Data`, both of type `interface{}`. How you choose to use these fields is up to you. Commonly, `Owner` refers to the entity to which the behavior tree is attached, and `Data` refers to some kind of storage mechanism, such as a `Blackboard` (e.g. [store/Blackboard.go](store/blackboard.go)) or any structure of your choice. The types of `Owner` and `Data` will of course have to be asserted inside the application specific nodes at runtime.
 
 ## <a id="installation" style="text-decoration:none;color:inherit;">Installation</a>
 
