@@ -17,7 +17,7 @@ import (
 	. "github.com/askft/go-behave/common/decorator"
 )
 
-// someRoot defines a node structure.
+// someRoot defines a node structure using predefined nodes.
 var someRoot = Repeater(core.Params{"n": 2},
 	Sequence(
 		Delayer(core.Params{"ms": 700},
@@ -74,20 +74,3 @@ func testTree(root core.Node) {
 
 	fmt.Println("Done!")
 }
-
-// An example of a tree for an entity that will attack the nearest target.
-// Of course, you'd need to implement all of the leaf nodes here yourself.
-
-// var attackBT =
-// 		+ Sequence {
-// 			? EnemyInAggroRange ( : target )
-// 			! SetTarget ( target : )
-// 			+ Selector {
-// 				+ Sequence {
-// 					? TargetInAttackRange (:)
-// 					! Attack (:)
-// 				}
-// 				! MoveTowardTarget (:)
-// 			}
-// 		}
-// 		`
