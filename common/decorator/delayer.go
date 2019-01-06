@@ -27,8 +27,8 @@ type delayer struct {
 	start time.Time
 }
 
-// Start ...
-func (d *delayer) Start(ctx *core.Context) {
+// Enter ...
+func (d *delayer) Enter(ctx *core.Context) {
 	d.start = time.Now()
 }
 
@@ -40,5 +40,5 @@ func (d *delayer) Tick(ctx *core.Context) core.Status {
 	return core.StatusRunning
 }
 
-// Stop ...
-func (d *delayer) Stop(ctx *core.Context) {}
+// Leave ...
+func (d *delayer) Leave(ctx *core.Context) {}

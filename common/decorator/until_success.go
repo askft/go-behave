@@ -15,8 +15,8 @@ type untilSuccess struct {
 	*core.Decorator
 }
 
-// Start ...
-func (d *untilSuccess) Start(ctx *core.Context) {}
+// Enter ...
+func (d *untilSuccess) Enter(ctx *core.Context) {}
 
 // Tick ...
 func (d *untilSuccess) Tick(ctx *core.Context) core.Status {
@@ -27,5 +27,5 @@ func (d *untilSuccess) Tick(ctx *core.Context) core.Status {
 	return core.StatusSuccess
 }
 
-// Stop ...
-func (d *untilSuccess) Stop(ctx *core.Context) {}
+// Leave ...
+func (d *untilSuccess) Leave(ctx *core.Context) {}

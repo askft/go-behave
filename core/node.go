@@ -12,9 +12,9 @@ type Node interface {
 	String() string
 
 	// Must be implemented by the custom node.
-	Start(*Context)
+	Enter(*Context)
 	Tick(*Context) Status
-	Stop(*Context)
+	Leave(*Context)
 }
 
 // BaseNode contains properties shared by all categories of node.

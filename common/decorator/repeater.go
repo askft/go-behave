@@ -26,8 +26,8 @@ type repeater struct {
 	i int
 }
 
-// Start ...
-func (d *repeater) Start(ctx *core.Context) {
+// Enter ...
+func (d *repeater) Enter(ctx *core.Context) {
 	d.i = 0
 }
 
@@ -43,5 +43,5 @@ func (d *repeater) Tick(ctx *core.Context) core.Status {
 	return status
 }
 
-// Stop ...
-func (d *repeater) Stop(ctx *core.Context) {}
+// Leave ...
+func (d *repeater) Leave(ctx *core.Context) {}

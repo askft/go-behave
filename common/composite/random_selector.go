@@ -18,8 +18,8 @@ type randomSelector struct {
 	*core.Composite
 }
 
-// Start ...
-func (s *randomSelector) Start(ctx *core.Context) {}
+// Enter ...
+func (s *randomSelector) Enter(ctx *core.Context) {}
 
 // Tick ...
 func (s *randomSelector) Tick(ctx *core.Context) core.Status {
@@ -29,5 +29,5 @@ func (s *randomSelector) Tick(ctx *core.Context) core.Status {
 	return core.Update(child, ctx)
 }
 
-// Stop ...
-func (s *randomSelector) Stop(ctx *core.Context) {}
+// Leave ...
+func (s *randomSelector) Leave(ctx *core.Context) {}

@@ -15,13 +15,13 @@ type succeed struct {
 	*core.Leaf
 }
 
-// Start ...
-func (a *succeed) Start(ctx *core.Context) {}
+// Enter ...
+func (a *succeed) Enter(ctx *core.Context) {}
 
 // Tick ...
 func (a *succeed) Tick(ctx *core.Context) core.Status {
 	return core.StatusSuccess
 }
 
-// Stop ...
-func (a *succeed) Stop(ctx *core.Context) {}
+// Leave ...
+func (a *succeed) Leave(ctx *core.Context) {}

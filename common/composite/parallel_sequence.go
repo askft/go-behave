@@ -26,8 +26,8 @@ type parallelSequence struct {
 	failReq int
 }
 
-// Start ...
-func (s *parallelSequence) Start(ctx *core.Context) {}
+// Enter ...
+func (s *parallelSequence) Enter(ctx *core.Context) {}
 
 // Tick ...
 func (s *parallelSequence) Tick(ctx *core.Context) core.Status {
@@ -50,5 +50,5 @@ func (s *parallelSequence) Tick(ctx *core.Context) core.Status {
 	return core.StatusRunning
 }
 
-// Stop ...
-func (s *parallelSequence) Stop(ctx *core.Context) {}
+// Leave ...
+func (s *parallelSequence) Leave(ctx *core.Context) {}

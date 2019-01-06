@@ -15,8 +15,8 @@ type selector struct {
 	*core.Composite
 }
 
-// Start ...
-func (s *selector) Start(ctx *core.Context) {
+// Enter ...
+func (s *selector) Enter(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 
@@ -34,5 +34,5 @@ func (s *selector) Tick(ctx *core.Context) core.Status {
 	}
 }
 
-// Stop ...
-func (s *selector) Stop(ctx *core.Context) {}
+// Leave ...
+func (s *selector) Leave(ctx *core.Context) {}

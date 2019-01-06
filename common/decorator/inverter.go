@@ -15,8 +15,8 @@ type inverter struct {
 	*core.Decorator
 }
 
-// Start ...
-func (d *inverter) Start(ctx *core.Context) {}
+// Enter ...
+func (d *inverter) Enter(ctx *core.Context) {}
 
 // Tick ...
 func (d *inverter) Tick(ctx *core.Context) core.Status {
@@ -30,5 +30,5 @@ func (d *inverter) Tick(ctx *core.Context) core.Status {
 	}
 }
 
-// Stop ...
-func (d *inverter) Stop(ctx *core.Context) {}
+// Leave ...
+func (d *inverter) Leave(ctx *core.Context) {}

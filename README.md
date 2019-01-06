@@ -87,9 +87,9 @@ While the library offers a set of pre-made common node types, it's easy to imple
 In order to define a custom node type, the type must embed `*core.T` where `T` is either `Composite`, `Decorator` or `Leaf`, and define the following methods:
 
 ```go
-(n *YourCustomNode) Start(*core.Context)
+(n *YourCustomNode) Enter(*core.Context)
 (n *YourCustomNode) Tick(*core.Context) core.Status
-(n *YourCustomNode) Stop(*core.Context)
+(n *YourCustomNode) Leave(*core.Context)
 ```
 
 The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. If you intend to construct a tree containing the node by compiling a definition string (see the next section), the function type of the custom node's constructor function must match one of `CompositeFn`, `DecoratorFn` or `LeafFn` (see [core/types.go](core/types.go)). An example can be seen in [common/decorator/repeater.go](common/decorator/repeater.go) (or any other type in the `composite`, `decorator`, `action` or `condition` packages).

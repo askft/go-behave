@@ -15,8 +15,8 @@ type sequence struct {
 	*core.Composite
 }
 
-// Start ...
-func (s *sequence) Start(ctx *core.Context) {
+// Enter ...
+func (s *sequence) Enter(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 
@@ -34,5 +34,5 @@ func (s *sequence) Tick(ctx *core.Context) core.Status {
 	}
 }
 
-// Stop ...
-func (s *sequence) Stop(ctx *core.Context) {}
+// Leave ...
+func (s *sequence) Leave(ctx *core.Context) {}

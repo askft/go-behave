@@ -12,8 +12,8 @@ func RandomSequence(children ...core.Node) core.Node {
 	return &randomSequence{Composite: base}
 }
 
-// Start ...
-func (s *randomSequence) Start(ctx *core.Context) {
+// Enter ...
+func (s *randomSequence) Enter(ctx *core.Context) {
 	shuffle(s.Children)
 }
 
@@ -36,8 +36,8 @@ func (s *randomSequence) Tick(ctx *core.Context) core.Status {
 	}
 }
 
-// Stop ...
-func (s *randomSequence) Stop(ctx *core.Context) {
+// Leave ...
+func (s *randomSequence) Leave(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 

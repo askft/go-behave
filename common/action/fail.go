@@ -15,13 +15,13 @@ type fail struct {
 	*core.Leaf
 }
 
-// Start ...
-func (a *fail) Start(ctx *core.Context) {}
+// Enter ...
+func (a *fail) Enter(ctx *core.Context) {}
 
 // Tick ...
 func (a *fail) Tick(ctx *core.Context) core.Status {
 	return core.StatusFailure
 }
 
-// Stop ...
-func (a *fail) Stop(ctx *core.Context) {}
+// Leave ...
+func (a *fail) Leave(ctx *core.Context) {}
