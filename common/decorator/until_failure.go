@@ -4,28 +4,24 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// UntilFailure ...
+// UntilFailure updates its child until it returns Failure.
 func UntilFailure(params core.Params, child core.Node) core.Node {
 	base := core.NewDecorator("UntilFailure", params, child)
 	return &untilFailure{Decorator: base}
 }
 
-// untilFailure ...
 type untilFailure struct {
 	*core.Decorator
 }
 
-// Enter ...
 func (d *untilFailure) Enter(ctx *core.Context) {}
 
-// Tick ...
 func (d *untilFailure) Tick(ctx *core.Context) core.Status {
 	status := core.Update(d.Child, ctx)
-	if status != core.StatusFailure {
-		return core.StatusRunning
+	if status == core.StatusFailure {
+		return core.StatusSuccess
 	}
-	return core.StatusSuccess
+	return core.StatusRunning
 }
 
-// Leave ...
 func (d *untilFailure) Leave(ctx *core.Context) {}
