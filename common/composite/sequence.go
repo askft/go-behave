@@ -4,35 +4,31 @@ import (
 	"github.com/askft/go-behave/core"
 )
 
-// Sequence creates a new sequence node.
+// Sequence updates each child in order, returning success only if
+// all children succeed. If a child returns Running, the sequence node
+// will resume execution from that child the next tick.
 func Sequence(children ...core.Node) core.Node {
 	base := core.NewComposite("Sequence", children)
 	return &sequence{Composite: base}
 }
 
-// sequence ...
 type sequence struct {
 	*core.Composite
 }
 
-// Enter ...
 func (s *sequence) Enter(ctx *core.Context) {
 	s.Composite.CurrentChild = 0
 }
 
-// Tick ...
 func (s *sequence) Tick(ctx *core.Context) core.Status {
-	for {
+	for s.CurrentChild < len(s.Children) {
 		status := core.Update(s.Children[s.CurrentChild], ctx)
 		if status != core.StatusSuccess {
 			return status
 		}
 		s.CurrentChild++
-		if s.CurrentChild >= len(s.Children) {
-			return core.StatusSuccess
-		}
 	}
+	return core.StatusSuccess
 }
 
-// Leave ...
 func (s *sequence) Leave(ctx *core.Context) {}
