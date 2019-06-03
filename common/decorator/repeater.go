@@ -30,7 +30,11 @@ func (d *repeater) Enter(ctx *core.Context) {
 }
 
 func (d *repeater) Tick(ctx *core.Context) core.Status {
-	_ = core.Update(d.Child, ctx)
+	status := core.Update(d.Child, ctx)
+
+	if status == core.StatusRunning {
+		return core.StatusRunning
+	}
 
 	// Run forever if n == 0.
 	if d.n == 0 {
