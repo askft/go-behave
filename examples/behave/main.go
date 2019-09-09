@@ -17,18 +17,22 @@ import (
 	. "github.com/askft/go-behave/common/decorator"
 )
 
-// someRoot defines a node structure using predefined nodes.
-var someRoot = Repeater(core.Params{"n": 2},
-	Sequence(
-		Delayer(core.Params{"ms": 700},
-			Succeed(nil, nil),
-		),
-		Delayer(core.Params{"ms": 400},
-			Inverter(nil,
-				Fail(nil, nil),
-			),
-		),
-	),
+// var delayingRoot = Repeater(core.Params{"n": 2},
+// 	PersistentSequence(
+// 		Delayer(core.Params{"ms": 700},
+// 			Succeed(nil, nil),
+// 		),
+// 		Delayer(core.Params{"ms": 400},
+// 			Inverter(nil,
+// 				Fail(nil, nil),
+// 			),
+// 		),
+// 	),
+// )
+
+var someRoot = Sequence(
+	Repeater(core.Params{"n": 2}, Fail(nil, nil)),
+	Succeed(nil, nil),
 )
 
 // ID is a simple type only used as tree owner for testing.
@@ -57,20 +61,15 @@ func testTree(root core.Node) {
 		panic(err)
 	}
 
-	ticker := time.NewTicker(100 * time.Millisecond)
 	for {
 		status := tree.Update()
-		select {
-		case <-ticker.C:
-			util.PrintTreeInColor(tree.Root)
-			fmt.Println()
-		default:
-		}
+		util.PrintTreeInColor(tree.Root)
+		fmt.Println()
 		if status == core.StatusSuccess {
 			break
 		}
+		time.Sleep(100 * time.Millisecond)
 	}
-	util.PrintTreeInColor(tree.Root)
 
 	fmt.Println("Done!")
 }

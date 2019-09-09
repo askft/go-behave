@@ -1,0 +1,14 @@
+# Notes and TODOs for this package:
+
+composites
+    [X] Parallel sequence should start from current node.
+    [ ] Active sequence is stateless, should it really be?
+    [ ] Sequence and persistent sequence are pretty much the same, look into it.
+
+Decorators
+    [X] Repeater
+    [ ] Limiter
+
+Misc
+    [ ] Have a validate() method on each node
+        to validate a tree before running it?

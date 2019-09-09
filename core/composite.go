@@ -6,7 +6,7 @@ package core
 type Composite struct {
 	*BaseNode
 	Children     []Node
-	CurrentChild int
+	CurrentChild int // TODO - move into instance nodes
 }
 
 // NewComposite creates a new composite base node.
