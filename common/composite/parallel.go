@@ -67,7 +67,7 @@ func (s *parallel) Tick(ctx *core.Context) core.Status {
 	if s.succ >= s.succReq {
 		return core.StatusSuccess
 	}
-	if s.succ >= s.failReq {
+	if s.fail >= s.failReq {
 		return core.StatusFailure
 	}
 	return core.StatusRunning
