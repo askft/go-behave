@@ -1,6 +1,8 @@
 package composite
 
 import (
+	"log"
+
 	"github.com/askft/go-behave/core"
 )
 
@@ -56,17 +58,21 @@ func (s *parallel) Tick(ctx *core.Context) core.Status {
 		// and mark it as completed in either of those two cases.
 		switch core.Update(s.Children[i], ctx) {
 		case core.StatusSuccess:
+			log.Println("success")
 			s.succ++
 			s.completed[i] = true
 		case core.StatusFailure:
+			log.Println("failure")
 			s.fail++
 			s.completed[i] = true
 		}
 	}
 
+	log.Printf("s.succ: %v; s.succReq: %v", s.succ, s.succReq)
 	if s.succ >= s.succReq {
 		return core.StatusSuccess
 	}
+	log.Printf("s.fail: %v; s.failReq: %v", s.fail, s.failReq)
 	if s.fail >= s.failReq {
 		return core.StatusFailure
 	}
