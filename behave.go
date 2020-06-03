@@ -2,6 +2,7 @@ package behave
 
 import (
 	"github.com/askft/go-behave/core"
+	"github.com/askft/go-behave/internal"
 	"github.com/askft/go-behave/util"
 )
 
@@ -21,7 +22,7 @@ type BehaviorTree struct {
 // NewBehaviorTree returns a new BehaviorTree. A data context
 // to be propagated down the tree each tick is created.
 func NewBehaviorTree(cfg Config) (*BehaviorTree, error) {
-	var eb util.ErrorBuilder
+	var eb internal.ErrorBuilder
 	eb.SetMessage("NewBehaviorTree")
 	if cfg.Root == nil {
 		eb.Write("Config.Root is nil")
