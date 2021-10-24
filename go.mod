@@ -1,4 +1,4 @@
-module github.com/askft/go-behave
+module github.com/DanTulovsky/go-behave
 
 go 1.12
 
