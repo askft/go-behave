@@ -1,9 +1,9 @@
-module github.com/askft/go-behave
+module github.com/DanTulovsky/go-behave
 
 go 1.17
 
 require (
-	github.com/askft/go-behave v0.0.0-20200603190557-1fef2510d574
+	github.com/DanTulovsky/go-behave v0.0.0-20200603190557-1fef2510d574
 	github.com/fatih/color v1.7.0
 	github.com/pkg/errors v0.8.1
 )
