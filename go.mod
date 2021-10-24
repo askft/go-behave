@@ -1,6 +1,6 @@
 module github.com/DanTulovsky/go-behave
 
-go 1.12
+go 1.17
 
 require (
 	github.com/fatih/color v1.7.0
