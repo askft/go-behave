@@ -23,7 +23,7 @@ func NewLeaf(name string, params Params, returns Returns) *Leaf {
 }
 
 // GetChildren returns an empty list of Node, since a leaf has no children.
-// This method is required for Leaf in order to implement IBase.
+// This method is required for Leaf in order to implement Node.
 func (a *Leaf) GetChildren() []Node {
 	return []Node{}
 }
