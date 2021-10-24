@@ -1,3 +1,5 @@
+github.com/askft/go-behave v0.0.0-20200603190557-1fef2510d574 h1:dWquYhkQa3VjUeLx10ZK0XILGA/JxlPGv5zje8ACuyY=
+github.com/askft/go-behave v0.0.0-20200603190557-1fef2510d574/go.mod h1:L6LAmw1pzBQ6oSpW/4rO5zLONHcwgfJ17RpZ79WsHG8=
 github.com/fatih/color v1.7.0 h1:DkWD4oS2D8LGGgTQ6IvwJJXSL5Vp2ffcQg58nFV38Ys=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
 github.com/mattn/go-colorable v0.1.2 h1:/bC9yWikZXAL9uJdulbSfyVNIR3n3trXl+v8+1sx8mU=
