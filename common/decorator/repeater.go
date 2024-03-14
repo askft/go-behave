@@ -6,9 +6,9 @@ import (
 
 // Repeater updates its child n times, at which point the repeater
 // returns Success. The repeater runs forever if n == 0.
-func Repeater[Context any](params core.Params, child core.Node[Context]) core.Node[Context] {
+func Repeater[Blackboard any, Event any](params core.Params, child core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
 	base := core.NewDecorator("Repeater", params, child)
-	d := &repeater[Context]{Decorator: base}
+	d := &repeater[Blackboard, Event]{Decorator: base}
 
 	n, err := params.GetInt("n")
 	if err != nil {
@@ -19,18 +19,18 @@ func Repeater[Context any](params core.Params, child core.Node[Context]) core.No
 	return d
 }
 
-type repeater[Context any] struct {
-	*core.Decorator[Context]
+type repeater[Blackboard any, Event any] struct {
+	*core.Decorator[Blackboard, Event]
 	n int
 	i int
 }
 
-func (d *repeater[Context]) Enter(ctx Context) {
+func (d *repeater[Blackboard, Event]) Enter(bb Blackboard) {
 	d.i = 0
 }
 
-func (d *repeater[Context]) Tick(ctx Context) core.Status {
-	status := core.Update(d.Child, ctx)
+func (d *repeater[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+	status := core.Update(d.Child, bb, evt)
 
 	if status == core.StatusRunning {
 		return core.StatusRunning
@@ -50,4 +50,4 @@ func (d *repeater[Context]) Tick(ctx Context) core.Status {
 	return core.StatusSuccess
 }
 
-func (d *repeater[Context]) Leave(ctx Context) {}
+func (d *repeater[Blackboard, Event]) Leave(bb Blackboard) {}

@@ -5,23 +5,23 @@ import (
 )
 
 // UntilSuccess updates its child until it returns Success.
-func UntilSuccess[Context any](params core.Params, child core.Node[Context]) core.Node[Context] {
+func UntilSuccess[Blackboard any, Event any](params core.Params, child core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
 	base := core.NewDecorator("UntilSuccess", params, child)
-	return &untilSuccess[Context]{Decorator: base}
+	return &untilSuccess[Blackboard, Event]{Decorator: base}
 }
 
-type untilSuccess[Context any] struct {
-	*core.Decorator[Context]
+type untilSuccess[Blackboard any, Event any] struct {
+	*core.Decorator[Blackboard, Event]
 }
 
-func (d *untilSuccess[Context]) Enter(ctx Context) {}
+func (d *untilSuccess[Blackboard, Event]) Enter(bb Blackboard) {}
 
-func (d *untilSuccess[Context]) Tick(ctx Context) core.Status {
-	status := core.Update(d.Child, ctx)
+func (d *untilSuccess[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+	status := core.Update(d.Child, bb, evt)
 	if status == core.StatusSuccess {
 		return core.StatusSuccess
 	}
 	return core.StatusRunning
 }
 
-func (d *untilSuccess[Context]) Leave(ctx Context) {}
+func (d *untilSuccess[Blackboard, Event]) Leave(bb Blackboard) {}

@@ -10,7 +10,7 @@ import (
 // node without having to explicitly set its name.
 // Example:
 //
-//	func SomeNode( args ) core.Node[Context]{
+//	func SomeNode( args ) core.Node[Blackboard, Event]{
 //		name := util.FuncName() // will be "SomeNode"
 //		base := core.NewT(name) // T is Composite, Decorator or Leaf
 //		return &someNode{T: base}

@@ -15,6 +15,10 @@ const (
 	CategoryLeaf      = Category("leaf")
 )
 
+type NodeResult interface {
+	status() Status
+}
+
 // Status denotes the return value of the execution of a node.
 type Status int
 
@@ -24,7 +28,18 @@ const (
 	StatusSuccess
 	StatusFailure
 	StatusRunning
+	StatusError
 )
+
+func (s Status) status() Status { return s }
+
+type NodeAsyncRunning[Event any] func(enqueue func(Event) error) error
+
+func (NodeAsyncRunning[Event]) status() Status { return StatusRunning }
+
+type NodeRuntimeError struct{ error }
+
+func (NodeRuntimeError) status() Status { return StatusError }
 
 type (
 	// Params denotes a list of parameters to a node.

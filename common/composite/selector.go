@@ -7,22 +7,22 @@ import (
 // Selector updates each child in order, returning success as soon as
 // a child succeeds. If a child returns Running, the selector node
 // will resume execution from that child the next tick.
-func Selector[Context any](children ...core.Node[Context]) core.Node[Context] {
+func Selector[Blackboard any, Event any](children ...core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
 	base := core.NewComposite("Selector", children)
-	return &selector[Context]{Composite: base}
+	return &selector[Blackboard, Event]{Composite: base}
 }
 
-type selector[Context any] struct {
-	*core.Composite[Context]
+type selector[Blackboard any, Event any] struct {
+	*core.Composite[Blackboard, Event]
 }
 
-func (s *selector[Context]) Enter(ctx Context) {
+func (s *selector[Blackboard, Event]) Enter(bb Blackboard) {
 	s.Composite.CurrentChild = 0
 }
 
-func (s *selector[Context]) Tick(ctx Context) core.Status {
+func (s *selector[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
 	for s.CurrentChild < len(s.Children) {
-		status := core.Update(s.Children[s.CurrentChild], ctx)
+		status := core.Update(s.Children[s.CurrentChild], bb, evt)
 		if status != core.StatusFailure {
 			return status
 		}
@@ -31,4 +31,4 @@ func (s *selector[Context]) Tick(ctx Context) core.Status {
 	return core.StatusFailure
 }
 
-func (s *selector[Context]) Leave(ctx Context) {}
+func (s *selector[Blackboard, Event]) Leave(bb Blackboard) {}

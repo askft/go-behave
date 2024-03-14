@@ -25,7 +25,7 @@ A behavior tree is a formalism for describing the behavior of an autonomous enti
 
 A behavior tree is a directed rooted tree with at most three categories of nodes: _composite nodes_, _decorator nodes_ and _leaf nodes_. Each category can contain many different _types_ of nodes. A _tick_ is sent from the root with a certain frequency, making a pre-order traversal of the tree. Each node type provides a different algorithm for processing the tick, explained below. Once a tick has been processed, the node returns a status to its parent - either _Failure_, _Running_ or _Success_.
 
-Leaf nodes require a data context, which will be propagated throughout the tree via the `Tick` procedure. The context usually contains a reference to the owner of the tree, i.e. the entity for which the tree describes a behavior, and a _store_ or _blackboard_ which is a data storage system that can be shared between different entities - in a game this store would contain e.g. information about the game world, positions of all entities, and so on.
+Leaf nodes require a data Blackboard, which will be propagated throughout the tree via the `Tick` procedure. The Blackboard usually contains a reference to the owner of the tree, i.e. the entity for which the tree describes a behavior, and a _store_ or _blackboard_ which is a data storage system that can be shared between different entities - in a game this store would contain e.g. information about the game world, positions of all entities, and so on.
 
 ### Composite nodes
 
@@ -51,7 +51,7 @@ A decorator node has a type and one child. Below are some common types of decora
 
 ### Leaf nodes
 
-A leaf node is normally specifically tailored to the application at hand. In a robotics context the task might be "Pick Up Object" or "Move Arm"; in a video game context it might be "Find Nearest Target" or "Attack Target". One can generally divide leaf nodes into two subcategories:
+A leaf node is normally specifically tailored to the application at hand. In a robotics Blackboard the task might be "Pick Up Object" or "Move Arm"; in a video game Blackboard it might be "Find Nearest Target" or "Attack Target". One can generally divide leaf nodes into two subcategories:
 
 - Action nodes, which interact with the environment and return a status depending on the result.
 - Condition nodes, which do not _do_ anything apart from querying the environment for information and subsequently returning a status.
@@ -69,9 +69,9 @@ While the library offers a set of pre-made common node types, it's easy to imple
 In order to define a custom node type, the type must embed `*core.T` where `T` is either `Composite`, `Decorator` or `Leaf`, and define the following methods:
 
 ```go
-(n *YourCustomNode) Enter(Context)
-(n *YourCustomNode) Tick(Context) core.Status
-(n *YourCustomNode) Leave(Context)
+(n *YourCustomNode) Enter(Blackboard)
+(n *YourCustomNode) Tick(Blackboard) core.Status
+(n *YourCustomNode) Leave(Blackboard)
 ```
 
 The struct may also contain other fields that will be initialized in the node's _constructor_, which you also need to create. If you intend to construct a tree containing the node by compiling a definition string (see the next section), the function type of the custom node's constructor function must match one of `CompositeFn`, `DecoratorFn` or `LeafFn` (see [core/types.go](core/types.go)). An example can be seen in [common/decorator/repeater.go](common/decorator/repeater.go) (or any other type in the `composite`, `decorator`, `action` or `condition` packages).

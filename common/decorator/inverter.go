@@ -5,22 +5,22 @@ import (
 )
 
 // Inverter ...
-func Inverter[Context any](params core.Params, child core.Node[Context]) core.Node[Context] {
+func Inverter[Blackboard any, Event any](params core.Params, child core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
 	base := core.NewDecorator("Inverter", params, child)
-	return &inverter[Context]{Decorator: base}
+	return &inverter[Blackboard, Event]{Decorator: base}
 }
 
 // inverter ...
-type inverter[Context any] struct {
-	*core.Decorator[Context]
+type inverter[Blackboard any, Event any] struct {
+	*core.Decorator[Blackboard, Event]
 }
 
 // Enter ...
-func (d *inverter[Context]) Enter(ctx Context) {}
+func (d *inverter[Blackboard, Event]) Enter(bb Blackboard) {}
 
 // Tick ...
-func (d *inverter[Context]) Tick(ctx Context) core.Status {
-	switch core.Update(d.Child, ctx) {
+func (d *inverter[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+	switch core.Update(d.Child, bb, evt) {
 	case core.StatusSuccess:
 		return core.StatusFailure
 	case core.StatusFailure:
@@ -31,4 +31,4 @@ func (d *inverter[Context]) Tick(ctx Context) core.Status {
 }
 
 // Leave ...
-func (d *inverter[Context]) Leave(ctx Context) {}
+func (d *inverter[Blackboard, Event]) Leave(bb Blackboard) {}

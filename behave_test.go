@@ -29,29 +29,32 @@ import (
 // 	),
 // )
 
-type TestContext struct {
+type TestBlackboard struct {
 	id int
 }
 
-var someRoot = Sequence[TestContext](
-	Repeater(core.Params{"n": 2}, Fail[TestContext](nil, nil)),
-	Succeed[TestContext](nil, nil),
+type Event struct{}
+
+var someRoot = Sequence[TestBlackboard, Event](
+	Repeater(core.Params{"n": 2}, Fail[TestBlackboard, Event](nil, nil)),
+	Succeed[TestBlackboard, Event](nil, nil),
 )
 
 func TestChannelMerge(t *testing.T) {
 	testTree(someRoot)
 }
 
-func testTree(root core.Node[TestContext]) {
+func testTree(root core.Node[TestBlackboard, Event]) {
 	fmt.Println("Testing tree...")
 
-	tree, err := NewBehaviorTree(TestContext{id: 42}, root)
+	tree, err := NewBehaviorTree(TestBlackboard{id: 42}, root)
 	if err != nil {
 		panic(err)
 	}
 
 	for {
-		status := tree.Update()
+		evt := Event{}
+		status := tree.Update(evt)
 		util.PrintTreeInColor(tree.Root)
 		fmt.Println()
 		if status == core.StatusSuccess {
