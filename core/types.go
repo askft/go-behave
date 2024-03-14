@@ -16,7 +16,7 @@ const (
 )
 
 type NodeResult interface {
-	status() Status
+	Status() Status
 }
 
 // Status denotes the return value of the execution of a node.
@@ -31,15 +31,15 @@ const (
 	StatusError
 )
 
-func (s Status) status() Status { return s }
+func (s Status) Status() Status { return s }
 
 type NodeAsyncRunning[Event any] func(enqueue func(Event) error) error
 
-func (NodeAsyncRunning[Event]) status() Status { return StatusRunning }
+func (NodeAsyncRunning[Event]) Status() Status { return StatusRunning }
 
 type NodeRuntimeError struct{ error }
 
-func (NodeRuntimeError) status() Status { return StatusError }
+func (NodeRuntimeError) Status() Status { return StatusError }
 
 type (
 	// Params denotes a list of parameters to a node.
