@@ -1,7 +1,7 @@
 package composite
 
 import (
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 )
 
 // Parallel updates all its children in parallel, i.e. every frame.
@@ -10,7 +10,7 @@ import (
 // succ/failReq is the minimum amount of nodes required to
 // succeed/fail for the parallel sequence node itself to succeed/fail.
 // A value of 0 for either node means that all nodes must succeed/fail.
-func Parallel(succReq, failReq int, children ...core.Node) core.Node {
+func Parallel[Context any](succReq, failReq int, children ...core.Node[Context]) core.Node[Context] {
 	base := core.NewComposite("Parallel", children)
 	if succReq == 0 {
 		succReq = len(children)
@@ -18,7 +18,7 @@ func Parallel(succReq, failReq int, children ...core.Node) core.Node {
 	if failReq == 0 {
 		failReq = len(children)
 	}
-	return &parallel{
+	return &parallel[Context]{
 		base,
 		succReq,
 		failReq,
@@ -28,8 +28,8 @@ func Parallel(succReq, failReq int, children ...core.Node) core.Node {
 	}
 }
 
-type parallel struct {
-	*core.Composite
+type parallel[Context any] struct {
+	*core.Composite[Context]
 	succReq   int
 	failReq   int
 	succ      int
@@ -37,12 +37,12 @@ type parallel struct {
 	completed []bool
 }
 
-func (s *parallel) Enter(ctx *core.Context) {
+func (s *parallel[Context]) Enter(ctx Context) {
 	s.succ = 0
 	s.fail = 0
 }
 
-func (s *parallel) Tick(ctx *core.Context) core.Status {
+func (s *parallel[Context]) Tick(ctx Context) core.Status {
 
 	// Update every child that has not completed yet every tick.
 	for i := 0; i < len(s.Children); i++ {
@@ -73,4 +73,4 @@ func (s *parallel) Tick(ctx *core.Context) core.Status {
 	return core.StatusRunning
 }
 
-func (s *parallel) Leave(ctx *core.Context) {}
+func (s *parallel[Context]) Leave(ctx Context) {}

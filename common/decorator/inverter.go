@@ -1,25 +1,25 @@
 package decorator
 
 import (
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 )
 
 // Inverter ...
-func Inverter(params core.Params, child core.Node) core.Node {
+func Inverter[Context any](params core.Params, child core.Node[Context]) core.Node[Context] {
 	base := core.NewDecorator("Inverter", params, child)
-	return &inverter{Decorator: base}
+	return &inverter[Context]{Decorator: base}
 }
 
 // inverter ...
-type inverter struct {
-	*core.Decorator
+type inverter[Context any] struct {
+	*core.Decorator[Context]
 }
 
 // Enter ...
-func (d *inverter) Enter(ctx *core.Context) {}
+func (d *inverter[Context]) Enter(ctx Context) {}
 
 // Tick ...
-func (d *inverter) Tick(ctx *core.Context) core.Status {
+func (d *inverter[Context]) Tick(ctx Context) core.Status {
 	switch core.Update(d.Child, ctx) {
 	case core.StatusSuccess:
 		return core.StatusFailure
@@ -31,4 +31,4 @@ func (d *inverter) Tick(ctx *core.Context) core.Status {
 }
 
 // Leave ...
-func (d *inverter) Leave(ctx *core.Context) {}
+func (d *inverter[Context]) Leave(ctx Context) {}

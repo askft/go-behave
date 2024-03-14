@@ -1,20 +1,20 @@
 package core
 
 // The Node interface must be satisfied by any custom node.
-type Node interface {
+type Node[Context any] interface {
 
 	// Automatically implemented by embedding a pointer to a
 	// Composite, Decorator or Leaf node in the custom node.
 	GetStatus() Status
 	SetStatus(Status)
 	GetCategory() Category
-	GetChildren() []Node
+	GetChildren() []Node[Context]
 	String() string
 
 	// Must be implemented by the custom node.
-	Enter(*Context)
-	Tick(*Context) Status
-	Leave(*Context)
+	Enter(Context)
+	Tick(Context) Status
+	Leave(Context)
 }
 
 // BaseNode contains properties shared by all categories of node.

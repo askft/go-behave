@@ -9,11 +9,12 @@ import (
 // This is useful when you want to define a constructor for a custom
 // node without having to explicitly set its name.
 // Example:
-//  func SomeNode( args ) core.Node {
-//  	name := util.FuncName() // will be "SomeNode"
-//  	base := core.NewT(name) // T is Composite, Decorator or Leaf
-//  	return &someNode{T: base}
-//  }
+//
+//	func SomeNode( args ) core.Node[Context]{
+//		name := util.FuncName() // will be "SomeNode"
+//		base := core.NewT(name) // T is Composite, Decorator or Leaf
+//		return &someNode{T: base}
+//	}
 func FuncName() string {
 	pc, _, _, ok := runtime.Caller(1)
 	if !ok {

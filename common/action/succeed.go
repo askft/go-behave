@@ -1,27 +1,27 @@
 package action
 
 import (
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 )
 
 // Succeed returns a new succeed node, which always succeeds in one tick.
-func Succeed(params core.Params, returns core.Returns) core.Node {
-	base := core.NewLeaf("Succeed", params, returns)
-	return &succeed{Leaf: base}
+func Succeed[Context any](params core.Params, returns core.Returns) core.Node[Context] {
+	base := core.NewLeaf[Context]("Succeed", params, returns)
+	return &succeed[Context]{Leaf: base}
 }
 
 // succeed ...
-type succeed struct {
-	*core.Leaf
+type succeed[Context any] struct {
+	*core.Leaf[Context]
 }
 
 // Enter ...
-func (a *succeed) Enter(ctx *core.Context) {}
+func (a *succeed[Context]) Enter(ctx Context) {}
 
 // Tick ...
-func (a *succeed) Tick(ctx *core.Context) core.Status {
+func (a *succeed[Context]) Tick(ctx Context) core.Status {
 	return core.StatusSuccess
 }
 
 // Leave ...
-func (a *succeed) Leave(ctx *core.Context) {}
+func (a *succeed[Context]) Leave(ctx Context) {}

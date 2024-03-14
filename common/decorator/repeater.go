@@ -1,14 +1,14 @@
 package decorator
 
 import (
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 )
 
 // Repeater updates its child n times, at which point the repeater
 // returns Success. The repeater runs forever if n == 0.
-func Repeater(params core.Params, child core.Node) core.Node {
+func Repeater[Context any](params core.Params, child core.Node[Context]) core.Node[Context] {
 	base := core.NewDecorator("Repeater", params, child)
-	d := &repeater{Decorator: base}
+	d := &repeater[Context]{Decorator: base}
 
 	n, err := params.GetInt("n")
 	if err != nil {
@@ -19,17 +19,17 @@ func Repeater(params core.Params, child core.Node) core.Node {
 	return d
 }
 
-type repeater struct {
-	*core.Decorator
+type repeater[Context any] struct {
+	*core.Decorator[Context]
 	n int
 	i int
 }
 
-func (d *repeater) Enter(ctx *core.Context) {
+func (d *repeater[Context]) Enter(ctx Context) {
 	d.i = 0
 }
 
-func (d *repeater) Tick(ctx *core.Context) core.Status {
+func (d *repeater[Context]) Tick(ctx Context) core.Status {
 	status := core.Update(d.Child, ctx)
 
 	if status == core.StatusRunning {
@@ -50,4 +50,4 @@ func (d *repeater) Tick(ctx *core.Context) core.Status {
 	return core.StatusSuccess
 }
 
-func (d *repeater) Leave(ctx *core.Context) {}
+func (d *repeater[Context]) Leave(ctx Context) {}

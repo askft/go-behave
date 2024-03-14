@@ -1,22 +1,22 @@
 package decorator
 
 import (
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 )
 
 // UntilSuccess updates its child until it returns Success.
-func UntilSuccess(params core.Params, child core.Node) core.Node {
+func UntilSuccess[Context any](params core.Params, child core.Node[Context]) core.Node[Context] {
 	base := core.NewDecorator("UntilSuccess", params, child)
-	return &untilSuccess{Decorator: base}
+	return &untilSuccess[Context]{Decorator: base}
 }
 
-type untilSuccess struct {
-	*core.Decorator
+type untilSuccess[Context any] struct {
+	*core.Decorator[Context]
 }
 
-func (d *untilSuccess) Enter(ctx *core.Context) {}
+func (d *untilSuccess[Context]) Enter(ctx Context) {}
 
-func (d *untilSuccess) Tick(ctx *core.Context) core.Status {
+func (d *untilSuccess[Context]) Tick(ctx Context) core.Status {
 	status := core.Update(d.Child, ctx)
 	if status == core.StatusSuccess {
 		return core.StatusSuccess
@@ -24,4 +24,4 @@ func (d *untilSuccess) Tick(ctx *core.Context) core.Status {
 	return core.StatusRunning
 }
 
-func (d *untilSuccess) Leave(ctx *core.Context) {}
+func (d *untilSuccess[Context]) Leave(ctx Context) {}

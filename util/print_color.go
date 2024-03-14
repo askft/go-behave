@@ -4,21 +4,21 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 
 	"github.com/fatih/color"
 )
 
 // NodeToString returns a string representation
 // of a tree node and all its children.
-func NodeToString(node core.Node) string {
+func NodeToString[Context any](node core.Node[Context]) string {
 	var b strings.Builder
 	fmt.Println()
 	nodeRecurse(node, 0, &b)
 	return b.String()
 }
 
-func nodeRecurse(node core.Node, level int, b *strings.Builder) {
+func nodeRecurse[Context any](node core.Node[Context], level int, b *strings.Builder) {
 	indent := strings.Repeat("    ", level)
 	b.WriteString(indent + node.String() + "\n")
 	for _, child := range node.GetChildren() {
@@ -29,11 +29,11 @@ func nodeRecurse(node core.Node, level int, b *strings.Builder) {
 // PrintTreeInColor prints the tree with colors representing node state.
 //
 // Red = Failure, Yellow = Running, Green = Success, Magenta = Invalid.
-func PrintTreeInColor(node core.Node) {
+func PrintTreeInColor[Context any](node core.Node[Context]) {
 	printTreeInColor(node, 0)
 }
 
-func printTreeInColor(node core.Node, level int) {
+func printTreeInColor[Context any](node core.Node[Context], level int) {
 	indent := strings.Repeat("    ", level)
 	color.Set(colorFor[node.GetStatus()])
 	fmt.Println(indent + node.String())

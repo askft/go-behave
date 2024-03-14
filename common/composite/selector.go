@@ -1,26 +1,26 @@
 package composite
 
 import (
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 )
 
 // Selector updates each child in order, returning success as soon as
 // a child succeeds. If a child returns Running, the selector node
 // will resume execution from that child the next tick.
-func Selector(children ...core.Node) core.Node {
+func Selector[Context any](children ...core.Node[Context]) core.Node[Context] {
 	base := core.NewComposite("Selector", children)
-	return &selector{Composite: base}
+	return &selector[Context]{Composite: base}
 }
 
-type selector struct {
-	*core.Composite
+type selector[Context any] struct {
+	*core.Composite[Context]
 }
 
-func (s *selector) Enter(ctx *core.Context) {
+func (s *selector[Context]) Enter(ctx Context) {
 	s.Composite.CurrentChild = 0
 }
 
-func (s *selector) Tick(ctx *core.Context) core.Status {
+func (s *selector[Context]) Tick(ctx Context) core.Status {
 	for s.CurrentChild < len(s.Children) {
 		status := core.Update(s.Children[s.CurrentChild], ctx)
 		if status != core.StatusFailure {
@@ -31,4 +31,4 @@ func (s *selector) Tick(ctx *core.Context) core.Status {
 	return core.StatusFailure
 }
 
-func (s *selector) Leave(ctx *core.Context) {}
+func (s *selector[Context]) Leave(ctx Context) {}

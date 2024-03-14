@@ -10,15 +10,15 @@ import (
 // map used for setting variables for a specific decorator node, for instance
 // Params{"n": 5} for a Repeater node or Params{"ms": 500} for a
 // Delayer node.
-type Decorator struct {
+type Decorator[Context any] struct {
 	*BaseNode
-	Child  Node
+	Child  Node[Context]
 	Params Params
 }
 
 // NewDecorator creates a new decorator base node.
-func NewDecorator(name string, params Params, child Node) *Decorator {
-	return &Decorator{
+func NewDecorator[Context any](name string, params Params, child Node[Context]) *Decorator[Context] {
+	return &Decorator[Context]{
 		BaseNode: newBaseNode(CategoryDecorator, name),
 		Child:    child,
 		Params:   params, // TODO (remove): This is only used for String()
@@ -26,11 +26,11 @@ func NewDecorator(name string, params Params, child Node) *Decorator {
 }
 
 // GetChildren returns a list containing the only child of the decorator node.
-func (d *Decorator) GetChildren() []Node {
-	return append([]Node{}, d.Child)
+func (d *Decorator[Context]) GetChildren() []Node[Context] {
+	return append([]Node[Context]{}, d.Child)
 }
 
 // String returns a string representation of the decorator node.
-func (d *Decorator) String() string {
+func (d *Decorator[Context]) String() string {
 	return fmt.Sprintf("* %s (%v)", d.name, d.Params)
 }

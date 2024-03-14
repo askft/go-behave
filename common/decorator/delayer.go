@@ -3,13 +3,13 @@ package decorator
 import (
 	"time"
 
-	"github.com/askft/go-behave/core"
+	"github.com/jbcpollak/go-behave/core"
 )
 
 // Delayer ...
-func Delayer(params core.Params, child core.Node) core.Node {
+func Delayer[Context any](params core.Params, child core.Node[Context]) core.Node[Context] {
 	base := core.NewDecorator("Delayer", params, child)
-	d := &delayer{Decorator: base}
+	d := &delayer[Context]{Decorator: base}
 
 	ms, err := params.GetInt("ms")
 	if err != nil {
@@ -21,19 +21,19 @@ func Delayer(params core.Params, child core.Node) core.Node {
 }
 
 // delayer ...
-type delayer struct {
-	*core.Decorator
+type delayer[Context any] struct {
+	*core.Decorator[Context]
 	delay time.Duration // delay in milliseconds
 	start time.Time
 }
 
 // Enter ...
-func (d *delayer) Enter(ctx *core.Context) {
+func (d *delayer[Context]) Enter(ctx Context) {
 	d.start = time.Now()
 }
 
 // Tick ...
-func (d *delayer) Tick(ctx *core.Context) core.Status {
+func (d *delayer[Context]) Tick(ctx Context) core.Status {
 	if time.Since(d.start) > d.delay {
 		return core.Update(d.Child, ctx)
 	}
@@ -41,4 +41,4 @@ func (d *delayer) Tick(ctx *core.Context) core.Status {
 }
 
 // Leave ...
-func (d *delayer) Leave(ctx *core.Context) {}
+func (d *delayer[Context]) Leave(ctx Context) {}
