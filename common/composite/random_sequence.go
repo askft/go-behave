@@ -23,9 +23,9 @@ func (s *randomSequence[Blackboard]) Enter(bb Blackboard) {
 
 func (s *randomSequence[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 	for s.CurrentChild < len(s.Children) {
-		status := core.Update(s.Children[s.CurrentChild], bb, evt)
-		if status != core.StatusSuccess {
-			return status
+		result := core.Update(s.Children[s.CurrentChild], bb, evt)
+		if result.Status() != core.StatusSuccess {
+			return result
 		}
 		s.Composite.CurrentChild++
 	}

@@ -20,9 +20,9 @@ func (s *activeSequence[Blackboard]) Enter(bb Blackboard) {}
 
 func (s *activeSequence[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 	for i := 0; i < len(s.Children); i++ {
-		status := core.Update(s.Children[i], bb, evt)
-		if status != core.StatusSuccess {
-			return status
+		result := core.Update(s.Children[i], bb, evt)
+		if result.Status() != core.StatusSuccess {
+			return result
 		}
 	}
 	return core.StatusSuccess

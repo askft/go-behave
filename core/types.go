@@ -38,9 +38,12 @@ type NodeAsyncRunning func(enqueue func(Event) error) error
 
 func (NodeAsyncRunning) Status() Status { return StatusRunning }
 
-type NodeRuntimeError struct{ error }
+type NodeRuntimeError struct {
+	Err error
+}
 
-func (NodeRuntimeError) Status() Status { return StatusError }
+func (n NodeRuntimeError) Status() Status { return StatusError }
+func (n NodeRuntimeError) String() string { return n.Err.Error() }
 
 type (
 	// Params denotes a list of parameters to a node.

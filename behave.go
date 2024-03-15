@@ -55,8 +55,8 @@ func (bt *BehaviorTree[Blackboard]) Update(evt core.Event) core.Status {
 			})
 		}
 	case core.StatusError:
-		if err, ok := result.(core.NodeRuntimeError); ok {
-			panic(err)
+		if status, ok := result.(core.NodeRuntimeError); ok {
+			panic(status.Err)
 		}
 	default:
 		panic(fmt.Errorf("invalid status %v", status))
@@ -71,8 +71,7 @@ func (bt *BehaviorTree[Blackboard]) EventLoop(evt core.Event) {
 	// Put the first event on the queue.
 	bt.events <- evt
 
-	for {
-		evt := <-bt.events
+	for evt := range bt.events {
 		fmt.Printf("Event: %v\n", evt)
 		bt.Update(evt)
 		util.PrintTreeInColor(bt.Root)
