@@ -25,6 +25,7 @@ type Status int
 // A list of possible statuses.
 const (
 	StatusInvalid Status = iota
+	StatusInitialized
 	StatusSuccess
 	StatusFailure
 	StatusRunning

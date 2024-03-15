@@ -35,19 +35,45 @@ type TestBlackboard struct {
 
 type Event struct{}
 
-var someRoot = Sequence[TestBlackboard, Event](
+var synchronousRoot = Sequence[TestBlackboard, Event](
 	Repeater(core.Params{"n": 2}, Fail[TestBlackboard, Event](nil, nil)),
 	Succeed[TestBlackboard, Event](nil, nil),
 )
 
-func TestChannelMerge(t *testing.T) {
-	testTree(someRoot)
-}
-
-func testTree(root core.Node[TestBlackboard, Event]) {
+func TestUpdate(t *testing.T) {
 	fmt.Println("Testing tree...")
 
-	tree, err := NewBehaviorTree(TestBlackboard{id: 42}, root)
+	tree, err := NewBehaviorTree(TestBlackboard{id: 42}, synchronousRoot)
+	if err != nil {
+		panic(err)
+	}
+
+	for {
+		evt := Event{}
+		status := tree.Update(evt)
+		util.PrintTreeInColor(tree.Root)
+		fmt.Println()
+		if status == core.StatusSuccess {
+			break
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	fmt.Println("Done!")
+}
+
+var asynchronousRoot = Sequence[TestBlackboard, Event](
+	Repeater(core.Params{"n": 2}, Fail[TestBlackboard, Event](nil, nil)),
+	AsyncDelayer[TestBlackboard, Event](
+		core.Params{"ms": 1000},
+		Succeed[TestBlackboard, Event](nil, nil),
+	),
+)
+
+func TestEventLoop(t *testing.T) {
+	fmt.Println("Testing tree...")
+
+	tree, err := NewBehaviorTree(TestBlackboard{id: 42}, asynchronousRoot)
 	if err != nil {
 		panic(err)
 	}
