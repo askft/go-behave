@@ -4,7 +4,7 @@ package core
 // then its Tick method, and finally Leave if it is not still running.
 func Update[Blackboard any](node Node[Blackboard], bb Blackboard, evt Event) NodeResult {
 
-	if node.GetStatus() != StatusRunning {
+	if node.Status() != StatusRunning {
 		node.Enter(bb)
 	}
 

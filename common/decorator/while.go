@@ -31,7 +31,7 @@ func While[Blackboard any](params core.Params, cond, action core.Node[Blackboard
 }
 
 type while[Blackboard any] struct {
-	*core.Decorator[Blackboard]
+	core.Decorator[Blackboard]
 	action core.Node[Blackboard]
 }
 

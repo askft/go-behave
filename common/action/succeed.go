@@ -12,7 +12,7 @@ func Succeed[Blackboard any](params core.Params, returns core.Returns) core.Node
 
 // succeed ...
 type succeed[Blackboard any] struct {
-	*core.Leaf[Blackboard]
+	core.Leaf[Blackboard]
 }
 
 // Enter ...

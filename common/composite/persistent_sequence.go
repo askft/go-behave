@@ -13,7 +13,7 @@ func PersistentSequence[Blackboard any](children ...core.Node[Blackboard]) core.
 }
 
 type persistentSequence[Blackboard any] struct {
-	*core.Composite[Blackboard]
+	core.Composite[Blackboard]
 }
 
 func (s *persistentSequence[Blackboard]) Enter(bb Blackboard) {}

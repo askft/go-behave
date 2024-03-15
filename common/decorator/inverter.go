@@ -12,7 +12,7 @@ func Inverter[Blackboard any](params core.Params, child core.Node[Blackboard]) c
 
 // inverter ...
 type inverter[Blackboard any] struct {
-	*core.Decorator[Blackboard]
+	core.Decorator[Blackboard]
 }
 
 // Enter ...

@@ -13,7 +13,7 @@ func Sequence[Blackboard any](children ...core.Node[Blackboard]) core.Node[Black
 }
 
 type sequence[Blackboard any] struct {
-	*core.Composite[Blackboard]
+	core.Composite[Blackboard]
 }
 
 func (s *sequence[Blackboard]) Enter(bb Blackboard) {

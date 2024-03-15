@@ -23,7 +23,7 @@ func AsyncDelayer[Blackboard any](params core.Params, child core.Node[Blackboard
 
 // delayer ...
 type asyncdelayer[Blackboard any] struct {
-	*core.Decorator[Blackboard]
+	core.Decorator[Blackboard]
 	delay time.Duration // delay in milliseconds
 	start time.Time
 }
@@ -52,7 +52,7 @@ func (d *asyncdelayer[Blackboard]) Tick(bb Blackboard, evt core.Event) core.Node
 	if _, ok := evt.(DelayerFinishedEvent); ok {
 		fmt.Printf("asyncdelayer: Calling child")
 		return core.Update(d.Child, bb, evt)
-	} else if d.GetStatus() == core.StatusInitialized {
+	} else if d.Status() == core.StatusInitialized {
 		fmt.Printf("asyncdelayer: Returning AsyncRunning")
 
 		return core.NodeAsyncRunning(d.doDelay)

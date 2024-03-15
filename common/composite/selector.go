@@ -13,7 +13,7 @@ func Selector[Blackboard any](children ...core.Node[Blackboard]) core.Node[Black
 }
 
 type selector[Blackboard any] struct {
-	*core.Composite[Blackboard]
+	core.Composite[Blackboard]
 }
 
 func (s *selector[Blackboard]) Enter(bb Blackboard) {

@@ -11,7 +11,7 @@ func UntilFailure[Blackboard any](params core.Params, child core.Node[Blackboard
 }
 
 type untilFailure[Blackboard any] struct {
-	*core.Decorator[Blackboard]
+	core.Decorator[Blackboard]
 }
 
 func (d *untilFailure[Blackboard]) Enter(bb Blackboard) {}

@@ -22,7 +22,7 @@ func Repeater[Blackboard any](params core.Params, child core.Node[Blackboard]) c
 }
 
 type repeater[Blackboard any] struct {
-	*core.Decorator[Blackboard]
+	core.Decorator[Blackboard]
 	n int
 	i int
 }

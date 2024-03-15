@@ -14,7 +14,7 @@ func RandomSequence[Blackboard any](children ...core.Node[Blackboard]) core.Node
 }
 
 type randomSequence[Blackboard any] struct {
-	*core.Composite[Blackboard]
+	core.Composite[Blackboard]
 }
 
 func (s *randomSequence[Blackboard]) Enter(bb Blackboard) {

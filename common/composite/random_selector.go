@@ -15,7 +15,7 @@ func RandomSelector[Blackboard any](children ...core.Node[Blackboard]) core.Node
 
 // randomSelector ...
 type randomSelector[Blackboard any] struct {
-	*core.Composite[Blackboard]
+	core.Composite[Blackboard]
 }
 
 // Enter ...

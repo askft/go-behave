@@ -11,23 +11,23 @@ import (
 // Params{"n": 5} for a Repeater node or Params{"ms": 500} for a
 // Delayer node.
 type Decorator[Blackboard any] struct {
-	*BaseNode
+	BaseNode
 	Child  Node[Blackboard]
 	Params Params
 }
 
 // NewDecorator creates a new decorator base node.
-func NewDecorator[Blackboard any](name string, params Params, child Node[Blackboard]) *Decorator[Blackboard] {
-	return &Decorator[Blackboard]{
+func NewDecorator[Blackboard any](name string, params Params, child Node[Blackboard]) Decorator[Blackboard] {
+	return Decorator[Blackboard]{
 		BaseNode: newBaseNode(CategoryDecorator, name),
 		Child:    child,
 		Params:   params, // TODO (remove): This is only used for String()
 	}
 }
 
-// GetChildren returns a list containing the only child of the decorator node.
-func (d *Decorator[Blackboard]) GetChildren() []Node[Blackboard] {
-	return append([]Node[Blackboard]{}, d.Child)
+func (c *Decorator[Blackboard]) Walk(walkFn WalkFunc[Blackboard], level int) {
+	walkFn(c, level)
+	c.Child.Walk(walkFn, level+1)
 }
 
 // String returns a string representation of the decorator node.

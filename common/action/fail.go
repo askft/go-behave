@@ -12,7 +12,7 @@ func Fail[Blackboard any](params core.Params, returns core.Returns) core.Node[Bl
 
 // fail ...
 type fail[Blackboard any] struct {
-	*core.Leaf[Blackboard]
+	core.Leaf[Blackboard]
 }
 
 // Enter ...

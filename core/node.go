@@ -1,17 +1,25 @@
 package core
 
-type Event interface{}
+type Event any
+
+// Preliminary interface to work around intermediate types like
+// composite, decorator, etc not inplementing Enter/Tick/Leave
+type Walkable[Blackboard any] interface {
+	// Automatically implemented by embedding a pointer to a
+	// Composite, Decorator or Leaf node in the custom node.
+	Status() Status
+	SetStatus(Status)
+	Category() Category
+	String() string
+
+	Walk(WalkFunc[Blackboard], int)
+}
+
+type WalkFunc[Blackboard any] func(Walkable[Blackboard], int)
 
 // The Node interface must be satisfied by any custom node.
 type Node[Blackboard any] interface {
-
-	// Automatically implemented by embedding a pointer to a
-	// Composite, Decorator or Leaf node in the custom node.
-	GetStatus() Status
-	SetStatus(Status)
-	GetCategory() Category
-	GetChildren() []Node[Blackboard]
-	String() string
+	Walkable[Blackboard]
 
 	// Must be implemented by the custom node.
 	Enter(Blackboard)
@@ -27,12 +35,12 @@ type BaseNode struct {
 	status   Status
 }
 
-func newBaseNode(category Category, name string) *BaseNode {
-	return &BaseNode{category: category, name: name}
+func newBaseNode(category Category, name string) BaseNode {
+	return BaseNode{category: category, name: name}
 }
 
-// GetStatus returns the status of this node.
-func (n *BaseNode) GetStatus() Status {
+// Status returns the status of this node.
+func (n *BaseNode) Status() Status {
 	return n.status
 }
 
@@ -42,6 +50,6 @@ func (n *BaseNode) SetStatus(status Status) {
 }
 
 // GetCategory returns the category of this node.
-func (n *BaseNode) GetCategory() Category {
+func (n *BaseNode) Category() Category {
 	return n.category
 }

@@ -15,7 +15,7 @@ type ErrorBuilder struct {
 }
 
 // Write wraps the error builder's error with the arguments.
-func (b *ErrorBuilder) Write(format string, args ...interface{}) {
+func (b *ErrorBuilder) Write(format string, args ...any) {
 	var msg string
 	if b.msg != "" {
 		msg += b.msg + ": "
@@ -30,7 +30,7 @@ func (b *ErrorBuilder) Write(format string, args ...interface{}) {
 
 // SetMessage sets a string that will be prepended to all successive
 // calls to Write.
-func (b *ErrorBuilder) SetMessage(format string, args ...interface{}) {
+func (b *ErrorBuilder) SetMessage(format string, args ...any) {
 	b.msg = fmt.Sprintf(format, args...)
 }
 

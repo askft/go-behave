@@ -22,7 +22,7 @@ func Delayer[Blackboard any](params core.Params, child core.Node[Blackboard]) co
 
 // delayer ...
 type delayer[Blackboard any] struct {
-	*core.Decorator[Blackboard]
+	core.Decorator[Blackboard]
 	delay time.Duration // delay in milliseconds
 	start time.Time
 }

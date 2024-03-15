@@ -29,7 +29,7 @@ func Parallel[Blackboard any](succReq, failReq int, children ...core.Node[Blackb
 }
 
 type parallel[Blackboard any] struct {
-	*core.Composite[Blackboard]
+	core.Composite[Blackboard]
 	succReq   int
 	failReq   int
 	succ      int

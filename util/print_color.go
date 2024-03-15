@@ -14,33 +14,33 @@ import (
 func NodeToString[Blackboard any](node core.Node[Blackboard]) string {
 	var b strings.Builder
 	fmt.Println()
-	nodeRecurse(node, 0, &b)
+
+	appendToBuffer := func(node core.Walkable[Blackboard], level int) {
+		appendNode[Blackboard](node, level, &b)
+	}
+
+	node.Walk(appendToBuffer, 0)
+	appendNode(node, 0, &b)
 	return b.String()
 }
 
-func nodeRecurse[Blackboard any](node core.Node[Blackboard], level int, b *strings.Builder) {
+func appendNode[Blackboard any](node core.Walkable[Blackboard], level int, b *strings.Builder) {
 	indent := strings.Repeat("    ", level)
 	b.WriteString(indent + node.String() + "\n")
-	for _, child := range node.GetChildren() {
-		nodeRecurse(child, level+1, b)
-	}
 }
 
 // PrintTreeInColor prints the tree with colors representing node state.
 //
 // Red = Failure, Yellow = Running, Green = Success, Magenta = Invalid.
 func PrintTreeInColor[Blackboard any](node core.Node[Blackboard]) {
-	printTreeInColor(node, 0)
+	node.Walk(printInColor, 0)
 }
 
-func printTreeInColor[Blackboard any](node core.Node[Blackboard], level int) {
+func printInColor[Blackboard any](node core.Walkable[Blackboard], level int) {
 	indent := strings.Repeat("    ", level)
-	color.Set(colorFor[node.GetStatus()])
+	color.Set(colorFor[node.Status()])
 	fmt.Println(indent + node.String())
 	color.Unset()
-	for _, child := range node.GetChildren() {
-		printTreeInColor(child, level+1)
-	}
 }
 
 var colorFor = map[core.Status]color.Attribute{
