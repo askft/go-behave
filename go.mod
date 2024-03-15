@@ -4,11 +4,12 @@ go 1.22
 
 require (
 	github.com/fatih/color v1.7.0
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
+	github.com/rs/zerolog v1.32.0
 )
 
 require (
-	github.com/mattn/go-colorable v0.1.2 // indirect
-	github.com/mattn/go-isatty v0.0.8 // indirect
-	golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
+	golang.org/x/sys v0.12.0 // indirect
 )

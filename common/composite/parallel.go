@@ -10,7 +10,7 @@ import (
 // succ/failReq is the minimum amount of nodes required to
 // succeed/fail for the parallel sequence node itself to succeed/fail.
 // A value of 0 for either node means that all nodes must succeed/fail.
-func Parallel[Blackboard any, Event any](succReq, failReq int, children ...core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
+func Parallel[Blackboard any](succReq, failReq int, children ...core.Node[Blackboard]) core.Node[Blackboard] {
 	base := core.NewComposite("Parallel", children)
 	if succReq == 0 {
 		succReq = len(children)
@@ -18,7 +18,7 @@ func Parallel[Blackboard any, Event any](succReq, failReq int, children ...core.
 	if failReq == 0 {
 		failReq = len(children)
 	}
-	return &parallel[Blackboard, Event]{
+	return &parallel[Blackboard]{
 		base,
 		succReq,
 		failReq,
@@ -28,8 +28,8 @@ func Parallel[Blackboard any, Event any](succReq, failReq int, children ...core.
 	}
 }
 
-type parallel[Blackboard any, Event any] struct {
-	*core.Composite[Blackboard, Event]
+type parallel[Blackboard any] struct {
+	*core.Composite[Blackboard]
 	succReq   int
 	failReq   int
 	succ      int
@@ -37,12 +37,12 @@ type parallel[Blackboard any, Event any] struct {
 	completed []bool
 }
 
-func (s *parallel[Blackboard, Event]) Enter(bb Blackboard) {
+func (s *parallel[Blackboard]) Enter(bb Blackboard) {
 	s.succ = 0
 	s.fail = 0
 }
 
-func (s *parallel[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+func (s *parallel[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 
 	// Update every child that has not completed yet every tick.
 	for i := 0; i < len(s.Children); i++ {
@@ -73,4 +73,4 @@ func (s *parallel[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeRe
 	return core.StatusRunning
 }
 
-func (s *parallel[Blackboard, Event]) Leave(bb Blackboard) {}
+func (s *parallel[Blackboard]) Leave(bb Blackboard) {}

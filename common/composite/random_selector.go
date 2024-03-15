@@ -8,21 +8,21 @@ import (
 )
 
 // RandomSelector creates a new random selector node.
-func RandomSelector[Blackboard any, Event any](children ...core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
+func RandomSelector[Blackboard any](children ...core.Node[Blackboard]) core.Node[Blackboard] {
 	base := core.NewComposite("RandomSelector", children)
-	return &randomSelector[Blackboard, Event]{Composite: base}
+	return &randomSelector[Blackboard]{Composite: base}
 }
 
 // randomSelector ...
-type randomSelector[Blackboard any, Event any] struct {
-	*core.Composite[Blackboard, Event]
+type randomSelector[Blackboard any] struct {
+	*core.Composite[Blackboard]
 }
 
 // Enter ...
-func (s *randomSelector[Blackboard, Event]) Enter(bb Blackboard) {}
+func (s *randomSelector[Blackboard]) Enter(bb Blackboard) {}
 
 // Tick ...
-func (s *randomSelector[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+func (s *randomSelector[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 	rand.Seed(time.Now().UnixNano())
 	index := rand.Intn(len(s.Children))
 	child := s.Children[index]
@@ -30,4 +30,4 @@ func (s *randomSelector[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.
 }
 
 // Leave ...
-func (s *randomSelector[Blackboard, Event]) Leave(bb Blackboard) {}
+func (s *randomSelector[Blackboard]) Leave(bb Blackboard) {}

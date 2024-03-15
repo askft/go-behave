@@ -1,14 +1,16 @@
 package decorator
 
 import (
+	"fmt"
+
 	"github.com/jbcpollak/go-behave/core"
 )
 
 // Repeater updates its child n times, at which point the repeater
 // returns Success. The repeater runs forever if n == 0.
-func Repeater[Blackboard any, Event any](params core.Params, child core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
+func Repeater[Blackboard any](params core.Params, child core.Node[Blackboard]) core.Node[Blackboard] {
 	base := core.NewDecorator("Repeater", params, child)
-	d := &repeater[Blackboard, Event]{Decorator: base}
+	d := &repeater[Blackboard]{Decorator: base}
 
 	n, err := params.GetInt("n")
 	if err != nil {
@@ -19,17 +21,18 @@ func Repeater[Blackboard any, Event any](params core.Params, child core.Node[Bla
 	return d
 }
 
-type repeater[Blackboard any, Event any] struct {
-	*core.Decorator[Blackboard, Event]
+type repeater[Blackboard any] struct {
+	*core.Decorator[Blackboard]
 	n int
 	i int
 }
 
-func (d *repeater[Blackboard, Event]) Enter(bb Blackboard) {
+func (d *repeater[Blackboard]) Enter(bb Blackboard) {
 	d.i = 0
 }
 
-func (d *repeater[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+func (d *repeater[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+	fmt.Println("Repeater: Calling child")
 	status := core.Update(d.Child, bb, evt)
 
 	if status == core.StatusRunning {
@@ -50,4 +53,4 @@ func (d *repeater[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeRe
 	return core.StatusSuccess
 }
 
-func (d *repeater[Blackboard, Event]) Leave(bb Blackboard) {}
+func (d *repeater[Blackboard]) Leave(bb Blackboard) {}

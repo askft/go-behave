@@ -5,23 +5,23 @@ import (
 )
 
 // Fail returns a new fail node, which always fails in one tick.
-func Fail[Blackboard any, Event any](params core.Params, returns core.Returns) core.Node[Blackboard, Event] {
-	base := core.NewLeaf[Blackboard, Event]("Fail", params, returns)
-	return &fail[Blackboard, Event]{Leaf: base}
+func Fail[Blackboard any](params core.Params, returns core.Returns) core.Node[Blackboard] {
+	base := core.NewLeaf[Blackboard]("Fail", params, returns)
+	return &fail[Blackboard]{Leaf: base}
 }
 
 // fail ...
-type fail[Blackboard any, Event any] struct {
-	*core.Leaf[Blackboard, Event]
+type fail[Blackboard any] struct {
+	*core.Leaf[Blackboard]
 }
 
 // Enter ...
-func (a *fail[Blackboard, Event]) Enter(bb Blackboard) {}
+func (a *fail[Blackboard]) Enter(bb Blackboard) {}
 
 // Tick ...
-func (a *fail[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+func (a *fail[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 	return core.StatusFailure
 }
 
 // Leave ...
-func (a *fail[Blackboard, Event]) Leave(bb Blackboard) {}
+func (a *fail[Blackboard]) Leave(bb Blackboard) {}

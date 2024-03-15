@@ -20,26 +20,26 @@ import "github.com/jbcpollak/go-behave/core"
 //
 // This implementation is taken from https://github.com/DanTulovsky/go-behave/blob/master/common/decorator/while.go
 // See also https://github.com/askft/go-behave/pull/2
-func While[Blackboard any, Event any](params core.Params, cond, action core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
+func While[Blackboard any](params core.Params, cond, action core.Node[Blackboard]) core.Node[Blackboard] {
 
 	base := core.NewDecorator("While", params, cond)
-	d := &while[Blackboard, Event]{
+	d := &while[Blackboard]{
 		Decorator: base,
 		action:    action, // action to run after condition succeeds
 	}
 	return d
 }
 
-type while[Blackboard any, Event any] struct {
-	*core.Decorator[Blackboard, Event]
-	action core.Node[Blackboard, Event]
+type while[Blackboard any] struct {
+	*core.Decorator[Blackboard]
+	action core.Node[Blackboard]
 }
 
-func (d *while[Blackboard, Event]) Enter(bb Blackboard) {
+func (d *while[Blackboard]) Enter(bb Blackboard) {
 
 }
 
-func (d *while[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+func (d *while[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 
 	// check the condition
 	status := core.Update(d.Child, bb, evt)
@@ -60,4 +60,4 @@ func (d *while[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResul
 
 }
 
-func (d *while[Blackboard, Event]) Leave(bb Blackboard) {}
+func (d *while[Blackboard]) Leave(bb Blackboard) {}

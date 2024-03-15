@@ -7,9 +7,9 @@ import (
 )
 
 // Delayer ...
-func Delayer[Blackboard any, Event any](params core.Params, child core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
+func Delayer[Blackboard any](params core.Params, child core.Node[Blackboard]) core.Node[Blackboard] {
 	base := core.NewDecorator("Delayer", params, child)
-	d := &delayer[Blackboard, Event]{Decorator: base}
+	d := &delayer[Blackboard]{Decorator: base}
 
 	ms, err := params.GetInt("ms")
 	if err != nil {
@@ -21,19 +21,19 @@ func Delayer[Blackboard any, Event any](params core.Params, child core.Node[Blac
 }
 
 // delayer ...
-type delayer[Blackboard any, Event any] struct {
-	*core.Decorator[Blackboard, Event]
+type delayer[Blackboard any] struct {
+	*core.Decorator[Blackboard]
 	delay time.Duration // delay in milliseconds
 	start time.Time
 }
 
 // Enter ...
-func (d *delayer[Blackboard, Event]) Enter(bb Blackboard) {
+func (d *delayer[Blackboard]) Enter(bb Blackboard) {
 	d.start = time.Now()
 }
 
 // Tick ...
-func (d *delayer[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+func (d *delayer[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 	if time.Since(d.start) > d.delay {
 		return core.Update(d.Child, bb, evt)
 	}
@@ -41,4 +41,4 @@ func (d *delayer[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeRes
 }
 
 // Leave ...
-func (d *delayer[Blackboard, Event]) Leave(bb Blackboard) {}
+func (d *delayer[Blackboard]) Leave(bb Blackboard) {}

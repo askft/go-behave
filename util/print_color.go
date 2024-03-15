@@ -11,14 +11,14 @@ import (
 
 // NodeToString returns a string representation
 // of a tree node and all its children.
-func NodeToString[Blackboard any, Event any](node core.Node[Blackboard, Event]) string {
+func NodeToString[Blackboard any](node core.Node[Blackboard]) string {
 	var b strings.Builder
 	fmt.Println()
 	nodeRecurse(node, 0, &b)
 	return b.String()
 }
 
-func nodeRecurse[Blackboard any, Event any](node core.Node[Blackboard, Event], level int, b *strings.Builder) {
+func nodeRecurse[Blackboard any](node core.Node[Blackboard], level int, b *strings.Builder) {
 	indent := strings.Repeat("    ", level)
 	b.WriteString(indent + node.String() + "\n")
 	for _, child := range node.GetChildren() {
@@ -29,11 +29,11 @@ func nodeRecurse[Blackboard any, Event any](node core.Node[Blackboard, Event], l
 // PrintTreeInColor prints the tree with colors representing node state.
 //
 // Red = Failure, Yellow = Running, Green = Success, Magenta = Invalid.
-func PrintTreeInColor[Blackboard any, Event any](node core.Node[Blackboard, Event]) {
+func PrintTreeInColor[Blackboard any](node core.Node[Blackboard]) {
 	printTreeInColor(node, 0)
 }
 
-func printTreeInColor[Blackboard any, Event any](node core.Node[Blackboard, Event], level int) {
+func printTreeInColor[Blackboard any](node core.Node[Blackboard], level int) {
 	indent := strings.Repeat("    ", level)
 	color.Set(colorFor[node.GetStatus()])
 	fmt.Println(indent + node.String())

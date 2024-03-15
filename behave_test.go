@@ -33,11 +33,13 @@ type TestBlackboard struct {
 	id int
 }
 
-type Event struct{}
+type Event struct {
+	id string
+}
 
-var synchronousRoot = Sequence[TestBlackboard, Event](
-	Repeater(core.Params{"n": 2}, Fail[TestBlackboard, Event](nil, nil)),
-	Succeed[TestBlackboard, Event](nil, nil),
+var synchronousRoot = Sequence[TestBlackboard](
+	Repeater(core.Params{"n": 2}, Fail[TestBlackboard](nil, nil)),
+	Succeed[TestBlackboard](nil, nil),
 )
 
 func TestUpdate(t *testing.T) {
@@ -62,11 +64,11 @@ func TestUpdate(t *testing.T) {
 	fmt.Println("Done!")
 }
 
-var asynchronousRoot = Sequence[TestBlackboard, Event](
-	Repeater(core.Params{"n": 2}, Fail[TestBlackboard, Event](nil, nil)),
-	AsyncDelayer[TestBlackboard, Event](
+var asynchronousRoot = Sequence[TestBlackboard](
+	// Repeater(core.Params{"n": 2}, Fail[TestBlackboard](nil, nil)),
+	AsyncDelayer[TestBlackboard](
 		core.Params{"ms": 1000},
-		Succeed[TestBlackboard, Event](nil, nil),
+		Succeed[TestBlackboard](nil, nil),
 	),
 )
 
@@ -78,16 +80,10 @@ func TestEventLoop(t *testing.T) {
 		panic(err)
 	}
 
-	for {
-		evt := Event{}
-		status := tree.Update(evt)
-		util.PrintTreeInColor(tree.Root)
-		fmt.Println()
-		if status == core.StatusSuccess {
-			break
-		}
-		time.Sleep(100 * time.Millisecond)
-	}
+	evt := Event{"initial event"}
+	go tree.EventLoop(evt)
+
+	time.Sleep(2 * time.Minute)
 
 	fmt.Println("Done!")
 }

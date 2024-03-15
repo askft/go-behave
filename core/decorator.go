@@ -10,15 +10,15 @@ import (
 // map used for setting variables for a specific decorator node, for instance
 // Params{"n": 5} for a Repeater node or Params{"ms": 500} for a
 // Delayer node.
-type Decorator[Blackboard any, Event any] struct {
+type Decorator[Blackboard any] struct {
 	*BaseNode
-	Child  Node[Blackboard, Event]
+	Child  Node[Blackboard]
 	Params Params
 }
 
 // NewDecorator creates a new decorator base node.
-func NewDecorator[Blackboard any, Event any](name string, params Params, child Node[Blackboard, Event]) *Decorator[Blackboard, Event] {
-	return &Decorator[Blackboard, Event]{
+func NewDecorator[Blackboard any](name string, params Params, child Node[Blackboard]) *Decorator[Blackboard] {
+	return &Decorator[Blackboard]{
 		BaseNode: newBaseNode(CategoryDecorator, name),
 		Child:    child,
 		Params:   params, // TODO (remove): This is only used for String()
@@ -26,11 +26,11 @@ func NewDecorator[Blackboard any, Event any](name string, params Params, child N
 }
 
 // GetChildren returns a list containing the only child of the decorator node.
-func (d *Decorator[Blackboard, Event]) GetChildren() []Node[Blackboard, Event] {
-	return append([]Node[Blackboard, Event]{}, d.Child)
+func (d *Decorator[Blackboard]) GetChildren() []Node[Blackboard] {
+	return append([]Node[Blackboard]{}, d.Child)
 }
 
 // String returns a string representation of the decorator node.
-func (d *Decorator[Blackboard, Event]) String() string {
+func (d *Decorator[Blackboard]) String() string {
 	return fmt.Sprintf("* %s (%v)", d.name, d.Params)
 }

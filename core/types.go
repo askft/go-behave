@@ -34,9 +34,9 @@ const (
 
 func (s Status) Status() Status { return s }
 
-type NodeAsyncRunning[Event any] func(enqueue func(Event) error) error
+type NodeAsyncRunning func(enqueue func(Event) error) error
 
-func (NodeAsyncRunning[Event]) Status() Status { return StatusRunning }
+func (NodeAsyncRunning) Status() Status { return StatusRunning }
 
 type NodeRuntimeError struct{ error }
 

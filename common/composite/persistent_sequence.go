@@ -7,18 +7,18 @@ import (
 // PersistentSequence updates each child in order. If a child
 // returns Failure or Running, this node returns the same value,
 // and resumes execution from the same child node the next tick.
-func PersistentSequence[Blackboard any, Event any](children ...core.Node[Blackboard, Event]) core.Node[Blackboard, Event] {
+func PersistentSequence[Blackboard any](children ...core.Node[Blackboard]) core.Node[Blackboard] {
 	base := core.NewComposite("PersistentSequence", children)
-	return &persistentSequence[Blackboard, Event]{Composite: base}
+	return &persistentSequence[Blackboard]{Composite: base}
 }
 
-type persistentSequence[Blackboard any, Event any] struct {
-	*core.Composite[Blackboard, Event]
+type persistentSequence[Blackboard any] struct {
+	*core.Composite[Blackboard]
 }
 
-func (s *persistentSequence[Blackboard, Event]) Enter(bb Blackboard) {}
+func (s *persistentSequence[Blackboard]) Enter(bb Blackboard) {}
 
-func (s *persistentSequence[Blackboard, Event]) Tick(bb Blackboard, evt Event) core.NodeResult {
+func (s *persistentSequence[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
 	for s.CurrentChild < len(s.Children) {
 		status := core.Update(s.Children[s.CurrentChild], bb, evt)
 		if status != core.StatusSuccess {
@@ -29,6 +29,6 @@ func (s *persistentSequence[Blackboard, Event]) Tick(bb Blackboard, evt Event) c
 	return core.StatusSuccess
 }
 
-func (s *persistentSequence[Blackboard, Event]) Leave(bb Blackboard) {
+func (s *persistentSequence[Blackboard]) Leave(bb Blackboard) {
 	s.Composite.CurrentChild = 0
 }
