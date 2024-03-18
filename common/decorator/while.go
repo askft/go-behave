@@ -1,6 +1,10 @@
 package decorator
 
-import "github.com/jbcpollak/greenstalk/core"
+import (
+	"context"
+
+	"github.com/jbcpollak/greenstalk/core"
+)
 
 // While node repeats the conditions and runs the action if the condition succeeds.
 // The action is started after the first success of the condition.
@@ -39,10 +43,10 @@ func (d *while[Blackboard]) Enter(bb Blackboard) {
 
 }
 
-func (d *while[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (d *while[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 
 	// check the condition
-	status := core.Update(d.Child, bb, evt)
+	status := core.Update(d.Child, bb, ctx, evt)
 
 	switch status {
 	case core.StatusRunning:
@@ -54,7 +58,7 @@ func (d *while[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult 
 	}
 
 	// here condition is successful
-	actionStatus := core.Update(d.action, bb, evt)
+	actionStatus := core.Update(d.action, bb, ctx, evt)
 
 	return actionStatus
 

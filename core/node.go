@@ -1,5 +1,7 @@
 package core
 
+import "context"
+
 type Event any
 
 // Preliminary interface to work around intermediate types like
@@ -23,7 +25,7 @@ type Node[Blackboard any] interface {
 
 	// Must be implemented by the custom node.
 	Enter(Blackboard)
-	Tick(Blackboard, Event) NodeResult
+	Tick(Blackboard, context.Context, Event) NodeResult
 	Leave(Blackboard)
 }
 

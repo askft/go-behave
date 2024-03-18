@@ -1,6 +1,8 @@
 package composite
 
 import (
+	"context"
+
 	"github.com/jbcpollak/greenstalk/core"
 )
 
@@ -20,9 +22,9 @@ func (s *selector[Blackboard]) Enter(bb Blackboard) {
 	s.Composite.CurrentChild = 0
 }
 
-func (s *selector[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (s *selector[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 	for s.CurrentChild < len(s.Children) {
-		status := core.Update(s.Children[s.CurrentChild], bb, evt)
+		status := core.Update(s.Children[s.CurrentChild], bb, ctx, evt)
 		if status != core.StatusFailure {
 			return status
 		}

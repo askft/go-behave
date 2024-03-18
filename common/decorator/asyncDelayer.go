@@ -1,6 +1,7 @@
 package decorator
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -47,11 +48,11 @@ func (d *asyncdelayer[Blackboard]) doDelay(enqueue func(core.Event) error) error
 }
 
 // Tick ...
-func (d *asyncdelayer[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (d *asyncdelayer[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 
 	if _, ok := evt.(DelayerFinishedEvent); ok {
 		fmt.Printf("asyncdelayer: Calling child")
-		return core.Update(d.Child, bb, evt)
+		return core.Update(d.Child, bb, ctx, evt)
 	} else if d.Status() == core.StatusInitialized {
 		fmt.Printf("asyncdelayer: Returning AsyncRunning")
 

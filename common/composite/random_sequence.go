@@ -1,6 +1,7 @@
 package composite
 
 import (
+	"context"
 	"math/rand"
 
 	"github.com/jbcpollak/greenstalk/core"
@@ -21,9 +22,9 @@ func (s *randomSequence[Blackboard]) Enter(bb Blackboard) {
 	shuffle(s.Children)
 }
 
-func (s *randomSequence[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (s *randomSequence[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 	for s.CurrentChild < len(s.Children) {
-		result := core.Update(s.Children[s.CurrentChild], bb, evt)
+		result := core.Update(s.Children[s.CurrentChild], bb, ctx, evt)
 		if result.Status() != core.StatusSuccess {
 			return result
 		}

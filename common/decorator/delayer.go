@@ -1,6 +1,7 @@
 package decorator
 
 import (
+	"context"
 	"time"
 
 	"github.com/jbcpollak/greenstalk/core"
@@ -33,9 +34,9 @@ func (d *delayer[Blackboard]) Enter(bb Blackboard) {
 }
 
 // Tick ...
-func (d *delayer[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (d *delayer[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 	if time.Since(d.start) > d.delay {
-		return core.Update(d.Child, bb, evt)
+		return core.Update(d.Child, bb, ctx, evt)
 	}
 	return core.StatusRunning
 }

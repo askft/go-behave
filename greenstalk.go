@@ -1,6 +1,7 @@
 package behave
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/jbcpollak/greenstalk/core"
@@ -10,6 +11,7 @@ import (
 
 // BehaviorTree ...
 type BehaviorTree[Blackboard any] struct {
+	ctx        context.Context
 	Root       core.Node[Blackboard]
 	Blackboard Blackboard
 	events     chan core.Event
@@ -17,7 +19,7 @@ type BehaviorTree[Blackboard any] struct {
 
 // NewBehaviorTree returns a new BehaviorTree. A data Blackboard
 // to be propagated down the tree each tick is created.
-func NewBehaviorTree[Blackboard any](bb Blackboard, root core.Node[Blackboard]) (*BehaviorTree[Blackboard], error) {
+func NewBehaviorTree[Blackboard any](ctx context.Context, root core.Node[Blackboard], bb Blackboard) (*BehaviorTree[Blackboard], error) {
 	var eb internal.ErrorBuilder
 	eb.SetMessage("NewBehaviorTree")
 	if root == nil {
@@ -28,6 +30,7 @@ func NewBehaviorTree[Blackboard any](bb Blackboard, root core.Node[Blackboard]) 
 		return nil, eb.Error()
 	}
 	tree := &BehaviorTree[Blackboard]{
+		ctx:        ctx,
 		Root:       root,
 		Blackboard: bb,
 		events:     make(chan core.Event, 100 /* arbitrary */),
@@ -37,7 +40,7 @@ func NewBehaviorTree[Blackboard any](bb Blackboard, root core.Node[Blackboard]) 
 
 // Update propagates an update call down the behavior tree.
 func (bt *BehaviorTree[Blackboard]) Update(evt core.Event) core.Status {
-	result := core.Update(bt.Root, bt.Blackboard, evt)
+	result := core.Update(bt.Root, bt.Blackboard, bt.ctx, evt)
 
 	status := result.Status()
 	switch status {

@@ -1,6 +1,7 @@
 package decorator
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/jbcpollak/greenstalk/core"
@@ -31,9 +32,9 @@ func (d *repeater[Blackboard]) Enter(bb Blackboard) {
 	d.i = 0
 }
 
-func (d *repeater[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (d *repeater[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 	fmt.Println("Repeater: Calling child")
-	status := core.Update(d.Child, bb, evt)
+	status := core.Update(d.Child, bb, ctx, evt)
 
 	if status == core.StatusRunning {
 		return core.StatusRunning

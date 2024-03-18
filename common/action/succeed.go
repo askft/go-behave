@@ -1,6 +1,8 @@
 package action
 
 import (
+	"context"
+
 	"github.com/jbcpollak/greenstalk/core"
 )
 
@@ -19,7 +21,7 @@ type succeed[Blackboard any] struct {
 func (a *succeed[Blackboard]) Enter(bb Blackboard) {}
 
 // Tick ...
-func (a *succeed[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (a *succeed[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 	return core.StatusSuccess
 }
 

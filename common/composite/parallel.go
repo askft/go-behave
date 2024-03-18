@@ -1,6 +1,8 @@
 package composite
 
 import (
+	"context"
+
 	"github.com/jbcpollak/greenstalk/core"
 )
 
@@ -42,7 +44,7 @@ func (s *parallel[Blackboard]) Enter(bb Blackboard) {
 	s.fail = 0
 }
 
-func (s *parallel[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (s *parallel[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 
 	// Update every child that has not completed yet every tick.
 	for i := 0; i < len(s.Children); i++ {
@@ -54,7 +56,7 @@ func (s *parallel[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResu
 
 		// Update a child and count whether it succeeded or failed,
 		// and mark it as completed in either of those two cases.
-		switch core.Update(s.Children[i], bb, evt) {
+		switch core.Update(s.Children[i], bb, ctx, evt) {
 		case core.StatusSuccess:
 			s.succ++
 			s.completed[i] = true

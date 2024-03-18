@@ -1,6 +1,7 @@
 package behave
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
@@ -45,7 +46,10 @@ var synchronousRoot = Sequence[TestBlackboard](
 func TestUpdate(t *testing.T) {
 	fmt.Println("Testing tree...")
 
-	tree, err := NewBehaviorTree(TestBlackboard{id: 42}, synchronousRoot)
+	// Synchronous, so does not need to be cancelled.
+	ctx := context.Background()
+
+	tree, err := NewBehaviorTree(ctx, synchronousRoot, TestBlackboard{id: 42})
 	if err != nil {
 		panic(err)
 	}
@@ -70,12 +74,19 @@ var asynchronousRoot = Sequence[TestBlackboard](
 		core.Params{"ms": 1000},
 		Succeed[TestBlackboard](nil, nil),
 	),
+	AsyncDelayer[TestBlackboard](
+		core.Params{"ms": 2000},
+		Succeed[TestBlackboard](nil, nil),
+	),
 )
 
 func TestEventLoop(t *testing.T) {
 	fmt.Println("Testing tree...")
 
-	tree, err := NewBehaviorTree(TestBlackboard{id: 42}, asynchronousRoot)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	tree, err := NewBehaviorTree(ctx, asynchronousRoot, TestBlackboard{id: 42})
 	if err != nil {
 		panic(err)
 	}
@@ -83,7 +94,8 @@ func TestEventLoop(t *testing.T) {
 	evt := Event{"initial event"}
 	go tree.EventLoop(evt)
 
-	time.Sleep(2 * time.Minute)
+	time.Sleep(90 * time.Second)
+	cancel()
 
 	fmt.Println("Done!")
 }

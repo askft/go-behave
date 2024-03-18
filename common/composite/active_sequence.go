@@ -1,6 +1,8 @@
 package composite
 
 import (
+	"context"
+
 	"github.com/jbcpollak/greenstalk/core"
 )
 
@@ -18,9 +20,9 @@ type activeSequence[Blackboard any] struct {
 
 func (s *activeSequence[Blackboard]) Enter(bb Blackboard) {}
 
-func (s *activeSequence[Blackboard]) Tick(bb Blackboard, evt core.Event) core.NodeResult {
+func (s *activeSequence[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
 	for i := 0; i < len(s.Children); i++ {
-		result := core.Update(s.Children[i], bb, evt)
+		result := core.Update(s.Children[i], bb, ctx, evt)
 		if result.Status() != core.StatusSuccess {
 			return result
 		}
