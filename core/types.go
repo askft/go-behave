@@ -34,7 +34,8 @@ const (
 
 func (s Status) Status() Status { return s }
 
-type NodeAsyncRunning func(enqueue func(Event) error) error
+type EnqueueFn func(Event) error
+type NodeAsyncRunning func(enqueue EnqueueFn) error
 
 func (NodeAsyncRunning) Status() Status { return StatusRunning }
 

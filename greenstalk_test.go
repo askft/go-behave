@@ -31,12 +31,37 @@ import (
 // )
 
 type TestBlackboard struct {
-	id int
+	id    int
+	count uint
 }
 
 type Event struct {
 	id string
 }
+
+// Counter increments a counter on the blackboard.
+func Counter(params core.Params, returns core.Returns) core.Node[TestBlackboard] {
+	base := core.NewLeaf[TestBlackboard]("Counter", params, returns)
+	return &counter{Leaf: base}
+}
+
+// succeed ...
+type counter struct {
+	core.Leaf[TestBlackboard]
+}
+
+// Enter ...
+func (a *counter) Enter(bb TestBlackboard) {}
+
+// Tick ...
+func (a *counter) Tick(bb TestBlackboard, ctx context.Context, evt core.Event) core.NodeResult {
+	fmt.Println("Counter: Incrementing count")
+	bb.count++
+	return core.StatusSuccess
+}
+
+// Leave ...
+func (a *counter) Leave(bb TestBlackboard) {}
 
 var synchronousRoot = Sequence[TestBlackboard](
 	Repeater(core.Params{"n": 2}, Fail[TestBlackboard](nil, nil)),
@@ -44,7 +69,7 @@ var synchronousRoot = Sequence[TestBlackboard](
 )
 
 func TestUpdate(t *testing.T) {
-	fmt.Println("Testing tree...")
+	fmt.Println("Testing synchronous tree...")
 
 	// Synchronous, so does not need to be cancelled.
 	ctx := context.Background()
@@ -71,22 +96,30 @@ func TestUpdate(t *testing.T) {
 var asynchronousRoot = Sequence[TestBlackboard](
 	// Repeater(core.Params{"n": 2}, Fail[TestBlackboard](nil, nil)),
 	AsyncDelayer[TestBlackboard](
-		core.Params{"ms": 1000},
-		Succeed[TestBlackboard](nil, nil),
+		core.Params{
+			"label": "First",
+			"ms":    100,
+		},
+		Counter(nil, nil),
 	),
 	AsyncDelayer[TestBlackboard](
-		core.Params{"ms": 2000},
-		Succeed[TestBlackboard](nil, nil),
+		core.Params{
+			"label": "Second",
+			"ms":    100,
+		},
+		Counter(nil, nil),
 	),
 )
 
 func TestEventLoop(t *testing.T) {
-	fmt.Println("Testing tree...")
+	fmt.Println("Testing asynchronous tree...")
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	tree, err := NewBehaviorTree(ctx, asynchronousRoot, TestBlackboard{id: 42})
+	bb := TestBlackboard{id: 42, count: 0}
+
+	tree, err := NewBehaviorTree(ctx, asynchronousRoot, bb)
 	if err != nil {
 		panic(err)
 	}
@@ -94,8 +127,24 @@ func TestEventLoop(t *testing.T) {
 	evt := Event{"initial event"}
 	go tree.EventLoop(evt)
 
-	time.Sleep(90 * time.Second)
+	time.Sleep(50 * time.Millisecond)
+	if bb.count != 0 {
+		t.Errorf("Expected count to be 0, got %d", bb.count)
+	}
+
+	// Sleep a bit more
+	time.Sleep(60 * time.Millisecond)
+	if bb.count != 1 {
+		t.Errorf("Expected count to be 1, got %d", bb.count)
+	}
+
+	// Shut it _down_
 	cancel()
+
+	// Ensure we shut down before the second tick
+	if bb.count != 1 {
+		t.Errorf("Expected to shut down before second tick but got %d", bb.count)
+	}
 
 	fmt.Println("Done!")
 }

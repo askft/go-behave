@@ -42,6 +42,11 @@ func newBaseNode(category Category, name string) BaseNode {
 }
 
 // Status returns the status of this node.
+func (n *BaseNode) Name() string {
+	return n.name
+}
+
+// Status returns the status of this node.
 func (n *BaseNode) Status() Status {
 	return n.status
 }
