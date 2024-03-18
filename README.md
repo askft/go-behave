@@ -1,9 +1,9 @@
-# Go Behave
+# Greenstalk
 
 An extensible Behavior Tree library in Go.
 
-![GoDoc](https://godoc.org/github.com/jbcpollak/go-behave?status.svg)
-[![Build Status](https://travis-ci.com/jbcpollak/go-behave.svg?branch=master)](https://travis-ci.com/jbcpollak/go-behave)
+![GoDoc](https://godoc.org/github.com/jbcpollak/greenstalk?status.svg)
+[![Build Status](https://travis-ci.com/jbcpollak/greenstalk.svg?branch=master)](https://travis-ci.com/jbcpollak/greenstalk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -11,13 +11,17 @@ An extensible Behavior Tree library in Go.
 * [Usage](#usage)
 * [Installation](#installation)
 
-![Go Behave](image.png)
+![Greenstalk](image.png)
 
 ## Important notice
 
-The library is still under development. Please do not assume API stability – fork the repository if you need that.
+The library is still under development. Please do not assume API stability.
 
-This library is a fork of [askft/go-behave](https://github.com/askft/go-behave) with the intention of supporting an asynchronous event-driven execution model while also modernizing it with generics and simplifying the API.
+This library is a fork of [askft/go-behave](https://github.com/askft/go-behave) with the following goals:
+* A streamlined API that utilizes modern Go
+* Support for event driven trees in addition to clock-driven ones
+
+This library is also inspired by what was learned from writing and using [blueshell](https://github.com/6RiverSystems/blueshell)
 
 ## Introduction
 
@@ -60,7 +64,7 @@ In _Go Behave_, there is no differentiation being made between these two subcate
 
 ## Usage
 
-Please see the [documentation](https://godoc.org/github.com/jbcpollak/go-behave) and the [examples](examples).
+Please see the [documentation](https://godoc.org/github.com/jbcpollak/greenstalk) and the [examples](examples).
 
 ### Defining custom nodes
 
@@ -84,9 +88,9 @@ In addition to have a reference to an actual root node, `Config` has two fields 
 
 ## Installation
 
-`go get github.com/jbcpollak/go-behave`
+`go get github.com/jbcpollak/greenstalk`
 
-The package is identified by `behave`, not `go-behave`.
+The package is identified by `behave`, not `greenstalk`.
 
 ## License
 

@@ -1,7 +1,7 @@
 package action
 
 import (
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // Succeed returns a new succeed node, which always succeeds in one tick.

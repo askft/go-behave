@@ -1,7 +1,7 @@
 package decorator
 
 import (
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // UntilSuccess updates its child until it returns Success.

@@ -1,7 +1,7 @@
 package composite
 
 import (
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // ActiveSequence ticks each child in order. Returns success if

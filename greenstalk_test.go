@@ -5,15 +5,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jbcpollak/go-behave/core"
-	"github.com/jbcpollak/go-behave/util"
+	"github.com/jbcpollak/greenstalk/core"
+	"github.com/jbcpollak/greenstalk/util"
 
 	// Use dot imports to make a tree definition look nice.
 	// Be careful when doing this! These packages export
 	// common word identifiers such as "Fail" and "Sequence".
-	. "github.com/jbcpollak/go-behave/common/action"
-	. "github.com/jbcpollak/go-behave/common/composite"
-	. "github.com/jbcpollak/go-behave/common/decorator"
+	. "github.com/jbcpollak/greenstalk/common/action"
+	. "github.com/jbcpollak/greenstalk/common/composite"
+	. "github.com/jbcpollak/greenstalk/common/decorator"
 )
 
 // var delayingRoot = Repeater(core.Params{"n": 2},

@@ -1,7 +1,7 @@
 package action
 
 import (
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // Fail returns a new fail node, which always fails in one tick.

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // AsyncDelayer ...

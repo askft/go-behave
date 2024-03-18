@@ -1,7 +1,7 @@
 package composite
 
 import (
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // Selector updates each child in order, returning success as soon as

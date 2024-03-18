@@ -1,7 +1,7 @@
 package composite
 
 import (
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // Parallel updates all its children in parallel, i.e. every frame.

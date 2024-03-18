@@ -3,9 +3,9 @@ package behave
 import (
 	"fmt"
 
-	"github.com/jbcpollak/go-behave/core"
-	"github.com/jbcpollak/go-behave/internal"
-	"github.com/jbcpollak/go-behave/util"
+	"github.com/jbcpollak/greenstalk/core"
+	"github.com/jbcpollak/greenstalk/internal"
+	"github.com/jbcpollak/greenstalk/util"
 )
 
 // BehaviorTree ...
@@ -23,9 +23,7 @@ func NewBehaviorTree[Blackboard any](bb Blackboard, root core.Node[Blackboard]) 
 	if root == nil {
 		eb.Write("Config.Root is nil")
 	}
-	// if bb == nil {
-	// 	eb.Write("Config.Data is nil")
-	// }
+
 	if eb.Error() != nil {
 		return nil, eb.Error()
 	}

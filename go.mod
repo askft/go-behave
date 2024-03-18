@@ -1,4 +1,4 @@
-module github.com/jbcpollak/go-behave
+module github.com/jbcpollak/greenstalk
 
 go 1.22
 

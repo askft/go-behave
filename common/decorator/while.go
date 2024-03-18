@@ -1,6 +1,6 @@
 package decorator
 
-import "github.com/jbcpollak/go-behave/core"
+import "github.com/jbcpollak/greenstalk/core"
 
 // While node repeats the conditions and runs the action if the condition succeeds.
 // The action is started after the first success of the condition.
@@ -18,8 +18,8 @@ import "github.com/jbcpollak/go-behave/core"
 //
 // This also allows you to have multiple conditions and multiple actions (just put them after each other in the sequence).
 //
-// This implementation is taken from https://github.com/DanTulovsky/go-behave/blob/master/common/decorator/while.go
-// See also https://github.com/askft/go-behave/pull/2
+// This implementation is taken from https://github.com/DanTulovsky/greenstalk/blob/master/common/decorator/while.go
+// See also https://github.com/askft/greenstalk/pull/2
 func While[Blackboard any](params core.Params, cond, action core.Node[Blackboard]) core.Node[Blackboard] {
 
 	base := core.NewDecorator("While", params, cond)

@@ -3,7 +3,7 @@ package decorator
 import (
 	"time"
 
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // Delayer ...

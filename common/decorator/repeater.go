@@ -3,7 +3,7 @@ package decorator
 import (
 	"fmt"
 
-	"github.com/jbcpollak/go-behave/core"
+	"github.com/jbcpollak/greenstalk/core"
 )
 
 // Repeater updates its child n times, at which point the repeater
