@@ -2,12 +2,12 @@ package behave
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
 	"github.com/jbcpollak/greenstalk/core"
 	"github.com/jbcpollak/greenstalk/util"
+	"github.com/rs/zerolog/log"
 
 	// Use dot imports to make a tree definition look nice.
 	// Be careful when doing this! These packages export
@@ -35,13 +35,14 @@ type TestBlackboard struct {
 	count uint
 }
 
-type Event struct {
-	id string
-}
-
 // Counter increments a counter on the blackboard.
 func Counter(params core.Params, returns core.Returns) core.Node[TestBlackboard] {
-	base := core.NewLeaf[TestBlackboard]("Counter", params, returns)
+	label, err := params.GetString("label")
+	if err != nil {
+		panic(err)
+	}
+
+	base := core.NewLeaf[TestBlackboard]("Counter "+label, params, returns)
 	return &counter{Leaf: base}
 }
 
@@ -54,9 +55,12 @@ type counter struct {
 func (a *counter) Enter(bb TestBlackboard) {}
 
 // Tick ...
+var countChan = make(chan uint, 0)
+
 func (a *counter) Tick(bb TestBlackboard, ctx context.Context, evt core.Event) core.NodeResult {
-	fmt.Println("Counter: Incrementing count")
+	log.Info().Msgf("%s: Incrementing count", a.Name())
 	bb.count++
+	countChan <- bb.count
 	return core.StatusSuccess
 }
 
@@ -69,7 +73,7 @@ var synchronousRoot = Sequence[TestBlackboard](
 )
 
 func TestUpdate(t *testing.T) {
-	fmt.Println("Testing synchronous tree...")
+	log.Info().Msg("Testing synchronous tree...")
 
 	// Synchronous, so does not need to be cancelled.
 	ctx := context.Background()
@@ -80,39 +84,54 @@ func TestUpdate(t *testing.T) {
 	}
 
 	for {
-		evt := Event{}
+		evt := core.DefaultEvent{}
 		status := tree.Update(evt)
 		util.PrintTreeInColor(tree.Root)
-		fmt.Println()
 		if status == core.StatusSuccess {
 			break
 		}
 		time.Sleep(100 * time.Millisecond)
 	}
 
-	fmt.Println("Done!")
+	log.Info().Msg("Done!")
 }
 
+var delay = 100
 var asynchronousRoot = Sequence[TestBlackboard](
 	// Repeater(core.Params{"n": 2}, Fail[TestBlackboard](nil, nil)),
 	AsyncDelayer[TestBlackboard](
 		core.Params{
 			"label": "First",
-			"ms":    100,
+			"delay": time.Duration(delay) * time.Millisecond,
 		},
-		Counter(nil, nil),
+		Counter(core.Params{
+			"label": "First",
+		}, nil),
 	),
 	AsyncDelayer[TestBlackboard](
 		core.Params{
 			"label": "Second",
-			"ms":    100,
+			"delay": time.Duration(delay) * time.Millisecond,
 		},
-		Counter(nil, nil),
+		Counter(core.Params{
+			"label": "Second",
+		}, nil),
 	),
 )
 
+func getCount(d time.Duration) (uint, bool) {
+	select {
+	case c := <-countChan:
+		log.Info().Msgf("got count %v", c)
+		return c, true
+	case <-time.After(d):
+		log.Info().Msgf("Timeout after delaying %v", d)
+		return 0, false
+	}
+}
+
 func TestEventLoop(t *testing.T) {
-	fmt.Println("Testing asynchronous tree...")
+	log.Info().Msg("Testing asynchronous tree...")
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -124,27 +143,43 @@ func TestEventLoop(t *testing.T) {
 		panic(err)
 	}
 
-	evt := Event{"initial event"}
+	evt := core.DefaultEvent{}
 	go tree.EventLoop(evt)
 
-	time.Sleep(50 * time.Millisecond)
-	if bb.count != 0 {
-		t.Errorf("Expected count to be 0, got %d", bb.count)
+	// Wait half the delay and verify no value sent
+	first_halfway, ok := getCount(time.Duration(delay/2) * time.Millisecond)
+	if ok {
+		t.Errorf("Unexpectedly got count %d", first_halfway)
+	} else {
+		log.Info().Msg("Halfway through first delay counter correctly is 0")
 	}
 
 	// Sleep a bit more
-	time.Sleep(60 * time.Millisecond)
-	if bb.count != 1 {
-		t.Errorf("Expected count to be 1, got %d", bb.count)
+	first_after, ok := getCount(time.Duration(delay/2+10) * time.Millisecond)
+	if ok && first_after != 1 {
+		t.Errorf("Expected count to be 1, got %d", first_after)
+	} else {
+		log.Info().Msg("After first delay, counter is 1")
+	}
+
+	// Wait half the delay and verify value is 0
+	second_halfway, ok := getCount(time.Duration(delay/2) * time.Millisecond)
+	if ok {
+		t.Errorf("Unexpectedly got count %d", second_halfway)
+	} else {
+		log.Info().Msg("Halfway through second delay counter correctly is 1")
 	}
 
 	// Shut it _down_
+	log.Info().Msg("Shutting down...")
 	cancel()
 
+	after_cancel, ok := getCount(time.Duration(delay/2) * time.Millisecond)
+
 	// Ensure we shut down before the second tick
-	if bb.count != 1 {
-		t.Errorf("Expected to shut down before second tick but got %d", bb.count)
+	if ok {
+		t.Errorf("Expected to shut down before second tick but got %d", after_cancel)
 	}
 
-	fmt.Println("Done!")
+	log.Info().Msg("Done!")
 }

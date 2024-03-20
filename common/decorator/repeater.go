@@ -2,9 +2,9 @@ package decorator
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/jbcpollak/greenstalk/core"
+	"github.com/rs/zerolog/log"
 )
 
 // Repeater updates its child n times, at which point the repeater
@@ -33,7 +33,7 @@ func (d *repeater[Blackboard]) Enter(bb Blackboard) {
 }
 
 func (d *repeater[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
-	fmt.Println("Repeater: Calling child")
+	log.Info().Msg("Repeater: Calling child")
 	status := core.Update(d.Child, bb, ctx, evt)
 
 	if status == core.StatusRunning {

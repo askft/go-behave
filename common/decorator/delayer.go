@@ -12,12 +12,12 @@ func Delayer[Blackboard any](params core.Params, child core.Node[Blackboard]) co
 	base := core.NewDecorator("Delayer", params, child)
 	d := &delayer[Blackboard]{Decorator: base}
 
-	ms, err := params.GetInt("ms")
+	delay, err := params.GetInt("delay")
 	if err != nil {
 		panic(err)
 	}
 
-	d.delay = time.Duration(ms) * time.Millisecond
+	d.delay = time.Duration(delay)
 	return d
 }
 

@@ -6,12 +6,13 @@ import "context"
 // then its Tick method, and finally Leave if it is not still running.
 func Update[Blackboard any](node Node[Blackboard], bb Blackboard, ctx context.Context, evt Event) NodeResult {
 
+	// var result NodeResult
 	if node.Status() != StatusRunning {
 		node.Enter(bb)
+		// } else {
 	}
 
 	result := node.Tick(bb, ctx, evt)
-
 	status := result.Status()
 	node.SetStatus(status)
 

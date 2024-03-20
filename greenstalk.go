@@ -7,6 +7,7 @@ import (
 	"github.com/jbcpollak/greenstalk/core"
 	"github.com/jbcpollak/greenstalk/internal"
 	"github.com/jbcpollak/greenstalk/util"
+	"github.com/rs/zerolog/log"
 )
 
 // BehaviorTree ...
@@ -50,7 +51,7 @@ func (bt *BehaviorTree[Blackboard]) Update(evt core.Event) core.Status {
 		// whatever
 	case core.StatusRunning:
 		if asyncRunning, ok := result.(core.NodeAsyncRunning); ok {
-			go asyncRunning(func(evt core.Event) error {
+			go asyncRunning(bt.ctx, func(evt core.Event) error {
 				bt.events <- evt
 				return nil
 			})
@@ -73,10 +74,9 @@ func (bt *BehaviorTree[Blackboard]) EventLoop(evt core.Event) {
 	bt.events <- evt
 
 	for evt := range bt.events {
-		fmt.Printf("Event: %v\n", evt)
+		log.Info().Msgf("Event: %v", evt)
 		bt.Update(evt)
 		util.PrintTreeInColor(bt.Root)
-		fmt.Println()
 	}
 }
 

@@ -34,6 +34,7 @@ func appendNode[Blackboard any](node core.Walkable[Blackboard], level int, b *st
 // Red = Failure, Yellow = Running, Green = Success, Magenta = Invalid.
 func PrintTreeInColor[Blackboard any](node core.Node[Blackboard]) {
 	node.Walk(printInColor, 0)
+	fmt.Println()
 }
 
 func printInColor[Blackboard any](node core.Walkable[Blackboard], level int) {

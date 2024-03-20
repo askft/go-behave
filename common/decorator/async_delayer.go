@@ -5,14 +5,20 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jbcpollak/greenstalk/core"
+	"github.com/rs/zerolog/log"
 )
 
 // AsyncDelayer ...
 func AsyncDelayer[Blackboard any](params core.Params, child core.Node[Blackboard]) core.Node[Blackboard] {
-	ms, err := params.GetInt("ms")
+	v, err := params.Get("delay")
 	if err != nil {
 		panic(err)
+	}
+	delay, ok := v.(time.Duration)
+	if !ok {
+		panic(fmt.Errorf("delay must be a time.Duration"))
 	}
 
 	label, err := params.GetString("label")
@@ -26,7 +32,7 @@ func AsyncDelayer[Blackboard any](params core.Params, child core.Node[Blackboard
 		Decorator: base,
 	}
 
-	d.delay = time.Duration(ms) * time.Millisecond
+	d.delay = time.Duration(delay)
 	return d
 }
 
@@ -42,11 +48,16 @@ func (d *asyncdelayer[Blackboard]) Enter(bb Blackboard) {
 	d.start = time.Now()
 	d.SetStatus(core.StatusInitialized)
 
-	fmt.Printf("%s Entered\n", d.BaseNode.Name())
+	log.Info().Msgf("%s Entered", d.BaseNode.Name())
 }
 
 type DelayerFinishedEvent struct {
-	start time.Time
+	targetNodeId uuid.UUID
+	start        time.Time
+}
+
+func (e DelayerFinishedEvent) TargetNodeId() uuid.UUID {
+	return e.targetNodeId
 }
 
 func (d *asyncdelayer[Blackboard]) doDelay(ctx context.Context, enqueue core.EnqueueFn) error {
@@ -56,26 +67,27 @@ func (d *asyncdelayer[Blackboard]) doDelay(ctx context.Context, enqueue core.Enq
 		t.Stop()
 		return fmt.Errorf("Interrupted")
 	case <-t.C:
+		log.Info().Msgf("Delayed: %v", time.Since(d.start))
+		return enqueue(DelayerFinishedEvent{d.Id(), d.start})
 	}
 
-	return enqueue(DelayerFinishedEvent{d.start})
 }
 
 // Tick ...
 func (d *asyncdelayer[Blackboard]) Tick(bb Blackboard, ctx context.Context, evt core.Event) core.NodeResult {
-	fmt.Printf("%s: Tick\n", d.BaseNode.Name())
+	log.Info().Msgf("%s: Tick", d.Name())
 
-	if _, ok := evt.(DelayerFinishedEvent); ok {
-		fmt.Printf("%s: Calling child\n", d.BaseNode.Name())
-		return core.Update(d.Child, bb, ctx, evt)
-	} else if d.Status() == core.StatusInitialized {
-		fmt.Printf("%s: Returning AsyncRunning\n", d.BaseNode.Name())
+	if dfe, ok := evt.(DelayerFinishedEvent); ok {
+		if dfe.TargetNodeId() == d.Id() {
+			log.Info().Msgf("%s: DelayerFinishedEvent", d.Name())
+			return core.Update(d.Child, bb, ctx, evt)
+		}
+	}
 
-		return core.NodeAsyncRunning(
-			func(enqueue core.EnqueueFn) error {
-				return d.doDelay(ctx, enqueue)
-			},
-		)
+	if d.Status() == core.StatusInitialized {
+		log.Info().Msgf("%s: Returning AsyncRunning", d.Name())
+
+		return core.NodeAsyncRunning(d.doDelay)
 	} else {
 		return core.StatusFailure
 	}
